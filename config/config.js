@@ -106,15 +106,18 @@ export default {
   },
 
   proxy: {
-    "/api": {
-      "target": "http://localhost:8020/",
-      "changeOrigin": true,
-      "pathRewrite": { "^/api" : "" }
+    '/api': {
+      target: 'http://localhost:8020/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
     },
-    "/login": {
-      "target": "http://localhost:8020",
-      "changeOrigin": true,
-    }
+    '/login': {
+      target: 'http://localhost:8020',
+      changeOrigin: true,
+    },
+    '/logout': {
+      target: 'http://localhost:8020',
+      changeOrigin: true,
+    },
   },
-
 };
