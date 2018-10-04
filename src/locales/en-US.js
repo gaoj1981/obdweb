@@ -1,3 +1,4 @@
+//
 export default {
   'navbar.lang': 'Languages',
   'layout.user.link.help': 'help',
