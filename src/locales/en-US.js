@@ -47,8 +47,10 @@ export default {
   'form.client.label.tooltip': 'Target service object',
   'form.client.placeholder':
     'Please describe your customer service, internal customers directly @ Name / job number',
+
   'form.invites.label': 'Inviting critics',
   'form.invites.placeholder': 'Please direct @ Name / job number, you can invite up to 5 people',
+
   'form.weight.label': 'Weight',
   'form.weight.placeholder': 'Please enter weight',
   'form.public.label': 'Target disclosure',
@@ -124,6 +126,7 @@ export default {
   'app.register-result.msg': 'Account：registered at {email}',
   'app.register-result.activation-email':
     'The activation email has been sent to your email address and is valid for 24 hours. Please log in to the email in time and click on the link in the email to activate the account.',
+
   'app.register-result.back-home': 'Back to home',
   'app.register-result.view-mailbox': 'View mailbox',
   'app.home.introduce': 'introduce',
@@ -162,6 +165,7 @@ export default {
   'app.forms.basic.title': 'Basic form',
   'app.forms.basic.description':
     'Form pages are used to collect or verify information to users, and basic forms are common in scenarios where there are fewer data items.',
+
   'app.monitor.trading-activity': 'Real-Time Trading Activity',
   'app.monitor.total-transactions-today': 'Total transactions today',
   'app.monitor.sales-target': 'Sales target completion rate',
@@ -209,11 +213,13 @@ export default {
   'app.settings.security.question': 'Security Question',
   'app.settings.security.question-description':
     'The security question is not set, and the security policy can effectively protect the account security',
+
   'app.settings.security.email': 'Backup Email',
   'app.settings.security.email-description': 'Bound Email：',
   'app.settings.security.mfa': 'MFA Device',
   'app.settings.security.mfa-description':
     'Unbound MFA device, after binding, can be confirmed twice',
+
   'app.settings.security.modify': 'Modify',
   'app.settings.security.set': 'Set',
   'app.settings.security.bind': 'Bind',
@@ -227,12 +233,15 @@ export default {
   'app.settings.notification.password': 'Account Password',
   'app.settings.notification.password-description':
     'Messages from other users will be notified in the form of a station letter',
+
   'app.settings.notification.messages': 'System Messages',
   'app.settings.notification.messages-description':
     'System messages will be notified in the form of a station letter',
+
   'app.settings.notification.todo': 'To-do Notification',
   'app.settings.notification.todo-description':
     'The to-do list will be notified in the form of a letter from the station',
+
   'app.settings.open': 'Open',
   'app.settings.close': 'Close',
   'app.exception.back': 'Back to home',
@@ -242,6 +251,7 @@ export default {
   'app.result.error.title': 'Submission Failed',
   'app.result.error.description':
     'Please check and modify the following information before resubmitting.',
+
   'app.result.error.hint-title': 'The content you submitted has the following error:',
   'app.result.error.hint-text1': 'Your account has been frozen',
   'app.result.error.hint-btn1': 'Thaw immediately',

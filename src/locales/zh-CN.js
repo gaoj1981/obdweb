@@ -45,8 +45,10 @@ export default {
   'form.client.label': '客户',
   'form.client.label.tooltip': '目标的服务对象',
   'form.client.placeholder': '请描述你服务的客户，内部客户直接 @姓名／工号',
+
   'form.invites.label': '邀评人',
   'form.invites.placeholder': '请直接 @姓名／工号，最多可邀请 5 人',
+
   'form.weight.label': '权重',
   'form.weight.placeholder': '请输入',
   'form.public.label': '目标公开',
@@ -122,6 +124,7 @@ export default {
   'app.register-result.msg': '你的账户：{email} 注册成功',
   'app.register-result.activation-email':
     '激活邮件已发送到你的邮箱中，邮件有效期为24小时。请及时登录邮箱，点击邮件中的链接激活帐户。',
+
   'app.register-result.back-home': '返回首页',
   'app.register-result.view-mailbox': '查看邮箱',
   'app.home.introduce': '介绍',
@@ -160,6 +163,7 @@ export default {
   'app.forms.basic.title': '基础表单',
   'app.forms.basic.description':
     '表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。',
+
   'app.monitor.trading-activity': '活动实时交易情况',
   'app.monitor.total-transactions': '今日交易总额',
   'app.monitor.sales-target': '销售目标完成率',
@@ -206,10 +210,12 @@ export default {
   'app.settings.security.phone-description': '已绑定手机：',
   'app.settings.security.question': '密保问题',
   'app.settings.security.question-description': '未设置密保问题，密保问题可有效保护账户安全',
+
   'app.settings.security.email': '备用邮箱',
   'app.settings.security.email-description': '已绑定邮箱：',
   'app.settings.security.mfa': 'MFA 设备',
   'app.settings.security.mfa-description': '未绑定 MFA 设备，绑定后，可以进行二次确认',
+
   'app.settings.security.modify': '修改',
   'app.settings.security.set': '设置',
   'app.settings.security.bind': '绑定',
@@ -222,10 +228,13 @@ export default {
   'app.settings.binding.bind': '绑定',
   'app.settings.notification.password': '账户密码',
   'app.settings.notification.password-description': '其他用户的消息将以站内信的形式通知',
+
   'app.settings.notification.messages': '系统消息',
   'app.settings.notification.messages-description': '系统消息将以站内信的形式通知',
-  'app.settings.notification.todo': '账户密码',
-  'app.settings.notification.todo-description': '账户密码',
+
+  'app.settings.notification.todo': '待办事项通知',
+  'app.settings.notification.todo-description': '待办事项清单将以信件表单形式通知',
+
   'app.settings.open': '开',
   'app.settings.close': '关',
   'app.exception.back': '返回首页',
@@ -234,6 +243,7 @@ export default {
   'app.exception.description.500': '抱歉，服务器出错了',
   'app.result.error.title': '提交失败',
   'app.result.error.description': '请核对并修改以下信息后，再重新提交。',
+
   'app.result.error.hint-title': '您提交的内容有如下错误：',
   'app.result.error.hint-text1': '您的账户已被冻结',
   'app.result.error.hint-btn1': '立即解冻',
@@ -243,6 +253,7 @@ export default {
   'app.result.success.title': '提交成功',
   'app.result.success.description':
     '提交结果页用于反馈一系列操作任务的处理结果， 如果仅是简单操作，使用 Message 全局提示反馈即可。 本文字区域可以展示简单的补充说明，如果有类似展示 “单据”的需求，下面这个灰色区域可以呈现比较复杂的内容。',
+
   'app.result.success.operate-title': '项目名称',
   'app.result.success.operate-id': '项目 ID：',
   'app.result.success.principal': '负责人：',
