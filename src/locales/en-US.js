@@ -4,6 +4,7 @@ export default {
   'layout.user.link.help': 'help',
   'layout.user.link.privacy': 'privacy',
   'layout.user.link.terms': 'terms',
+  'layout.copyright.year': '2018',
   'layout.copyright.ltd': 'Shanghai MaNuo Intelligent Technology Co., Ltd.',
   'layout.system.title': 'Transfer Medical',
   'layout.system.desc': 'WKH Transfer Medical Monitor Cloud Platform',

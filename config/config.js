@@ -109,7 +109,6 @@ export default {
     '/api': {
       target: 'http://localhost:8020/',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
     },
     '/login': {
       target: 'http://localhost:8020',

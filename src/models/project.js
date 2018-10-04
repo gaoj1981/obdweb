@@ -12,7 +12,7 @@ export default {
       const response = yield call(queryProjectNotice);
       yield put({
         type: 'saveNotice',
-        payload: Array.isArray(response) ? response : [],
+        payload: Array.isArray(response) ? [] : [],
       });
     },
   },

@@ -28,7 +28,9 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2018 <FormattedMessage id="layout.copyright.ltd" />
+    Copyright <Icon type="copyright" /> <FormattedMessage id="layout.copyright.year" />
+    &nbsp;&nbsp;
+    <FormattedMessage id="layout.copyright.ltd" />
   </Fragment>
 );
 

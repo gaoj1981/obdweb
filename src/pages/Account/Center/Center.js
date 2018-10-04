@@ -28,7 +28,7 @@ class Center extends PureComponent {
     dispatch({
       type: 'list/fetch',
       payload: {
-        count: 8,
+        count: 0,
       },
     });
     dispatch({
@@ -97,7 +97,7 @@ class Center extends PureComponent {
         key: 'articles',
         tab: (
           <span>
-            文章 <span style={{ fontSize: 14 }}>(8)</span>
+            文章 <span style={{ fontSize: 14 }}>(0)</span>
           </span>
         ),
       },
@@ -105,7 +105,7 @@ class Center extends PureComponent {
         key: 'applications',
         tab: (
           <span>
-            应用 <span style={{ fontSize: 14 }}>(8)</span>
+            应用 <span style={{ fontSize: 14 }}>(0)</span>
           </span>
         ),
       },
@@ -113,7 +113,7 @@ class Center extends PureComponent {
         key: 'projects',
         tab: (
           <span>
-            项目 <span style={{ fontSize: 14 }}>(8)</span>
+            项目 <span style={{ fontSize: 14 }}>(0)</span>
           </span>
         ),
       },
@@ -174,7 +174,7 @@ class Center extends PureComponent {
                     )}
                   </div>
                   <Divider style={{ marginTop: 16 }} dashed />
-                  <div className={styles.team}>
+                  <div className={styles.team} style={{ display: 'none' }}>
                     <div className={styles.teamTitle}>团队</div>
                     <Spin spinning={projectLoading}>
                       <Row gutter={36}>
