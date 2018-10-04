@@ -1,4 +1,3 @@
-// import zhMessages from '../../locales/zh.json';
 export default {
   'navbar.lang': 'Languages',
   'layout.user.link.help': 'help',
