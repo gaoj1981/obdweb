@@ -46,9 +46,11 @@ export default {
   'form.client.label.tooltip': '目标的服务对象',
   'form.client.placeholder': '请描述你服务的客户，内部客户直接 @姓名／工号',
 
+  //
   'form.invites.label': '邀评人',
   'form.invites.placeholder': '请直接 @姓名／工号，最多可邀请 5 人',
 
+  //
   'form.weight.label': '权重',
   'form.weight.placeholder': '请输入',
   'form.public.label': '目标公开',
@@ -211,11 +213,13 @@ export default {
   'app.settings.security.question': '密保问题',
   'app.settings.security.question-description': '未设置密保问题，密保问题可有效保护账户安全',
 
+  //
   'app.settings.security.email': '备用邮箱',
   'app.settings.security.email-description': '已绑定邮箱：',
   'app.settings.security.mfa': 'MFA 设备',
   'app.settings.security.mfa-description': '未绑定 MFA 设备，绑定后，可以进行二次确认',
 
+  //
   'app.settings.security.modify': '修改',
   'app.settings.security.set': '设置',
   'app.settings.security.bind': '绑定',
@@ -229,12 +233,15 @@ export default {
   'app.settings.notification.password': '账户密码',
   'app.settings.notification.password-description': '其他用户的消息将以站内信的形式通知',
 
+  //
   'app.settings.notification.messages': '系统消息',
   'app.settings.notification.messages-description': '系统消息将以站内信的形式通知',
 
+  //
   'app.settings.notification.todo': '待办事项通知',
   'app.settings.notification.todo-description': '待办事项清单将以信件表单形式通知',
 
+  //
   'app.settings.open': '开',
   'app.settings.close': '关',
   'app.exception.back': '返回首页',
@@ -244,6 +251,7 @@ export default {
   'app.result.error.title': '提交失败',
   'app.result.error.description': '请核对并修改以下信息后，再重新提交。',
 
+  //
   'app.result.error.hint-title': '您提交的内容有如下错误：',
   'app.result.error.hint-text1': '您的账户已被冻结',
   'app.result.error.hint-btn1': '立即解冻',
