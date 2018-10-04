@@ -1,5 +1,4 @@
 // import zhMessages from '../../locales/zh.json';
-
 export default {
   'navbar.lang': '语言',
   'layout.user.link.help': '帮助',
@@ -10,6 +9,7 @@ export default {
   'layout.system.desc': '维康恒巡诊车采集、监控、管理云平台',
   'validation.email.required': '请输入邮箱地址！',
   'validation.email.wrong-format': '邮箱地址格式错误！',
+  'validation.username.required': '请输入用户名！',
   'validation.password.required': '请输入密码！',
   'validation.password.twice': '两次输入的密码不匹配!',
   'validation.password.strength.msg': '请至少输入 6 个字符。请不要使用容易被猜到的密码。',

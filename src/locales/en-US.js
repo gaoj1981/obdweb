@@ -1,3 +1,4 @@
+// import zhMessages from '../../locales/zh.json';
 export default {
   'navbar.lang': 'Languages',
   'layout.user.link.help': 'help',
@@ -8,6 +9,7 @@ export default {
   'layout.system.desc': 'WKH Transfer Medical Monitor Cloud Platform',
   'validation.email.required': 'Please enter your email!',
   'validation.email.wrong-format': 'The email address is in the wrong format!',
+  'validation.username.required': 'Please enter your username!',
   'validation.password.required': 'Please enter your password!',
   'validation.password.twice': 'The passwords entered twice do not match!',
   'validation.password.strength.msg':

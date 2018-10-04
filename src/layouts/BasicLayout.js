@@ -167,15 +167,15 @@ class BasicLayout extends React.PureComponent {
 
   getPageTitle = pathname => {
     const currRouterData = this.matchParamsPath(pathname);
-
+    const title = formatMessage({ id: 'layout.system.title' });
     if (!currRouterData) {
-      return 'Ant Design Pro';
+      return title;
     }
     const message = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-    return `${message} - Ant Design Pro`;
+    return `${message} - ${title}`;
   };
 
   getLayoutStyle = () => {

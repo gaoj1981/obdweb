@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatMessage } from 'umi/locale';
 import { Icon } from 'antd';
 import styles from './index.less';
 
@@ -7,12 +8,12 @@ export default {
     props: {
       size: 'large',
       prefix: <Icon type="user" className={styles.prefixIcon} />,
-      placeholder: 'admin',
+      placeholder: formatMessage({ id: 'validation.username.required' }),
     },
     rules: [
       {
         required: true,
-        message: 'Please enter username!',
+        message: formatMessage({ id: 'validation.username.required' }),
       },
     ],
   },
@@ -21,12 +22,12 @@ export default {
       size: 'large',
       prefix: <Icon type="lock" className={styles.prefixIcon} />,
       type: 'password',
-      placeholder: '888888',
+      placeholder: formatMessage({ id: 'validation.password.required' }),
     },
     rules: [
       {
         required: true,
-        message: 'Please enter password!',
+        message: formatMessage({ id: 'validation.password.required' }),
       },
     ],
   },
