@@ -171,7 +171,7 @@ class BaseView extends Component {
                 ],
               })(<PhoneView />)}
             </FormItem>
-            <Button type="primary" onClick={() => message.warn('权限不足，请联系管理员！')}>
+            <Button type="primary" onClick={() => message.warn('您的权限不足，请联系管理员！')}>
               <FormattedMessage
                 id="app.settings.basic.update"
                 defaultMessage="Update Information"
