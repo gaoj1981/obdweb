@@ -80,7 +80,7 @@ class LoginPage extends Component {
             {login.status === 'error' &&
               login.type === 'account' &&
               !submitting &&
-              this.renderMessage('账户或密码错误（admin/888888）')}
+              this.renderMessage('账户或密码错误')}
             <UserName name="username" placeholder="admin/user" />
             <Password
               name="password"
@@ -92,14 +92,14 @@ class LoginPage extends Component {
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="app.login.remember-me" />
             </Checkbox>
-            <a style={{ float: 'right' }} href="">
+            <a style={{ float: 'right', display: 'none' }} href="">
               <FormattedMessage id="app.login.forgot-password" />
             </a>
           </div>
           <Submit loading={submitting}>
             <FormattedMessage id="app.login.login" />
           </Submit>
-          <div className={styles.other}>
+          <div className={styles.other} style={{ display: 'none' }}>
             <FormattedMessage id="app.login.sign-in-with" />
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
