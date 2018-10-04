@@ -80,7 +80,7 @@ class LoginPage extends Component {
             {login.status === 'error' &&
               login.type === 'account' &&
               !submitting &&
-              this.renderMessage('账户或密码错误')}
+              this.renderMessage(formatMessage({ id: 'app.login.tab-login-credentials.failure' }))}
             <UserName name="username" placeholder="admin/user" />
             <Password
               name="password"

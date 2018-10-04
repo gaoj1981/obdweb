@@ -108,6 +108,7 @@ export default {
   'menu.account.trigger': 'Trigger Error',
   'menu.account.logout': 'Logout',
   'app.login.tab-login-credentials': 'Credentials',
+  'app.login.tab-login-credentials.failure': 'Incorrect account or password',
   'app.login.tab-login-mobile': 'Mobile number',
   'app.login.remember-me': 'Remember me',
   'app.login.forgot-password': 'Forgot your password?',

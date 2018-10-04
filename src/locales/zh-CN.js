@@ -108,6 +108,7 @@ export default {
   'menu.account.trigger': '触发报错',
   'menu.account.logout': '退出登录',
   'app.login.tab-login-credentials': '账户密码登录',
+  'app.login.tab-login-credentials.failure': '账户或密码错误',
   'app.login.tab-login-mobile': '手机号登录',
   'app.login.remember-me': '自动登录',
   'app.login.forgot-password': '忘记密码',

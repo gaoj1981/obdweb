@@ -32,7 +32,7 @@ const copyright = (
 );
 
 class UserLayout extends React.PureComponent {
-  // @TODO title
+  // @TODO title nouse
   // getPageTitle() {
   //   const { routerData, location } = this.props;
   //   const { pathname } = location;
