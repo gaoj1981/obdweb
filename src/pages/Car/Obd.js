@@ -6,7 +6,7 @@ class BaseInfo extends PureComponent {
   componentDidMount() {}
 
   render() {
-    return <div className={styles.testCss}>test</div>;
+    return <div className={styles.testCss}>test obd</div>;
   }
 }
 

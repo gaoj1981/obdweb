@@ -8,14 +8,9 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './MainPage.less';
 
-@connect(({ user, project, activities, chart, loading }) => ({
+@connect(({ user, loading }) => ({
   currentUser: user.currentUser,
-  project,
-  activities,
-  chart,
   currentUserLoading: loading.effects['user/fetchCurrent'],
-  projectLoading: loading.effects['project/fetchNotice'],
-  activitiesLoading: loading.effects['activities/fetchList'],
 }))
 class MainPage extends PureComponent {
   componentDidMount() {

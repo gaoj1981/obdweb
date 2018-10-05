@@ -6,7 +6,7 @@ class BaseInfo extends PureComponent {
   componentDidMount() {}
 
   render() {
-    return <div className={styles.testCss}>test binduser aaa</div>;
+    return <div className={styles.testCss}>test binduser</div>;
   }
 }
 
