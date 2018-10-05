@@ -43,6 +43,60 @@ export default [
           },
         ],
       },
+      // car
+      {
+        path: '/car',
+        name: 'car',
+        icon: 'car',
+        routes: [
+          {
+            path: '/car/basic',
+            name: 'basic',
+            component: './Car/BaseInfo',
+            icon: 'database',
+          },
+          {
+            path: '/car/obd',
+            name: 'obd',
+            component: './Car/Obd',
+            icon: 'gateway',
+          },
+          {
+            path: '/car/user',
+            name: 'buser',
+            authority: ['admin'],
+            component: './Car/BindUser',
+            icon: 'team',
+          },
+        ],
+      },
+      // car
+      {
+        path: '/equip',
+        name: 'equip',
+        icon: 'fork',
+        routes: [
+          {
+            path: '/equip/bind',
+            name: 'basic',
+            component: './Car/BaseInfo',
+            icon: 'database',
+          },
+          {
+            path: '/car/obd',
+            name: 'obd',
+            component: './Car/Obd',
+            icon: 'gateway',
+          },
+          {
+            path: '/car/user',
+            name: 'buser',
+            authority: ['admin'],
+            component: './Car/BindUser',
+            icon: 'team',
+          },
+        ],
+      },
       // forms
       {
         path: '/form',
