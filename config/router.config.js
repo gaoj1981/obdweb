@@ -70,30 +70,24 @@ export default [
           },
         ],
       },
-      // car
+      // equip
       {
         path: '/equip',
         name: 'equip',
         icon: 'fork',
         routes: [
           {
-            path: '/equip/bind',
-            name: 'basic',
-            component: './Car/BaseInfo',
-            icon: 'database',
+            path: '/equip/list',
+            name: 'listview',
+            component: './Equip/ListView',
+            icon: 'deployment-unit',
           },
           {
-            path: '/car/obd',
-            name: 'obd',
-            component: './Car/Obd',
-            icon: 'gateway',
-          },
-          {
-            path: '/car/user',
-            name: 'buser',
+            path: '/equip/lic',
+            name: 'license',
             authority: ['admin'],
-            component: './Car/BindUser',
-            icon: 'team',
+            component: './Equip/LicAuth',
+            icon: 'usb',
           },
         ],
       },
