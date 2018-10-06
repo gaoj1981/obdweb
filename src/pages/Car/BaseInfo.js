@@ -20,7 +20,7 @@ const CreateForm = Form.create()(props => {
       destroyOnClose
       title={formatMessage({
         id: 'form.biz.title.add',
-        defaultMessage: 'Not translated into English',
+        defaultMessage: 'No translate',
       })}
       visible={modalVisible}
       onOk={okHandle}
