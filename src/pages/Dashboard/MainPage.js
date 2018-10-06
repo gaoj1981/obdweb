@@ -17,9 +17,11 @@ import styles from './MainPage.less';
 class MainPage extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
+    //
     dispatch({
       type: 'user/fetchCurrent',
     });
+    //
     dispatch({
       type: 'equip/fetchLicCountSum',
     });

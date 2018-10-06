@@ -33,7 +33,7 @@ const CreateForm = Form.create()(props => {
       >
         {form.getFieldDecorator('desc', {
           rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
-        })(<Input placeholder="请输入" />)}
+        })(<Input />)}
       </FormItem>
     </Modal>
   );

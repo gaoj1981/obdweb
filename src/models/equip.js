@@ -1,5 +1,6 @@
 import { getLicCountSum } from '../services/equip';
 
+//
 export default {
   namespace: 'equip',
 
