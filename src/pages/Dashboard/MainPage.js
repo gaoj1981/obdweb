@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 import { connect } from 'dva';
 import Link from 'umi/link';
@@ -8,15 +9,19 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './MainPage.less';
 
-@connect(({ user, loading }) => ({
+@connect(({ user, loading, equip }) => ({
   currentUser: user.currentUser,
   currentUserLoading: loading.effects['user/fetchCurrent'],
+  licCountSum: equip.licCountSum,
 }))
 class MainPage extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
+    });
+    dispatch({
+      type: 'equip/fetchLicCountSum',
     });
   }
 
@@ -65,7 +70,7 @@ class MainPage extends PureComponent {
   }
 
   render() {
-    const { currentUser, currentUserLoading } = this.props;
+    const { currentUser, currentUserLoading, licCountSum } = this.props;
 
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (
@@ -75,9 +80,8 @@ class MainPage extends PureComponent {
           </div>
           <div className={styles.content}>
             <div className={styles.contentTitle}>
-              早安，
-              {currentUser.name}
-              ，祝你开心每一天！
+              <FormattedMessage id="biz.dashboard.hello.prefix" />
+              {currentUser.name}，<FormattedMessage id="biz.dashboard.hello.suffix" />
             </div>
             <div>
               {currentUser.title} |{currentUser.group}
@@ -89,17 +93,18 @@ class MainPage extends PureComponent {
     const extraContent = (
       <div className={styles.extraContent}>
         <div className={styles.statItem}>
-          <p>设备数</p>
+          <p>{formatMessage({ id: 'biz.car.count.total', defaultMessage: 'No Translate' })}</p>
           <p>56</p>
         </div>
         <div className={styles.statItem}>
-          <p>授权使用</p>
+          <p>{formatMessage({ id: 'biz.car.count.total', defaultMessage: 'No Translate' })}</p>
           <p>
-            8<span> / 24</span>
+            {licCountSum[0]}
+            <span> / {licCountSum[1]}</span>
           </p>
         </div>
         <div className={styles.statItem}>
-          <p>维修保养记录</p>
+          <p>{formatMessage({ id: 'biz.car.count.record', defaultMessage: 'No Translate' })}</p>
           <p>2,223</p>
         </div>
       </div>
@@ -116,26 +121,40 @@ class MainPage extends PureComponent {
             <Card
               className={styles.projectList}
               style={{ marginBottom: 24 }}
-              title="进行中的项目"
+              title={formatMessage({
+                id: 'biz.dashboard.project.coding',
+                defaultMessage: 'No Translate',
+              })}
               bordered={false}
-              extra={<Link to="/">全部项目</Link>}
+              extra={
+                <Link to="/">
+                  {formatMessage({
+                    id: 'biz.dashboard.project.all',
+                    defaultMessage: 'No Translate',
+                  })}
+                </Link>
+              }
               bodyStyle={{ padding: 0 }}
             />
             <Card
               bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
               bordered={false}
               className={styles.activeCard}
-              title="动态"
+              title={formatMessage({ id: 'biz.dashboard.guide', defaultMessage: 'No Translate' })}
             />
           </Col>
           <Col xl={8} lg={24} md={24} sm={24} xs={24}>
             <Card
               style={{ marginBottom: 24 }}
-              title="快速开始 / 便捷导航"
+              title={formatMessage({ id: 'biz.dashboard.dynamic', defaultMessage: 'No Translate' })}
               bordered={false}
               bodyStyle={{ padding: 0 }}
             />
-            <Card bodyStyle={{ paddingTop: 12, paddingBottom: 12 }} bordered={false} title="车辆" />
+            <Card
+              bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
+              bordered={false}
+              title={formatMessage({ id: 'biz.car', defaultMessage: 'No Translate' })}
+            />
           </Col>
         </Row>
       </PageHeaderWrapper>

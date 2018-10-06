@@ -62,6 +62,15 @@ export default {
   'form.publicUsers.option.A': 'Colleague A',
   'form.publicUsers.option.B': 'Colleague B',
   'form.publicUsers.option.C': 'Colleague C',
+  'form.biz.title.add': 'Add',
+  'form.biz.title.edit': 'Edit',
+  'form.biz.title.del': 'Delete',
+  'form.biz.add': 'Successfully added',
+  'form.biz.edit': 'Successfully modified',
+  'form.biz.delete': 'Successfully deleted',
+  'form.biz.delete.confirm': 'Are you sure want to delete?',
+  'form.biz.login.username': 'Please enter your username!',
+  'form.biz.login.password': 'Please enter your password!',
   'component.globalHeader.search': 'Search',
   'component.globalHeader.search.example1': 'Search example 1',
   'component.globalHeader.search.example2': 'Search example 2',
@@ -312,4 +321,7 @@ export default {
   'app.setting.copyinfo': 'copy success，please replace defaultSettings in src/models/setting.js',
   'app.setting.production.hint':
     'Setting panel shows in development environment only, please manually modify',
+  // =========================================================================
+  'biz.dashboard.hello.prefix': 'Hello,',
+  'biz.dashboard.hello.suffix': 'Hope you will be happy every day!',
 };

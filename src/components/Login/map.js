@@ -8,7 +8,7 @@ export default {
     props: {
       size: 'large',
       prefix: <Icon type="user" className={styles.prefixIcon} />,
-      placeholder: formatMessage({ id: 'validation.username.required' }),
+      placeholder: formatMessage({ id: 'form.biz.login.username' }),
     },
     rules: [
       {
@@ -22,7 +22,7 @@ export default {
       size: 'large',
       prefix: <Icon type="lock" className={styles.prefixIcon} />,
       type: 'password',
-      placeholder: formatMessage({ id: 'validation.password.required' }),
+      placeholder: formatMessage({ id: 'form.biz.login.password' }),
     },
     rules: [
       {
