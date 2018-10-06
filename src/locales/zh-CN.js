@@ -330,6 +330,7 @@ export default {
   'biz.dashboard.dynamic': '动态',
   'biz.car': '车辆',
   'biz.car.eid': '车辆编号',
+  'biz.car.eid.length': '请输入 {length} 个字符的编号！',
   'biz.car.count.total': '巡诊车数',
   'biz.car.count.record': '维修保养记录',
   'biz.lic.count.sum': '授权用量',

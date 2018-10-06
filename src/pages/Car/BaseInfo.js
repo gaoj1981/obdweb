@@ -32,7 +32,16 @@ const CreateForm = Form.create()(props => {
         label={formatMessage({ id: 'biz.car.eid', defaultMessage: 'No Translate' })}
       >
         {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
+          rules: [
+            {
+              required: true,
+              message: formatMessage(
+                { id: 'biz.car.eid.length', defaultMessage: 'No Translate' },
+                { length: 15 }
+              ),
+              min: 15,
+            },
+          ],
         })(<Input />)}
       </FormItem>
     </Modal>
