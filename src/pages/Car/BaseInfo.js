@@ -1,7 +1,21 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'dva';
 import { formatMessage } from 'umi/locale';
-import { Row, Col, Form, Input, Cascader, Card, Modal, Button, Table, message } from 'antd';
-import { AREA_DATA } from '../../common/AreaJson';
+import {
+  Row,
+  Col,
+  Form,
+  Input,
+  Cascader,
+  Card,
+  Modal,
+  Button,
+  Table,
+  Divider,
+  message,
+} from 'antd';
+import { AREA_DATA } from '@/common/AreaJson';
+import { getAreaId } from '@/utils/BizUtil';
 import styles from './BaseInfo.less';
 
 const FormItem = Form.Item;
@@ -48,22 +62,51 @@ const CreateForm = Form.create()(props => {
   );
 });
 
+@connect(({ car, loading }) => ({
+  carPageList: car.carPageList,
+  loading: loading.models.rule,
+}))
 @Form.create()
 class BaseInfo extends PureComponent {
   state = {
     modalVisible: false,
   };
 
+  columns = [
+    {
+      title: 'eid',
+      dataIndex: 'eid',
+    },
+    {
+      title: '描述',
+      dataIndex: 'deviceNumber',
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
+          <Divider type="vertical" />
+          <a href="">订阅警报</a>
+        </Fragment>
+      ),
+    },
+  ];
+
   componentDidMount() {}
 
   handleSearch = e => {
     e.preventDefault();
 
-    const { form } = this.props;
+    const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      console.log(fieldsValue);
+      const { areaId } = fieldsValue;
+      dispatch({
+        type: 'car/fetchPageCar',
+        payload: { eidLike: fieldsValue.eidLike, areaId: getAreaId(areaId), paging: 1 },
+      });
     });
   };
 
@@ -97,7 +140,7 @@ class BaseInfo extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="车辆编号">
-              {getFieldDecorator('eid')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('eidLike')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -131,7 +174,14 @@ class BaseInfo extends PureComponent {
   }
 
   render() {
+    const {
+      carPageList: { content, totalElements, number, size },
+      loading,
+    } = this.props;
     const { modalVisible } = this.state;
+
+    // 分页
+    const pagination = { current: number + 1, pageSize: size, total: totalElements };
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -145,10 +195,11 @@ class BaseInfo extends PureComponent {
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
             <Table
               rowKey="id"
+              loading={loading}
               columns={this.columns}
-              dataSource={[]}
-              loading={false}
+              dataSource={content}
               size="small"
+              pagination={pagination}
             />
           </div>
         </Card>

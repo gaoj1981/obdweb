@@ -4,7 +4,9 @@ export async function getLicCountSum() {
   return request('/api/lic/count.sum');
 }
 
-export async function getDeviceTODO() {
-  // 待完善
-  return request('/api/device');
+export async function getCarPage(params) {
+  return request('/api/car/get.page', {
+    method: 'POST',
+    body: params,
+  });
 }

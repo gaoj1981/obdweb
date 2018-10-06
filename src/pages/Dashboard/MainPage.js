@@ -99,7 +99,7 @@ class MainPage extends PureComponent {
           <p>56</p>
         </div>
         <div className={styles.statItem}>
-          <p>{formatMessage({ id: 'biz.car.count.total', defaultMessage: 'No Translate' })}</p>
+          <p>{formatMessage({ id: 'biz.lic.count.sum', defaultMessage: 'No Translate' })}</p>
           <p>
             {licCountSum[0]}
             <span> / {licCountSum[1]}</span>
