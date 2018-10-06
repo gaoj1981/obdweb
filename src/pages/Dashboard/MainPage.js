@@ -101,8 +101,8 @@ class MainPage extends PureComponent {
         <div className={styles.statItem}>
           <p>{formatMessage({ id: 'biz.lic.count.sum', defaultMessage: 'No Translate' })}</p>
           <p>
-            {licCountSum[0]}
-            <span> / {licCountSum[1]}</span>
+            {licCountSum ? licCountSum[0] : 0}
+            <span> / {licCountSum ? licCountSum[1] : 0}</span>
           </p>
         </div>
         <div className={styles.statItem}>

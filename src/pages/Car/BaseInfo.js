@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { formatMessage } from 'umi/locale';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import {
   Row,
   Col,
@@ -12,10 +12,14 @@ import {
   Button,
   Table,
   Divider,
+  Dropdown,
+  Menu,
+  Badge,
+  Icon,
   message,
 } from 'antd';
 import { AREA_DATA } from '@/common/AreaJson';
-import { getAreaId } from '@/utils/BizUtil';
+import { getAreaId, getStatus4FuelType, deleteConfirm, getAreaName } from '@/utils/BizUtil';
 import styles from './BaseInfo.less';
 
 const FormItem = Form.Item;
@@ -64,7 +68,7 @@ const CreateForm = Form.create()(props => {
 
 @connect(({ car, loading }) => ({
   carPageList: car.carPageList,
-  loading: loading.models.rule,
+  loading: loading.models.car,
 }))
 @Form.create()
 class BaseInfo extends PureComponent {
@@ -74,26 +78,82 @@ class BaseInfo extends PureComponent {
 
   columns = [
     {
-      title: 'eid',
+      title: <FormattedMessage id="biz.car.eid" defaultMessage="No translate" />,
       dataIndex: 'eid',
     },
     {
-      title: '描述',
+      title: <FormattedMessage id="biz.obd.device.number" defaultMessage="No translate" />,
       dataIndex: 'deviceNumber',
     },
     {
+      title: <FormattedMessage id="biz.car.areaid" defaultMessage="No translate" />,
+      dataIndex: 'areaId',
+      render: val => getAreaName(val),
+    },
+    {
+      title: <FormattedMessage id="biz.car.platenum" defaultMessage="No translate" />,
+      dataIndex: 'plateNum',
+    },
+    {
+      title: <FormattedMessage id="biz.car.enginepower" defaultMessage="No translate" />,
+      dataIndex: 'enginePower',
+    },
+    {
+      title: <FormattedMessage id="biz.car.carmodel" defaultMessage="No translate" />,
+      dataIndex: 'carModel',
+    },
+    {
+      title: <FormattedMessage id="biz.car.fueltype" defaultMessage="No translate" />,
+      dataIndex: 'fuelType',
+      render(val) {
+        return <Badge status={getStatus4FuelType(val)} text={val} />;
+      },
+    },
+    {
       title: '操作',
+      align: 'center',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a
+            onClick={() => {
+              deleteConfirm('车辆', record.id, this.handleDelete);
+            }}
+          >
+            删除
+          </a>
+          <Divider type="vertical" />
+          <Dropdown
+            overlay={
+              <Menu onClick={({ key }) => this.moreBtnExc(key)}>
+                <Menu.Item key="record">维修保养</Menu.Item>
+                <Menu.Item key="buser">销售售后</Menu.Item>
+                <Menu.Item key="insur">车辆保险</Menu.Item>
+                <Menu.Item key="mot">车辆年检</Menu.Item>
+              </Menu>
+            }
+          >
+            <a>
+              更多 <Icon type="down" />
+            </a>
+          </Dropdown>
         </Fragment>
       ),
     },
   ];
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/fetchPageCar',
+      payload: { paging: 1 },
+    });
+  }
+
+  handleDelete = id => {
+    console.log('delete', id);
+  };
 
   handleSearch = e => {
     e.preventDefault();
@@ -111,12 +171,12 @@ class BaseInfo extends PureComponent {
   };
 
   handleFormReset = () => {
-    const { form } = this.props;
+    const { dispatch, form } = this.props;
     form.resetFields();
-    // dispatch({
-    //   type: 'rule/fetch',
-    //   payload: {},
-    // });
+    dispatch({
+      type: 'car/fetchPageCar',
+      payload: { paging: 1 },
+    });
   };
 
   handleModalVisible = flag => {
@@ -129,6 +189,10 @@ class BaseInfo extends PureComponent {
     console.log(fields);
     message.success('添加成功');
     this.handleModalVisible();
+  };
+
+  moreBtnExc = key => {
+    console.log(key);
   };
 
   renderSimpleForm() {
@@ -197,7 +261,7 @@ class BaseInfo extends PureComponent {
               rowKey="id"
               loading={loading}
               columns={this.columns}
-              dataSource={content}
+              dataSource={content || []}
               size="small"
               pagination={pagination}
             />
