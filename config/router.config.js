@@ -68,6 +68,18 @@ export default [
             component: './Car/BindUser',
             icon: 'team',
           },
+          {
+            path: '/car/insur',
+            name: 'insur',
+            component: './Car/Insur',
+            icon: 'insurance',
+          },
+          {
+            path: '/car/mot',
+            name: 'mot',
+            component: './Car/Mot',
+            icon: 'safety-certificate',
+          },
         ],
       },
       // equip
@@ -89,13 +101,55 @@ export default [
             component: './Equip/LicAuth',
             icon: 'usb',
           },
+          {
+            path: '/equip/consum',
+            name: 'consum',
+            component: './Equip/Consum',
+            icon: 'gold',
+          },
+          {
+            path: '/equip/warning',
+            name: 'warning',
+            authority: ['admin'],
+            component: './Equip/Warning',
+            icon: 'warning',
+          },
         ],
+      },
+      // sales
+      {
+        path: '/sales',
+        name: 'sales',
+        icon: 'shop',
+        routes: [
+          {
+            path: '/sales/score',
+            name: 'score',
+            component: './Sales/Score',
+            icon: 'shopping-cart',
+          },
+          {
+            path: '/sales/record',
+            name: 'record',
+            component: './Sales/Record',
+            icon: 'tool',
+          },
+        ],
+      },
+      // system
+      {
+        path: '/sys',
+        name: 'sys',
+        icon: 'setting',
+        component: './Sys/Index',
+        routes: [],
       },
       // forms
       {
         path: '/form',
         icon: 'form',
         name: 'form',
+        hideInMenu: true,
         routes: [
           {
             path: '/form/basic-form',
@@ -143,6 +197,7 @@ export default [
         path: '/list',
         icon: 'table',
         name: 'list',
+        hideInMenu: true,
         routes: [
           {
             path: '/list/table-list',
@@ -191,6 +246,7 @@ export default [
         path: '/profile',
         name: 'profile',
         icon: 'profile',
+        hideInMenu: true,
         routes: [
           // profile
           {
@@ -210,6 +266,7 @@ export default [
         name: 'result',
         icon: 'check-circle-o',
         path: '/result',
+        hideInMenu: true,
         routes: [
           // result
           {
@@ -224,6 +281,7 @@ export default [
         name: 'exception',
         icon: 'warning',
         path: '/exception',
+        hideInMenu: true,
         routes: [
           // exception
           {
@@ -253,6 +311,7 @@ export default [
         name: 'account',
         icon: 'user',
         path: '/account',
+        hideInMenu: true,
         routes: [
           {
             path: '/account/center',
