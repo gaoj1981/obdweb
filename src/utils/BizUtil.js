@@ -24,7 +24,6 @@ function getAreaNameTest() {
   let strs;
   for (let i = 0; i < areaIds.length; i += 1) {
     jsoProv = areaIds[i];
-    // if (jsoProv.value === "110000") {
     cityArr = jsoProv.children;
     for (let j = 0; j < cityArr.length; j += 1) {
       jsoCity = cityArr[j];
@@ -38,7 +37,6 @@ function getAreaNameTest() {
         strs += `,${jsoCity.value}:"${jsoCity.label}"`;
       }
     }
-    // }
   }
   console.log(strs);
 }
