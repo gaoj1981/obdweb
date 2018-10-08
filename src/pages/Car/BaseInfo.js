@@ -170,7 +170,22 @@ class BaseInfo extends PureComponent {
   };
 
   handleAdd = fields => {
-    console.log(fields);
+    const { areaIds } = fields;
+    const areaId = getAreaId(areaIds);
+    const formParam = { ...fields };
+    formParam.areaId = areaId;
+    //
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/addCar',
+      payload: formParam,
+      callback: () => {
+        dispatch({
+          type: 'car/fetchPageCar',
+          payload: { paging: 1 },
+        });
+      },
+    });
     message.success('添加成功');
     this.handleModalVisible();
   };

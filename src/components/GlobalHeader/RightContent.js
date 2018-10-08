@@ -88,13 +88,12 @@ export default class GlobalHeaderRight extends PureComponent {
             console.log('enter', value); // eslint-disable-line
           }}
         />
-        <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
+        <Tooltip title={formatMessage({ id: 'component.globalHeader.api.doc' })}>
           <a
             target="_blank"
             href="/swagger-ui.html"
             rel="noopener noreferrer"
             className={styles.action}
-            title="{ formatMessage({id: 'component.globalHeader.help'}) }"
           >
             <Icon type="question-circle-o" />
           </a>

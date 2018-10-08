@@ -10,3 +10,10 @@ export async function getCarPage(params) {
     body: params,
   });
 }
+
+export async function createCar(params) {
+  return request('/api/car/add', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -1,4 +1,4 @@
-import { getCarPage } from '@/services/equip';
+import { getCarPage, createCar } from '@/services/equip';
 
 //
 export default {
@@ -15,6 +15,10 @@ export default {
         type: 'queryList',
         payload: response,
       });
+    },
+    *addCar({ payload, callback }, { call }) {
+      yield call(createCar, payload);
+      callback();
     },
   },
 
