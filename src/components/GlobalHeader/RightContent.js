@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
-import { Spin, Tag, Menu, Icon, Dropdown, Avatar } from 'antd';
+import { Spin, Tag, Menu, Icon, Dropdown, Avatar, Tooltip } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import NoticeIcon from '../NoticeIcon';
@@ -88,6 +88,17 @@ export default class GlobalHeaderRight extends PureComponent {
             console.log('enter', value); // eslint-disable-line
           }}
         />
+        <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
+          <a
+            target="_blank"
+            href="/swagger-ui.html"
+            rel="noopener noreferrer"
+            className={styles.action}
+            title="{ formatMessage({id: 'component.globalHeader.help'}) }"
+          >
+            <Icon type="question-circle-o" />
+          </a>
+        </Tooltip>
         <NoticeIcon
           className={styles.action}
           count={currentUser.notifyCount}
