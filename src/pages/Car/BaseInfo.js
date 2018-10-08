@@ -98,7 +98,7 @@ class BaseInfo extends PureComponent {
       align: 'center',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+          <a onClick={() => console.log(text, record)}>编辑</a>
           <Divider type="vertical" />
           <a
             onClick={() => {
