@@ -8,6 +8,7 @@ export default {
   'layout.copyright.ltd': '码诺智能科技出品',
   'layout.system.title': '云巡诊系统',
   'layout.system.desc': '维康恒巡诊车采集、监控、管理云平台',
+  'validation.error.unknown': '未知异常！',
   'validation.email.required': '请输入邮箱地址！',
   'validation.email.wrong-format': '邮箱地址格式错误！',
   'validation.username.required': '请输入用户名！',

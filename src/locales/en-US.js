@@ -8,6 +8,7 @@ export default {
   'layout.copyright.ltd': 'Shanghai MaNuo Intelligent Technology Co., Ltd.',
   'layout.system.title': 'Transfer Medical',
   'layout.system.desc': 'WKH Transfer Medical Monitor Cloud Platform',
+  'validation.error.unknown': 'Unknown Error!',
   'validation.email.required': 'Please enter your email!',
   'validation.email.wrong-format': 'The email address is in the wrong format!',
   'validation.username.required': 'Please enter your username!',

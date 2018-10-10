@@ -1,6 +1,7 @@
 import BizConst from '@/common/BizConst';
 import { AREA_DATA, AREA_DATA_KEYVALUE } from '@/common/AreaJson';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
+import { formatMessage } from 'umi/locale';
 
 function getAreaId(areaIdArr) {
   if (areaIdArr) {
@@ -66,4 +67,12 @@ function deleteConfirm(text, id, delExcute) {
   });
 }
 
-export { getAreaId, getStatus4FuelType, deleteConfirm, getAreaName, getAreaNameTest };
+function isResOK(response) {
+  if (response && response.status === 400) {
+    message.error(response.message || formatMessage.get({ id: 'validation.error.unknown' }));
+    return false;
+  }
+  return true;
+}
+
+export { getAreaId, getStatus4FuelType, deleteConfirm, getAreaName, getAreaNameTest, isResOK };

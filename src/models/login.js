@@ -5,6 +5,9 @@ import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
 
+// 防止redirect叠加
+let redirectUrl = null;
+
 export default {
   namespace: 'login',
 
@@ -54,12 +57,16 @@ export default {
         },
       });
       reloadAuthorized();
+      if (window.location.href && !redirectUrl) {
+        // 多次调用redirect会叠加
+        redirectUrl = window.location.href;
+      }
       yield call(fakeAccountLogout);
       yield put(
         routerRedux.push({
           pathname: '/user/login',
           search: stringify({
-            redirect: window.location.href,
+            redirect: redirectUrl,
           }),
         })
       );

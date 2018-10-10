@@ -9,7 +9,6 @@ import {
   Cascader,
   Card,
   Button,
-  Table,
   Divider,
   Dropdown,
   Menu,
@@ -21,6 +20,7 @@ import {
 import { AREA_DATA } from '@/common/AreaJson';
 import Ellipsis from '@/components/Ellipsis';
 import { getAreaId, getStatus4FuelType, deleteConfirm, getAreaName } from '@/utils/BizUtil';
+import { TableListBase } from '@/common/TableLists';
 import CreateCarForm from './CreateCarForm';
 import styles from './BaseInfo.less';
 
@@ -35,6 +35,7 @@ const FormItem = Form.Item;
 class BaseInfo extends PureComponent {
   state = {
     modalVisible: false,
+    pageQuery: {},
   };
 
   columns = [
@@ -90,7 +91,7 @@ class BaseInfo extends PureComponent {
       title: <FormattedMessage id="biz.car.fueltype" defaultMessage="No translate" />,
       dataIndex: 'fuelType',
       render(val) {
-        return <Badge status={getStatus4FuelType(val)} text={val} />;
+        return val ? <Badge status={getStatus4FuelType(val)} text={val} /> : val;
       },
     },
     {
@@ -128,11 +129,7 @@ class BaseInfo extends PureComponent {
   ];
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'car/fetchPageCar',
-      payload: { paging: 1 },
-    });
+    this.dispatchPageList(1);
   }
 
   handleDelete = id => {
@@ -142,25 +139,19 @@ class BaseInfo extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
 
-    const { dispatch, form } = this.props;
+    const { form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       const { areaIds } = fieldsValue;
-      dispatch({
-        type: 'car/fetchPageCar',
-        payload: { eidLike: fieldsValue.eidLike, areaId: getAreaId(areaIds), paging: 1 },
-      });
+      this.dispatchPageList(1, { eidLike: fieldsValue.eidLike, areaId: getAreaId(areaIds) });
     });
   };
 
   handleFormReset = () => {
-    const { dispatch, form } = this.props;
+    const { form } = this.props;
     form.resetFields();
-    dispatch({
-      type: 'car/fetchPageCar',
-      payload: { paging: 1 },
-    });
+    this.dispatchPageList(1, {});
   };
 
   handleModalVisible = flag => {
@@ -177,22 +168,33 @@ class BaseInfo extends PureComponent {
     //
     const { dispatch } = this.props;
     dispatch({
-      type: 'car/addCar',
+      type: 'car/reqCommon',
+      service: 'addCar',
       payload: formParam,
       callback: () => {
-        dispatch({
-          type: 'car/fetchPageCar',
-          payload: { paging: 1 },
-        });
+        this.dispatchPageList(1);
+        message.success('添加成功');
       },
     });
-    message.success('添加成功');
     this.handleModalVisible();
   };
 
   moreBtnExc = key => {
     console.log(key);
   };
+
+  dispatchPageList(paging, queryParam) {
+    const { dispatch } = this.props;
+    const { pageQuery } = this.state;
+    const queryVal = queryParam || pageQuery;
+    const param = { ...queryVal, paging };
+    dispatch({
+      type: 'car/reqCommon',
+      service: 'queryCarList',
+      payload: param,
+    });
+    this.setState({ pageQuery: queryVal });
+  }
 
   renderSimpleForm() {
     const {
@@ -237,18 +239,17 @@ class BaseInfo extends PureComponent {
   }
 
   render() {
-    const {
-      carPageList: { content, totalElements, number, size },
-      loading,
-    } = this.props;
+    const { carPageList } = this.props;
     const { modalVisible } = this.state;
-
-    // 分页
-    const pagination = { current: number + 1, pageSize: size, total: totalElements };
 
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+    };
+
+    const propsTableList = {
+      ...carPageList,
+      columns: this.columns,
     };
 
     return (
@@ -256,14 +257,7 @@ class BaseInfo extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-            <Table
-              rowKey="id"
-              loading={loading}
-              columns={this.columns}
-              dataSource={content || []}
-              size="small"
-              pagination={pagination}
-            />
+            {TableListBase(propsTableList)}
           </div>
         </Card>
         <CreateCarForm {...parentMethods} modalVisible={modalVisible} />

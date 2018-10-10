@@ -3,6 +3,10 @@ import { notification } from 'antd';
 import router from 'umi/router';
 import hash from 'hash.js';
 import { isAntdPro } from './utils';
+import { reloadAuthorized } from './Authorized';
+
+// 防止401上报多次
+let isHave401 = false;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -23,39 +27,58 @@ const codeMessage = {
 };
 
 const checkStatus = response => {
-  if (response.status >= 200 && response.status < 300) {
+  if ((response.status >= 200 && response.status < 300) || response.status === 400) {
+    if (response.url.indexOf('/user/login') > 0) {
+      isHave401 = false;
+    }
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
-  notification.error({
-    // message: `请求错误 ${response.status}: ${response.url}`,
-    message: `请求错误 ${response.status}`,
-    description: errortext,
-  });
+  if (response.status === 401 && !isHave401) {
+    notification.error({
+      // message: `请求错误 ${response.status}: ${response.url}`,
+      message: `请求错误 ${response.status}`,
+      description: errortext,
+    });
+    isHave401 = true;
+    reloadAuthorized();
+    // @HACK
+    /* eslint-disable no-underscore-dangle */
+    window.g_app._store.dispatch({
+      type: 'login/logout',
+    });
+  } else if (response.status !== 401) {
+    notification.error({
+      // message: `请求错误 ${response.status}: ${response.url}`,
+      message: `请求错误 ${response.status}`,
+      description: errortext,
+    });
+  }
   const error = new Error(errortext);
   error.name = response.status;
   error.response = response;
   throw error;
 };
 
-const cachedSave = (response, hashcode) => {
-  /**
-   * Clone a response data and store it in sessionStorage
-   * Does not support data other than json, Cache only json
-   */
-  const contentType = response.headers.get('Content-Type');
-  if (contentType && contentType.match(/application\/json/i)) {
-    // All data is saved as text
-    response
-      .clone()
-      .text()
-      .then(content => {
-        sessionStorage.setItem(hashcode, content);
-        sessionStorage.setItem(`${hashcode}:timestamp`, Date.now());
-      });
-  }
-  return response;
-};
+// 注释，会缓存结果，导致新增等操作后，List结果不刷新
+// const cachedSave = (response, hashcode) => {
+//   /**
+//    * Clone a response data and store it in sessionStorage
+//    * Does not support data other than json, Cache only json
+//    */
+//   const contentType = response.headers.get('Content-Type');
+//   if (contentType && contentType.match(/application\/json/i)) {
+//     // All data is saved as text
+//     response
+//       .clone()
+//       .text()
+//       .then(content => {
+//         sessionStorage.setItem(hashcode, content);
+//         sessionStorage.setItem(`${hashcode}:timestamp`, Date.now());
+//       });
+//   }
+//   return response;
+// };
 
 /**
  * Requests a URL, returning a promise.
@@ -120,38 +143,32 @@ export default function request(
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
-  return fetch(url, newOptions)
-    .then(checkStatus)
-    .then(response => cachedSave(response, hashcode))
-    .then(response => {
-      // DELETE and 204 do not return data by default
-      // using .json will report an error.
-      if (newOptions.method === 'DELETE' || response.status === 204) {
-        return response.text();
-      }
-      return response.json();
-    })
-    .catch(e => {
-      const status = e.name;
-      if (status === 401) {
-        // @HACK
-        /* eslint-disable no-underscore-dangle */
-        window.g_app._store.dispatch({
-          type: 'login/logout',
-        });
-        return;
-      }
-      // environment should not be used
-      if (status === 403) {
-        router.push('/exception/403');
-        return;
-      }
-      if (status <= 504 && status >= 500) {
-        router.push('/exception/500');
-        return;
-      }
-      if (status >= 404 && status < 422) {
-        router.push('/exception/404');
-      }
-    });
+  return (
+    fetch(url, newOptions)
+      .then(checkStatus)
+      // .then(response => cachedSave(response, hashcode))
+      .then(response => {
+        // DELETE and 204 do not return data by default
+        // using .json will report an error.
+        if (newOptions.method === 'DELETE' || response.status === 204) {
+          return response.text();
+        }
+        return response.json();
+      })
+      .catch(e => {
+        const status = e.name;
+        // environment should not be used
+        if (status === 403) {
+          router.push('/exception/403');
+          return;
+        }
+        if (status <= 504 && status >= 500) {
+          router.push('/exception/500');
+          return;
+        }
+        if (status >= 404 && status < 422) {
+          router.push('/exception/404');
+        }
+      })
+  );
 }
