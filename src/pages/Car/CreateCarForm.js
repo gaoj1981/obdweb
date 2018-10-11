@@ -24,6 +24,14 @@ const CreateForm = Form.create()(props => {
         id: 'form.biz.title.add',
         defaultMessage: 'No translate',
       })}
+      okText={formatMessage({
+        id: 'form.submit',
+        defaultMessage: 'No translate',
+      })}
+      cancelText={formatMessage({
+        id: 'form.cancel',
+        defaultMessage: 'No translate',
+      })}
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}

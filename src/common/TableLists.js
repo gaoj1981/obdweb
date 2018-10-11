@@ -21,6 +21,13 @@ function getPagination(props) {
 }
 
 class TableListBase extends PureComponent {
+  handleTableChange = pagination => {
+    const { onChange } = this.props;
+    if (onChange) {
+      onChange(pagination);
+    }
+  };
+
   render() {
     const { content, loading, columns, totalElements, size, number } = this.props;
     return (
@@ -31,6 +38,7 @@ class TableListBase extends PureComponent {
         dataSource={content || []}
         size="small"
         pagination={getPagination({ totalElements, size, number })}
+        onChange={this.handleTableChange}
       />
     );
   }

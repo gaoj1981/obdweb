@@ -37,7 +37,7 @@ class BaseInfo extends PureComponent {
   state = {
     modalVisible: false,
     drawerVisible: false,
-    drawerWidth: 0,
+    drawerWidth: 660,
     pageQuery: {},
   };
 
@@ -98,18 +98,20 @@ class BaseInfo extends PureComponent {
       },
     },
     {
-      title: '操作',
+      title: <FormattedMessage id="form.action" defaultMessage="No translate" />,
       align: 'center',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleDrawerVisible(true, record.id)}>编辑</a>
+          <a onClick={() => this.handleDrawerVisible(true, record.id)}>
+            <FormattedMessage id="form.edit" defaultMessage="No translate" />
+          </a>
           <Divider type="vertical" />
           <a
             onClick={() => {
               deleteConfirm('车辆', record.id, this.handleDelete);
             }}
           >
-            删除
+            <FormattedMessage id="form.delete" defaultMessage="No translate" />
           </a>
           <Divider type="vertical" />
           <Dropdown
@@ -123,7 +125,7 @@ class BaseInfo extends PureComponent {
             }
           >
             <a>
-              更多 <Icon type="down" />
+              <FormattedMessage id="form.more" defaultMessage="No translate" /> <Icon type="down" />
             </a>
           </Dropdown>
         </Fragment>
@@ -149,6 +151,10 @@ class BaseInfo extends PureComponent {
       const { areaIds } = fieldsValue;
       this.dispatchPageList(0, { eidLike: fieldsValue.eidLike, areaId: getAreaId(areaIds) });
     });
+  };
+
+  handleTableChange = pagination => {
+    this.dispatchPageList(pagination.current - 1);
   };
 
   handleFormReset = () => {
@@ -184,12 +190,18 @@ class BaseInfo extends PureComponent {
 
   handleDrawerVisible = (flag, id) => {
     console.log(id);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/reqCommon',
+      service: 'queryCarList',
+      payload: { id },
+    });
     this.setState({
       drawerVisible: !!flag,
     });
   };
 
-  handleAdd = fields => {
+  handleEdit = fields => {
     console.log('edit', fields);
     this.handleDrawerVisible();
   };
@@ -202,14 +214,13 @@ class BaseInfo extends PureComponent {
     const { dispatch } = this.props;
     const { pageQuery } = this.state;
     const queryVal = queryParam || pageQuery;
-    const param = { query: queryVal, page, sort: { insTime: 0 }, size: 5 };
+    const param = { query: queryVal, page, size: 15 };
     dispatch({
       type: 'car/reqCommon',
       service: 'queryCarList',
       payload: param,
     });
     this.setState({ pageQuery: queryVal });
-    this.setState({ drawerVisible: false });
   }
 
   renderSimpleForm() {
@@ -234,10 +245,10 @@ class BaseInfo extends PureComponent {
           <Col md={6} sm={20}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
-                查询
+                <FormattedMessage id="form.search" defaultMessage="No translate" />
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
+                <FormattedMessage id="form.reset" defaultMessage="No translate" />
               </Button>
             </span>
           </Col>
@@ -279,11 +290,16 @@ class BaseInfo extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-            <TableListBase {...propsTableList} />
+            <TableListBase {...propsTableList} onChange={this.handleTableChange} />
           </div>
         </Card>
         <CreateCarForm {...parentMethods} modalVisible={modalVisible} />
-        <ModifyCarForm {...editMethods} drawerVisible={drawerVisible} drawerWidth={drawerWidth} />
+        <ModifyCarForm
+          {...editMethods}
+          drawerVisible={drawerVisible}
+          drawerWidth={drawerWidth}
+          loading={loading}
+        />
       </div>
     );
   }
