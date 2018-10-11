@@ -23,7 +23,8 @@ export default {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      console.log(response);
+      if (response && response.status === 'ok') {
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -57,9 +58,12 @@ export default {
         },
       });
       reloadAuthorized();
+
       if (window.location.href && !redirectUrl) {
         // 多次调用redirect会叠加
-        redirectUrl = window.location.href;
+        if (window.location.href.indexOf('exception/500') < 0) {
+          redirectUrl = window.location.href;
+        }
       }
       yield call(fakeAccountLogout);
       yield put(

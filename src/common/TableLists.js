@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { getLocale } from 'umi/locale';
 import { Table } from 'antd';
 
@@ -20,9 +20,24 @@ function getPagination(props) {
   return pagination;
 }
 
-function TableListBase(props) {
+class TableListBase extends PureComponent {
+  render() {
+    const { content, loading, columns, totalElements, size, number } = this.props;
+    return (
+      <Table
+        rowKey="id"
+        loading={loading}
+        columns={columns}
+        dataSource={content || []}
+        size="small"
+        pagination={getPagination({ totalElements, size, number })}
+      />
+    );
+  }
+}
+
+function TableListBaseFunc(props) {
   const { content, loading, columns } = props;
-  console.log(loading);
   // 分页
   return (
     <Table
@@ -36,4 +51,4 @@ function TableListBase(props) {
   );
 }
 
-export { TableListBase, getPagination };
+export { TableListBase, TableListBaseFunc, getPagination };

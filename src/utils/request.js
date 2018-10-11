@@ -5,8 +5,8 @@ import hash from 'hash.js';
 import { isAntdPro } from './utils';
 import { reloadAuthorized } from './Authorized';
 
-// 防止401上报多次
-let isHave401 = false;
+// 防止ERR上报多次
+let isHaveErr = false;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -14,7 +14,7 @@ const codeMessage = {
   202: '一个请求已经进入后台排队（异步任务）。',
   204: '删除数据成功。',
   400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-  401: '用户没有权限（令牌、用户名、密码错误）。',
+  401: '需要重新登录认证（超时或密码错误等）。',
   403: '用户得到授权，但是访问是被禁止的。',
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
   406: '请求的格式不可得。',
@@ -27,35 +27,30 @@ const codeMessage = {
 };
 
 const checkStatus = response => {
-  if ((response.status >= 200 && response.status < 300) || response.status === 400) {
-    if (response.url.indexOf('/user/login') > 0) {
-      isHave401 = false;
-    }
+  const { status } = response;
+  if (status >= 200 && status <= 400) {
+    isHaveErr = false;
     return response;
   }
-  const errortext = codeMessage[response.status] || response.statusText;
-  if (response.status === 401 && !isHave401) {
+  const errortext = codeMessage[status] || response.statusText;
+  if (!isHaveErr) {
     notification.error({
       // message: `请求错误 ${response.status}: ${response.url}`,
-      message: `请求错误 ${response.status}`,
+      message: `请求错误 ${status}`,
       description: errortext,
     });
-    isHave401 = true;
-    reloadAuthorized();
-    // @HACK
-    /* eslint-disable no-underscore-dangle */
-    window.g_app._store.dispatch({
-      type: 'login/logout',
-    });
-  } else if (response.status !== 401) {
-    notification.error({
-      // message: `请求错误 ${response.status}: ${response.url}`,
-      message: `请求错误 ${response.status}`,
-      description: errortext,
-    });
+    if (status === 401) {
+      isHaveErr = true;
+      reloadAuthorized();
+      // @HACK
+      /* eslint-disable no-underscore-dangle */
+      window.g_app._store.dispatch({
+        type: 'login/logout',
+      });
+    }
   }
   const error = new Error(errortext);
-  error.name = response.status;
+  error.name = status;
   error.response = response;
   throw error;
 };

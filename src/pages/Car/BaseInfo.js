@@ -22,6 +22,7 @@ import Ellipsis from '@/components/Ellipsis';
 import { getAreaId, getStatus4FuelType, deleteConfirm, getAreaName } from '@/utils/BizUtil';
 import { TableListBase } from '@/common/TableLists';
 import CreateCarForm from './CreateCarForm';
+import ModifyCarForm from './ModifyCarForm';
 import styles from './BaseInfo.less';
 
 // 共通常量
@@ -35,6 +36,8 @@ const FormItem = Form.Item;
 class BaseInfo extends PureComponent {
   state = {
     modalVisible: false,
+    drawerVisible: false,
+    drawerWidth: 0,
     pageQuery: {},
   };
 
@@ -99,7 +102,7 @@ class BaseInfo extends PureComponent {
       align: 'center',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => console.log(text, record)}>编辑</a>
+          <a onClick={() => this.handleDrawerVisible(true, record.id)}>编辑</a>
           <Divider type="vertical" />
           <a
             onClick={() => {
@@ -129,7 +132,7 @@ class BaseInfo extends PureComponent {
   ];
 
   componentDidMount() {
-    this.dispatchPageList(1);
+    this.dispatchPageList();
   }
 
   handleDelete = id => {
@@ -144,14 +147,14 @@ class BaseInfo extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       const { areaIds } = fieldsValue;
-      this.dispatchPageList(1, { eidLike: fieldsValue.eidLike, areaId: getAreaId(areaIds) });
+      this.dispatchPageList(0, { eidLike: fieldsValue.eidLike, areaId: getAreaId(areaIds) });
     });
   };
 
   handleFormReset = () => {
     const { form } = this.props;
     form.resetFields();
-    this.dispatchPageList(1, {});
+    this.dispatchPageList();
   };
 
   handleModalVisible = flag => {
@@ -172,28 +175,41 @@ class BaseInfo extends PureComponent {
       service: 'addCar',
       payload: formParam,
       callback: () => {
-        this.dispatchPageList(1);
+        this.dispatchPageList(0);
         message.success('添加成功');
       },
     });
     this.handleModalVisible();
   };
 
+  handleDrawerVisible = (flag, id) => {
+    console.log(id);
+    this.setState({
+      drawerVisible: !!flag,
+    });
+  };
+
+  handleAdd = fields => {
+    console.log('edit', fields);
+    this.handleDrawerVisible();
+  };
+
   moreBtnExc = key => {
     console.log(key);
   };
 
-  dispatchPageList(paging, queryParam) {
+  dispatchPageList(page, queryParam) {
     const { dispatch } = this.props;
     const { pageQuery } = this.state;
     const queryVal = queryParam || pageQuery;
-    const param = { ...queryVal, paging };
+    const param = { query: queryVal, page, sort: { insTime: 0 }, size: 5 };
     dispatch({
       type: 'car/reqCommon',
       service: 'queryCarList',
       payload: param,
     });
     this.setState({ pageQuery: queryVal });
+    this.setState({ drawerVisible: false });
   }
 
   renderSimpleForm() {
@@ -239,17 +255,23 @@ class BaseInfo extends PureComponent {
   }
 
   render() {
-    const { carPageList } = this.props;
-    const { modalVisible } = this.state;
+    const { carPageList, loading } = this.props;
+    const { modalVisible, drawerVisible, drawerWidth } = this.state;
+
+    const propsTableList = {
+      ...carPageList,
+      loading,
+      columns: this.columns,
+    };
 
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
 
-    const propsTableList = {
-      ...carPageList,
-      columns: this.columns,
+    const editMethods = {
+      handleEdit: this.handleEdit,
+      handleDrawerVisible: this.handleDrawerVisible,
     };
 
     return (
@@ -257,10 +279,11 @@ class BaseInfo extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-            {TableListBase(propsTableList)}
+            <TableListBase {...propsTableList} />
           </div>
         </Card>
         <CreateCarForm {...parentMethods} modalVisible={modalVisible} />
+        <ModifyCarForm {...editMethods} drawerVisible={drawerVisible} drawerWidth={drawerWidth} />
       </div>
     );
   }
