@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import { stringify } from 'qs';
 
 export async function getLicCountSum() {
   return request('/api/lic/count.sum');
@@ -16,4 +17,8 @@ export async function createCar(params) {
     method: 'POST',
     body: params,
   });
+}
+
+export async function getCarInfo(params) {
+  return request(`/api/car/get?${stringify(params)}`);
 }

@@ -102,7 +102,7 @@ class BaseInfo extends PureComponent {
       align: 'center',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleDrawerVisible(true, record.id)}>
+          <a onClick={() => this.handleDrawerVisible(true, record)}>
             <FormattedMessage id="form.edit" defaultMessage="No translate" />
           </a>
           <Divider type="vertical" />
@@ -188,13 +188,13 @@ class BaseInfo extends PureComponent {
     this.handleModalVisible();
   };
 
-  handleDrawerVisible = (flag, id) => {
-    console.log(id);
+  handleDrawerVisible = (flag, record) => {
+    console.log(record);
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',
-      service: 'queryCarList',
-      payload: { id },
+      service: 'getCarInfo',
+      payload: { id: record.id },
     });
     this.setState({
       drawerVisible: !!flag,
