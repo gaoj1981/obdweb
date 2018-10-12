@@ -30,6 +30,7 @@ const FormItem = Form.Item;
 
 @connect(({ car, loading }) => ({
   carPageList: car.carPageList,
+  carInfo: car.carInfo,
   loading: loading.models.car,
 }))
 @Form.create()
@@ -102,7 +103,7 @@ class BaseInfo extends PureComponent {
       align: 'center',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleDrawerVisible(true, record)}>
+          <a onClick={() => this.handleDrawerVisible(true, record.id)}>
             <FormattedMessage id="form.edit" defaultMessage="No translate" />
           </a>
           <Divider type="vertical" />
@@ -188,14 +189,15 @@ class BaseInfo extends PureComponent {
     this.handleModalVisible();
   };
 
-  handleDrawerVisible = (flag, record) => {
-    console.log(record);
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'car/reqCommon',
-      service: 'getCarInfo',
-      payload: { id: record.id },
-    });
+  handleDrawerVisible = (flag, id) => {
+    if (flag) {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'car/reqCommon',
+        service: 'getCarInfo',
+        payload: { id },
+      });
+    }
     this.setState({
       drawerVisible: !!flag,
     });
@@ -266,7 +268,7 @@ class BaseInfo extends PureComponent {
   }
 
   render() {
-    const { carPageList, loading } = this.props;
+    const { carPageList, carInfo, loading } = this.props;
     const { modalVisible, drawerVisible, drawerWidth } = this.state;
 
     const propsTableList = {
@@ -299,6 +301,7 @@ class BaseInfo extends PureComponent {
           drawerVisible={drawerVisible}
           drawerWidth={drawerWidth}
           loading={loading}
+          formValue={carInfo}
         />
       </div>
     );

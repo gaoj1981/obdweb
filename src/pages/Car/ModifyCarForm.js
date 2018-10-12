@@ -3,6 +3,8 @@ import { Cascader, Form, Button, Input, Drawer, Select, Row, Col } from 'antd';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import { AREA_DATA } from '@/common/AreaJson';
 import BizConst from '@/common/BizConst';
+import { getAreaArr } from '@/utils/BizUtil';
+import ColorInputWidget from './ColorInputWidget';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -39,9 +41,17 @@ class ModifyCarForm extends PureComponent {
     });
   };
 
+  checkPrice = (rule, value, callback) => {
+    if (value.number > 0) {
+      callback();
+      return;
+    }
+    callback('Price must greater than zero!');
+  };
+
   render() {
     const { visible } = this.state;
-    const { drawerVisible, drawerWidth, form, handleDrawerVisible } = this.props;
+    const { drawerVisible, drawerWidth, form, formValue, handleDrawerVisible } = this.props;
 
     // 兼容Modal&&Drawer滚动条闪动
     let realVisible = true;
@@ -57,10 +67,17 @@ class ModifyCarForm extends PureComponent {
 
     return (
       <Drawer
-        title="Basic Drawer"
+        title={`${formatMessage({
+          id: 'form.edit',
+          defaultMessage: 'No Translate',
+        })}${formatMessage({
+          id: 'biz.car',
+          defaultMessage: 'No Translate',
+        })}`}
         placement="right"
         width={realWidth}
         closable={false}
+        destroyOnClose
         onClose={() => handleDrawerVisible()}
         visible={realVisible}
       >
@@ -79,13 +96,14 @@ class ModifyCarForm extends PureComponent {
             onClick={() => handleDrawerVisible()}
           />
         </div>
-        <Form layout="vertical" hideRequiredMark>
+        <Form layout="vertical">
           <Row gutter={16}>
             <Col span={12}>
               <FormItem
                 label={formatMessage({ id: 'biz.car.eid', defaultMessage: 'No Translate' })}
               >
                 {form.getFieldDecorator('eid', {
+                  initialValue: formValue.eid,
                   rules: [
                     {
                       required: true,
@@ -117,6 +135,7 @@ class ModifyCarForm extends PureComponent {
                 label={formatMessage({ id: 'biz.car.areaid', defaultMessage: 'No Translate' })}
               >
                 {form.getFieldDecorator('areaIds', {
+                  initialValue: getAreaArr(formValue.areaId),
                   rules: [
                     {
                       required: true,
@@ -136,13 +155,33 @@ class ModifyCarForm extends PureComponent {
                 )}
               </FormItem>
             </Col>
-          </Row>
-          <Row>
-            <Col>
+            <Col span={8}>
+              <FormItem
+                label={formatMessage({ id: 'biz.car.name', defaultMessage: 'No Translate' })}
+              >
+                {form.getFieldDecorator('carName', {
+                  initialValue: formValue.carName,
+                  rules: [
+                    {
+                      max: 20,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                              { length: 20 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input placeholder="请输入车牌名称" />)}
+              </FormItem>
+            </Col>
+            <Col span={8}>
               <FormItem
                 label={formatMessage({ id: 'biz.car.platenum', defaultMessage: 'No Translate' })}
               >
                 {form.getFieldDecorator('plateNum', {
+                  initialValue: formValue.plateNum,
                   rules: [
                     {
                       max: 10,
@@ -158,11 +197,12 @@ class ModifyCarForm extends PureComponent {
                 })(<Input placeholder="请输入车牌号" />)}
               </FormItem>
             </Col>
-            <Col>
+            <Col span={8}>
               <FormItem
                 label={formatMessage({ id: 'biz.car.fueltype', defaultMessage: 'No Translate' })}
               >
                 {form.getFieldDecorator('fuelType', {
+                  initialValue: formValue.fuelType,
                   rules: [],
                 })(
                   <Select placeholder="请选择燃料类型" style={{ width: '100%' }}>
@@ -171,6 +211,14 @@ class ModifyCarForm extends PureComponent {
                     ))}
                   </Select>
                 )}
+              </FormItem>
+            </Col>
+            <Col span={24}>
+              <FormItem>
+                {form.getFieldDecorator('carColor', {
+                  initialValue: formValue.carColor,
+                  rules: [],
+                })(<ColorInputWidget />)}
               </FormItem>
             </Col>
           </Row>
@@ -196,7 +244,7 @@ class ModifyCarForm extends PureComponent {
           >
             <FormattedMessage id="form.cancel" defaultMessage="No translate" />
           </Button>
-          <Button onClick={this.onClose} type="primary">
+          <Button type="primary" onClick={() => this.handleSubmit()}>
             <FormattedMessage id="form.submit" defaultMessage="No translate" />
           </Button>
         </div>

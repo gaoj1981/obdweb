@@ -11,6 +11,18 @@ function getAreaId(areaIdArr) {
   return null;
 }
 
+function getAreaArr(areaId) {
+  const areaArr = [];
+  const provId = parseInt(areaId / 10000, 10) * 10000;
+  const cityId = parseInt(areaId / 100, 10) * 100;
+  areaArr.push(`${provId}`);
+  if (provId !== 110000 && provId !== 310000 && provId !== 120000 && provId !== 500000) {
+    areaArr.push(`${cityId}`);
+  }
+  areaArr.push(`${areaId}`);
+  return areaArr;
+}
+
 function getAreaName(areaId) {
   return AREA_DATA_KEYVALUE[areaId];
 }
@@ -75,4 +87,12 @@ function isResOK(response) {
   return true;
 }
 
-export { getAreaId, getStatus4FuelType, deleteConfirm, getAreaName, getAreaNameTest, isResOK };
+export {
+  getAreaId,
+  getAreaArr,
+  getStatus4FuelType,
+  deleteConfirm,
+  getAreaName,
+  getAreaNameTest,
+  isResOK,
+};
