@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'umi/locale';
-import { Tag, Input, Icon } from 'antd';
+import { Tag, Input, Icon, Row, Col, message } from 'antd';
 
-let tagsFromServer = ['红色', '黑色', '白色', '银色', '绿色', '黄色', '蓝色'];
+let tagsFromServer = ['红色', '绿色', '黄色', '蓝色', '银色', '白色', '黑色'];
 const getTagsColor = tag => {
   switch (tag) {
     case '红色':
@@ -10,7 +10,7 @@ const getTagsColor = tag => {
     case '黑色':
       return 'black';
     case '白色':
-      return '#ddd';
+      return '#999';
     case '银色':
       return '';
     case '绿色':
@@ -50,7 +50,7 @@ class ColorInputWidget extends React.Component {
   }
 
   componentWillUnmount() {
-    tagsFromServer = ['红色', '黑色', '白色', '银色', '绿色', '黄色', '蓝色'];
+    tagsFromServer = ['红色', '绿色', '黄色', '蓝色', '银色', '白色', '黑色'];
   }
 
   triggerChange = changedValue => {
@@ -72,15 +72,23 @@ class ColorInputWidget extends React.Component {
   handleInputConfirm = () => {
     const { state } = this;
     const { inputValue } = state;
-    let { tags } = state;
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
+    if (inputValue.length > 6) {
+      message.warn('颜色最多6个汉字！');
     }
-    this.setState({
-      tags,
-      inputVisible: false,
-      inputValue: '',
-    });
+    if (
+      inputValue &&
+      tagsFromServer.indexOf(inputValue) === -1 &&
+      inputValue.length > 0 &&
+      inputValue.length <= 6
+    ) {
+      tagsFromServer = [...tagsFromServer, inputValue];
+      this.setState({
+        selectedTag: inputValue,
+        inputVisible: false,
+        inputValue: '',
+      });
+      this.triggerChange(inputValue);
+    }
   };
 
   saveInputRef = input => {
@@ -101,41 +109,47 @@ class ColorInputWidget extends React.Component {
     const { selectedTag, inputVisible, inputValue } = this.state;
     return (
       <div>
-        <span style={{ color: 'rgba(0, 0, 0, 0.85)', fontSize: 14 }}>
-          <FormattedMessage id="biz.car.color" defaultMessage="No translate" />
-          &nbsp;&nbsp;
-        </span>
-        {tagsFromServer.map(tag => {
-          const styleVal = selectedTag === tag ? { color: '#FFF', backgroundColor: '#108ee9' } : {};
-          return (
-            <Tag
-              color={getTagsColor(tag)}
-              key={tag}
-              style={styleVal}
-              onClick={checked => this.handleChange(tag, checked)}
-            >
-              {tag} {selectedTag === tag ? <Icon type="check" /> : null}
-            </Tag>
-          );
-        })}
+        <Row>
+          <Col span={2}>
+            <span style={{ color: 'rgba(0, 0, 0, 0.85)', fontSize: 14 }}>
+              <FormattedMessage id="biz.car.color" defaultMessage="No translate" />：
+            </span>
+          </Col>
+          <Col span={22} style={{ lineHeight: '26px' }}>
+            {tagsFromServer.map(tag => {
+              const styleVal =
+                selectedTag === tag ? { color: '#FFF', backgroundColor: '#108ee9' } : {};
+              return (
+                <Tag
+                  color={getTagsColor(tag)}
+                  key={tag}
+                  style={styleVal}
+                  onClick={checked => this.handleChange(tag, checked)}
+                >
+                  {tag} {selectedTag === tag ? <Icon type="check" /> : <Icon type="car" />}
+                </Tag>
+              );
+            })}
 
-        {inputVisible && (
-          <Input
-            ref={this.saveInputRef}
-            type="text"
-            size="small"
-            style={{ width: 78 }}
-            value={inputValue}
-            onChange={this.handleInputChange}
-            onBlur={this.handleInputConfirm}
-            onPressEnter={this.handleInputConfirm}
-          />
-        )}
-        {!inputVisible && (
-          <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-            <Icon type="plus" /> 其他颜色
-          </Tag>
-        )}
+            {inputVisible && (
+              <Input
+                ref={this.saveInputRef}
+                type="text"
+                size="small"
+                style={{ width: 78 }}
+                value={inputValue}
+                onChange={this.handleInputChange}
+                onBlur={this.handleInputConfirm}
+                onPressEnter={this.handleInputConfirm}
+              />
+            )}
+            {!inputVisible && (
+              <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
+                <Icon type="plus" /> 其他颜色
+              </Tag>
+            )}
+          </Col>
+        </Row>
       </div>
     );
   }

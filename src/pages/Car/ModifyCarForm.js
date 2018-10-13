@@ -1,5 +1,16 @@
 import React, { PureComponent } from 'react';
-import { Cascader, Form, Button, Input, Drawer, Select, Row, Col } from 'antd';
+import {
+  Cascader,
+  Form,
+  Button,
+  Input,
+  Drawer,
+  Select,
+  Row,
+  Col,
+  InputNumber,
+  Divider,
+} from 'antd';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import { AREA_DATA } from '@/common/AreaJson';
 import BizConst from '@/common/BizConst';
@@ -155,6 +166,62 @@ class ModifyCarForm extends PureComponent {
                 )}
               </FormItem>
             </Col>
+            <Col span={12}>
+              <FormItem label="发动机编号">
+                {form.getFieldDecorator('engineNum', {
+                  initialValue: formValue.engineNum,
+                  rules: [
+                    {
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage({
+                              id: 'biz.common.require.input',
+                              defaultMessage: 'No Translate',
+                            })
+                          : null,
+                    },
+                    {
+                      max: 20,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                              { length: 20 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input placeholder="请输入发动机编号" />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="车架号">
+                {form.getFieldDecorator('frameNum', {
+                  initialValue: formValue.frameNum,
+                  rules: [
+                    {
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage({
+                              id: 'biz.common.require.input',
+                              defaultMessage: 'No Translate',
+                            })
+                          : null,
+                    },
+                    {
+                      max: 20,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                              { length: 20 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input placeholder="请输入车架号" />)}
+              </FormItem>
+            </Col>
             <Col span={8}>
               <FormItem
                 label={formatMessage({ id: 'biz.car.name', defaultMessage: 'No Translate' })}
@@ -213,6 +280,100 @@ class ModifyCarForm extends PureComponent {
                 )}
               </FormItem>
             </Col>
+            <Col>
+              <Divider>车辆其他信息</Divider>
+            </Col>
+            <Col span={5}>
+              <FormItem label="发动机排量">
+                {form.getFieldDecorator('enginePower', {
+                  initialValue: formValue.enginePower,
+                  rules: [
+                    {
+                      max: 10,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                              { length: 10 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={4}>
+              <FormItem label="百公里油耗">
+                {form.getFieldDecorator('baiOilUsed', {
+                  initialValue: formValue.baiOilUsed,
+                  rules: [],
+                })(<InputNumber min={1} max={500} />)}
+              </FormItem>
+            </Col>
+            <Col span={5}>
+              <FormItem label="尺寸">
+                {form.getFieldDecorator('carSize', {
+                  initialValue: formValue.carSize,
+                  rules: [
+                    {
+                      max: 10,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                              { length: 10 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={5}>
+              <FormItem label="运营负责人">
+                {form.getFieldDecorator('prinId', {
+                  initialValue: formValue.prinId,
+                  rules: [],
+                })(
+                  <Select
+                    showSearch
+                    style={{ width: '100%' }}
+                    placeholder="请选择"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    <Option value="jack">Jack</Option>
+                    <Option value="lucy">Lucy</Option>
+                    <Option value="tom">Tom</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={5}>
+              <FormItem label="维护负责人">
+                {form.getFieldDecorator('maintId', {
+                  initialValue: formValue.maintId,
+                  rules: [],
+                })(
+                  <Select
+                    showSearch
+                    style={{ width: '100%' }}
+                    placeholder="请选择"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    <Option value="jack">Jack</Option>
+                    <Option value="lucy">Lucy</Option>
+                    <Option value="tom">Tom</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+
             <Col span={24}>
               <FormItem>
                 {form.getFieldDecorator('carColor', {
