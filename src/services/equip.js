@@ -22,3 +22,16 @@ export async function createCar(params) {
 export async function getCarInfo(params) {
   return request(`/api/car/get?${stringify(params)}`);
 }
+
+export async function modifyCar(params) {
+  return request('/api/car/edit', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function delCar(params) {
+  return request(`/api/car/del?${stringify(params)}`, {
+    method: 'DELETE',
+  });
+}

@@ -1,9 +1,11 @@
 import { isResOK } from '@/utils/BizUtil';
-import { getCarPage, createCar, getCarInfo } from '@/services/equip';
+import { getCarPage, createCar, getCarInfo, modifyCar, delCar } from '@/services/equip';
 import { getBuserPage, getBindUser } from '@/services/cars';
 
 const servToReduce = {
   addCar: { method: createCar, reduce: null },
+  editCar: { method: modifyCar, reduce: null },
+  delCar: { method: delCar, reduce: null },
   queryCarList: { method: getCarPage, reduce: 'queryList' },
   getCarInfo: { method: getCarInfo, reduce: 'queryCarInfo' },
   getBindUser: { method: getBindUser, reduce: 'queryBindUser' },

@@ -40,6 +40,7 @@ class BaseInfo extends PureComponent {
     drawerVisible: false,
     drawerWidth: 660,
     pageQuery: {},
+    queryPage: 0,
   };
 
   columns = [
@@ -140,6 +141,17 @@ class BaseInfo extends PureComponent {
 
   handleDelete = id => {
     console.log('delete', id);
+    //
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/reqCommon',
+      service: 'delCar',
+      payload: { id },
+      callback: () => {
+        this.dispatchPageList();
+        message.success('删除成功');
+      },
+    });
   };
 
   handleSearch = e => {
@@ -204,7 +216,21 @@ class BaseInfo extends PureComponent {
   };
 
   handleEdit = fields => {
-    console.log('edit', fields);
+    const { areaIds } = fields;
+    const areaId = getAreaId(areaIds);
+    const formParam = { ...fields };
+    formParam.areaId = areaId;
+    //
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/reqCommon',
+      service: 'editCar',
+      payload: formParam,
+      callback: () => {
+        this.dispatchPageList();
+        message.success('修改成功');
+      },
+    });
     this.handleDrawerVisible();
   };
 
@@ -214,9 +240,15 @@ class BaseInfo extends PureComponent {
 
   dispatchPageList(page, queryParam) {
     const { dispatch } = this.props;
-    const { pageQuery } = this.state;
+    const { pageQuery, queryPage } = this.state;
     const queryVal = queryParam || pageQuery;
-    const param = { query: queryVal, page, size: 15 };
+    let curPg = 0;
+    if (page >= 0) {
+      curPg = page;
+    } else {
+      curPg = queryPage || 0;
+    }
+    const param = { query: queryVal, page: curPg, size: 15 };
     dispatch({
       type: 'car/reqCommon',
       service: 'queryCarList',

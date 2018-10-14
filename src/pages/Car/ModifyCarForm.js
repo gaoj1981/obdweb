@@ -77,7 +77,7 @@ class ModifyCarForm extends PureComponent {
         })}${formatMessage({
           id: 'biz.car',
           defaultMessage: 'No Translate',
-        })}`}
+        })}（${formValue.eid}）`}
         placement="right"
         width={realWidth}
         closable={false}
@@ -104,38 +104,6 @@ class ModifyCarForm extends PureComponent {
           <Row gutter={16}>
             <Col span={12}>
               <FormItem
-                label={formatMessage({ id: 'biz.car.eid', defaultMessage: 'No Translate' })}
-              >
-                {form.getFieldDecorator('eid', {
-                  initialValue: formValue.eid,
-                  rules: [
-                    {
-                      required: true,
-                      message:
-                        localVal === 'zh-CN'
-                          ? formatMessage({
-                              id: 'biz.common.require.input',
-                              defaultMessage: 'No Translate',
-                            })
-                          : null,
-                    },
-                    {
-                      min: 15,
-                      max: 20,
-                      message:
-                        localVal === 'zh-CN'
-                          ? formatMessage(
-                              { id: 'biz.common.length.range', defaultMessage: 'No Translate' },
-                              { lenMin: 15, lenMax: 20 }
-                            )
-                          : null,
-                    },
-                  ],
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem
                 label={formatMessage({ id: 'biz.car.areaid', defaultMessage: 'No Translate' })}
               >
                 {form.getFieldDecorator('areaIds', {
@@ -156,6 +124,31 @@ class ModifyCarForm extends PureComponent {
                     options={AREA_DATA.areaIds}
                   />
                 )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                label={formatMessage({
+                  id: 'biz.obd.device.number',
+                  defaultMessage: 'No Translate',
+                })}
+              >
+                {form.getFieldDecorator('deviceNumber', {
+                  initialValue: formValue.deviceNumber,
+                  rules: [
+                    {
+                      min: 10,
+                      max: 20,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.range', defaultMessage: 'No Translate' },
+                              { lenMin: 10, lenMax: 20 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input />)}
               </FormItem>
             </Col>
             <Col span={12}>
@@ -305,12 +298,12 @@ class ModifyCarForm extends PureComponent {
                   initialValue: formValue.carSize,
                   rules: [
                     {
-                      max: 10,
+                      max: 20,
                       message:
                         localVal === 'zh-CN'
                           ? formatMessage(
                               { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
-                              { length: 10 }
+                              { length: 20 }
                             )
                           : null,
                     },
@@ -349,6 +342,12 @@ class ModifyCarForm extends PureComponent {
             <FormItem>
               {form.getFieldDecorator('id', {
                 initialValue: formValue.id,
+                rules: [],
+              })(<Input type="hidden" />)}
+            </FormItem>
+            <FormItem>
+              {form.getFieldDecorator('eid', {
+                initialValue: formValue.eid,
                 rules: [],
               })(<Input type="hidden" />)}
             </FormItem>
