@@ -1,10 +1,13 @@
 import { isResOK } from '@/utils/BizUtil';
 import { getCarPage, createCar, getCarInfo } from '@/services/equip';
+import { getBuserPage, getBindUser } from '@/services/cars';
 
 const servToReduce = {
   addCar: { method: createCar, reduce: null },
   queryCarList: { method: getCarPage, reduce: 'queryList' },
   getCarInfo: { method: getCarInfo, reduce: 'queryCarInfo' },
+  getBindUser: { method: getBindUser, reduce: 'queryBindUser' },
+  queryBuserList: { method: getBuserPage, reduce: 'queryPgBuser' },
 };
 //
 export default {
@@ -13,6 +16,8 @@ export default {
   state: {
     carPageList: {},
     carInfo: {},
+    buserPageList: {},
+    bindUser: {},
   },
 
   effects: {
@@ -31,6 +36,12 @@ export default {
         if (callback) callback();
       }
     },
+    *clearBindUser({ payload }, { put }) {
+      yield put({
+        type: 'queryBindUser',
+        payload,
+      });
+    },
   },
 
   reducers: {
@@ -44,6 +55,18 @@ export default {
       return {
         ...state,
         carInfo: action.payload,
+      };
+    },
+    queryPgBuser(state, action) {
+      return {
+        ...state,
+        buserPageList: action.payload,
+      };
+    },
+    queryBindUser(state, action) {
+      return {
+        ...state,
+        bindUser: action.payload,
       };
     },
   },

@@ -16,6 +16,7 @@ import { AREA_DATA } from '@/common/AreaJson';
 import BizConst from '@/common/BizConst';
 import { getAreaArr } from '@/utils/BizUtil';
 import ColorInputWidget from './ColorInputWidget';
+import BuserSelWidget from './BuserSelWidget';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -50,14 +51,6 @@ class ModifyCarForm extends PureComponent {
       form.resetFields();
       handleEdit(fieldsValue);
     });
-  };
-
-  checkPrice = (rule, value, callback) => {
-    if (value.number > 0) {
-      callback();
-      return;
-    }
-    callback('Price must greater than zero!');
   };
 
   render() {
@@ -161,7 +154,6 @@ class ModifyCarForm extends PureComponent {
                     style={{ width: '100%' }}
                     placeholder="请选择"
                     options={AREA_DATA.areaIds}
-                    allowClear
                   />
                 )}
               </FormItem>
@@ -280,10 +272,15 @@ class ModifyCarForm extends PureComponent {
                 )}
               </FormItem>
             </Col>
-            <Col>
-              <Divider>车辆其他信息</Divider>
+            <Col span={8}>
+              <FormItem label="百公里油耗">
+                {form.getFieldDecorator('baiOilUsed', {
+                  initialValue: formValue.baiOilUsed,
+                  rules: [],
+                })(<InputNumber style={{ width: '100%' }} min={1} max={500} />)}
+              </FormItem>
             </Col>
-            <Col span={5}>
+            <Col span={8}>
               <FormItem label="发动机排量">
                 {form.getFieldDecorator('enginePower', {
                   initialValue: formValue.enginePower,
@@ -302,15 +299,7 @@ class ModifyCarForm extends PureComponent {
                 })(<Input />)}
               </FormItem>
             </Col>
-            <Col span={4}>
-              <FormItem label="百公里油耗">
-                {form.getFieldDecorator('baiOilUsed', {
-                  initialValue: formValue.baiOilUsed,
-                  rules: [],
-                })(<InputNumber min={1} max={500} />)}
-              </FormItem>
-            </Col>
-            <Col span={5}>
+            <Col span={8}>
               <FormItem label="尺寸">
                 {form.getFieldDecorator('carSize', {
                   initialValue: formValue.carSize,
@@ -329,51 +318,6 @@ class ModifyCarForm extends PureComponent {
                 })(<Input />)}
               </FormItem>
             </Col>
-            <Col span={5}>
-              <FormItem label="运营负责人">
-                {form.getFieldDecorator('prinId', {
-                  initialValue: formValue.prinId,
-                  rules: [],
-                })(
-                  <Select
-                    showSearch
-                    style={{ width: '100%' }}
-                    placeholder="请选择"
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="tom">Tom</Option>
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={5}>
-              <FormItem label="维护负责人">
-                {form.getFieldDecorator('maintId', {
-                  initialValue: formValue.maintId,
-                  rules: [],
-                })(
-                  <Select
-                    showSearch
-                    style={{ width: '100%' }}
-                    placeholder="请选择"
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="tom">Tom</Option>
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-
             <Col span={24}>
               <FormItem>
                 {form.getFieldDecorator('carColor', {
@@ -382,6 +326,32 @@ class ModifyCarForm extends PureComponent {
                 })(<ColorInputWidget />)}
               </FormItem>
             </Col>
+            <Col>
+              <Divider dashed>车辆相关人员</Divider>
+            </Col>
+            <Col span={12}>
+              <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="运营人">
+                {form.getFieldDecorator('prinId', {
+                  initialValue: formValue.prinId,
+                  rules: [],
+                })(<BuserSelWidget utype={1} />)}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="维护人">
+                {form.getFieldDecorator('maintId', {
+                  initialValue: formValue.maintId,
+                  rules: [],
+                })(<BuserSelWidget utype={2} />)}
+              </FormItem>
+            </Col>
+
+            <FormItem>
+              {form.getFieldDecorator('id', {
+                initialValue: formValue.id,
+                rules: [],
+              })(<Input type="hidden" />)}
+            </FormItem>
           </Row>
         </Form>
         <div
