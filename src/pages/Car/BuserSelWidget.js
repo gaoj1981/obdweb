@@ -9,7 +9,7 @@ import styles from './BuserSelWidget.less';
 const { Search } = Input;
 
 @connect(({ car, loading }) => ({
-  buserPageList: car.buserPageList,
+  buserPageList: car.pageBindUser,
   bindUserInfo: car.bindUser,
   baseLoading: loading.models.car,
 }))
@@ -106,7 +106,7 @@ class BuserSelWidget extends React.Component {
     const param = { page: curPg, query: { orUnameTel: searVal, utype }, size: pgSize };
     dispatch({
       type: 'car/reqCommon',
-      service: 'queryBuserList',
+      service: 'pageBindUser',
       payload: param,
       callback: () => {
         let page = curPg;

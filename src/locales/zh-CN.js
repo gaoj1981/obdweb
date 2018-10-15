@@ -72,7 +72,7 @@ export default {
   'form.publicUsers.option.A': '同事甲',
   'form.publicUsers.option.B': '同事乙',
   'form.publicUsers.option.C': '同事丙',
-  'form.biz.title.add': '新增',
+  'form.biz.title.add': '添加',
   'form.biz.title.edit': '编辑',
   'form.biz.title.del': '删除',
   'form.biz.add': '添加成功',

@@ -253,7 +253,7 @@ class BaseInfo extends PureComponent {
       service: 'queryCarList',
       payload: param,
     });
-    this.setState({ pageQuery: queryVal });
+    this.setState({ pageQuery: queryVal, queryPage: curPg });
   }
 
   renderSimpleForm() {

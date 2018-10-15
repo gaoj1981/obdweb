@@ -81,7 +81,7 @@ function deleteConfirm(text, id, delExcute) {
 
 function isResOK(response) {
   if (response && response.status === 400) {
-    message.error(response.message || formatMessage.get({ id: 'validation.error.unknown' }));
+    message.error(response.message || formatMessage({ id: 'validation.error.unknown' }));
     return false;
   }
   return true;

@@ -1,6 +1,6 @@
 import { isResOK } from '@/utils/BizUtil';
 import { getCarPage, createCar, getCarInfo, modifyCar, delCar } from '@/services/equip';
-import { getBuserPage, getBindUser } from '@/services/cars';
+import { pageBindUser, addBindUser, delBindUser, editBindUser, getBindUser } from '@/services/cars';
 
 const servToReduce = {
   addCar: { method: createCar, reduce: null },
@@ -8,8 +8,11 @@ const servToReduce = {
   delCar: { method: delCar, reduce: null },
   queryCarList: { method: getCarPage, reduce: 'queryList' },
   getCarInfo: { method: getCarInfo, reduce: 'queryCarInfo' },
-  getBindUser: { method: getBindUser, reduce: 'queryBindUser' },
-  queryBuserList: { method: getBuserPage, reduce: 'queryPgBuser' },
+  pageBindUser: { method: pageBindUser, reduce: 'pageBindUser' },
+  addBindUser: { method: addBindUser, reduce: null },
+  delBindUser: { method: delBindUser, reduce: null },
+  editBindUser: { method: editBindUser, reduce: null },
+  getBindUser: { method: getBindUser, reduce: 'getBindUser' },
 };
 //
 export default {
@@ -18,7 +21,7 @@ export default {
   state: {
     carPageList: {},
     carInfo: {},
-    buserPageList: {},
+    pageBindUser: {},
     bindUser: {},
   },
 
@@ -59,13 +62,13 @@ export default {
         carInfo: action.payload,
       };
     },
-    queryPgBuser(state, action) {
+    pageBindUser(state, action) {
       return {
         ...state,
-        buserPageList: action.payload,
+        pageBindUser: action.payload,
       };
     },
-    queryBindUser(state, action) {
+    getBindUser(state, action) {
       return {
         ...state,
         bindUser: action.payload,

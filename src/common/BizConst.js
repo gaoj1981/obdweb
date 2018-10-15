@@ -1,5 +1,5 @@
 export default {
-  pageSize: 20,
+  pageSize: 15,
   statusMap: ['default', 'processing', 'warning', 'success', 'error'],
   fuelTypeArr: ['汽油', '柴油', '电动', '油电混动', '其他'],
 };
