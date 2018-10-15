@@ -38,7 +38,7 @@ class BaseInfo extends PureComponent {
   state = {
     modalVisible: false,
     drawerVisible: false,
-    drawerWidth: 660,
+    drawerWidth: 666,
     pageQuery: {},
     queryPage: 0,
   };

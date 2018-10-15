@@ -6,6 +6,7 @@ import { Button, Card, Col, Divider, Dropdown, Form, Icon, Input, Menu, message,
 import BizConst from '@/common/BizConst';
 import AddBizForm from '@/common/AddBizForm';
 import EditBizForm from '@/common/EditBizForm';
+import QueryBizForm from '@/common/QueryBizForm';
 import { TableListBase } from '@/common/TableLists';
 import { deleteConfirm } from '@/utils/BizUtil';
 import { addForm, editForm } from './BindUserForms';
@@ -26,9 +27,11 @@ class BindUser extends PureComponent {
   state = {
     addVisible: false,
     editVisible: false,
-    editWidth: 660,
+    editWidth: 666,
     pageQuery: {},
     queryPage: 0,
+    queryVisible: false,
+    queryHeight: 99,
   };
 
   columns = [
@@ -159,7 +162,18 @@ class BindUser extends PureComponent {
     this.handleEditVisible();
   };
 
-  handleQueryVisible = () => {};
+  handleQueryVisible = flag => {
+    this.setState({
+      queryVisible: !!flag,
+    });
+  };
+
+  handleQuery = fields => {
+    const formParam = { ...fields };
+    console.log('query', formParam);
+    //
+    this.dispatchPageList();
+  };
 
   handleSearch = e => {
     e.preventDefault();
@@ -243,7 +257,7 @@ class BindUser extends PureComponent {
   }
 
   render() {
-    const { addVisible, editVisible, editWidth } = this.state;
+    const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
     const { pageBindUser, bindUser, loading } = this.props;
 
     const propsTableList = {
@@ -264,6 +278,11 @@ class BindUser extends PureComponent {
       bizForm: editForm,
     };
 
+    const queryMethods = {
+      handleQuery: this.handleQuery,
+      handleQueryVisible: this.handleQueryVisible,
+    };
+
     return (
       <div className={styles.testCss}>
         <Card bordered={false}>
@@ -280,6 +299,7 @@ class BindUser extends PureComponent {
           loading={loading}
           formValue={bindUser}
         />
+        <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
       </div>
     );
   }
