@@ -339,13 +339,13 @@ class ModifyCarForm extends PureComponent {
               </FormItem>
             </Col>
 
-            <FormItem>
+            <FormItem style={{ display: 'none' }}>
               {form.getFieldDecorator('id', {
                 initialValue: formValue.id,
                 rules: [],
               })(<Input type="hidden" />)}
             </FormItem>
-            <FormItem>
+            <FormItem style={{ display: 'none' }}>
               {form.getFieldDecorator('eid', {
                 initialValue: formValue.eid,
                 rules: [],
