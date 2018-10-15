@@ -1,8 +1,16 @@
 import { isResOK } from '@/utils/BizUtil';
-import { getCarPage, createCar, getCarInfo, modifyCar, delCar } from '@/services/equip';
+import {
+  getCarCountSum,
+  getCarPage,
+  createCar,
+  getCarInfo,
+  modifyCar,
+  delCar,
+} from '@/services/equip';
 import { pageBindUser, addBindUser, delBindUser, editBindUser, getBindUser } from '@/services/cars';
 
 const servToReduce = {
+  carCountSum: { method: getCarCountSum, reduce: 'saveCarSum' },
   addCar: { method: createCar, reduce: null },
   editCar: { method: modifyCar, reduce: null },
   delCar: { method: delCar, reduce: null },
@@ -19,6 +27,7 @@ export default {
   namespace: 'car',
 
   state: {
+    carCountSum: 0,
     carPageList: {},
     carInfo: {},
     pageBindUser: {},
@@ -41,6 +50,13 @@ export default {
         if (callback) callback();
       }
     },
+    *fetchCarCountSum(_, { call, put }) {
+      const response = yield call(getCarCountSum);
+      yield put({
+        type: 'saveCarSum',
+        payload: response,
+      });
+    },
     *clearBindUser({ payload }, { put }) {
       yield put({
         type: 'queryBindUser',
@@ -50,6 +66,12 @@ export default {
   },
 
   reducers: {
+    saveCarSum(state, action) {
+      return {
+        ...state,
+        carCountSum: action.payload,
+      };
+    },
     queryList(state, action) {
       return {
         ...state,

@@ -8,10 +8,11 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './MainPage.less';
 
-@connect(({ user, loading, equip }) => ({
+@connect(({ user, loading, equip, car }) => ({
   currentUser: user.currentUser,
   currentUserLoading: loading.effects['user/fetchCurrent'],
   licCountSum: equip.licCountSum,
+  carCountSum: car.carCountSum,
 }))
 class MainPage extends PureComponent {
   componentDidMount() {
@@ -24,6 +25,10 @@ class MainPage extends PureComponent {
     dispatch({
       type: 'equip/fetchLicCountSum',
     });
+    //
+    dispatch({
+      type: 'car/fetchCarCountSum',
+    });
   }
 
   componentWillUnmount() {
@@ -34,7 +39,7 @@ class MainPage extends PureComponent {
   }
 
   render() {
-    const { currentUser, currentUserLoading, licCountSum } = this.props;
+    const { currentUser, currentUserLoading, licCountSum, carCountSum } = this.props;
 
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (
@@ -58,7 +63,7 @@ class MainPage extends PureComponent {
       <div className={styles.extraContent}>
         <div className={styles.statItem}>
           <p>{formatMessage({ id: 'biz.car.count.total', defaultMessage: 'No Translate' })}</p>
-          <p>56</p>
+          <p>{carCountSum || 0}</p>
         </div>
         <div className={styles.statItem}>
           <p>{formatMessage({ id: 'biz.lic.count.sum', defaultMessage: 'No Translate' })}</p>
