@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Button, Input, Icon, Popover, List, Tag, Avatar, Divider, message } from 'antd';
+import { Button, Input, Icon, Popover, List, Tag, Avatar, Divider } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import Ellipsis from '@/components/Ellipsis';
 
@@ -92,7 +92,7 @@ class BuserSelWidget extends React.Component {
     if (totalPages >= curPg + 1 && !baseLoading) {
       this.dispatchList(searVal, curPg);
     } else {
-      message.warn('无更多相应人员信息');
+      console.log('无更多相应人员信息');
     }
   };
 
@@ -112,7 +112,11 @@ class BuserSelWidget extends React.Component {
         let page = curPg;
         let { scrollData } = this.state;
         const { buserPageList } = this.props;
-        scrollData = scrollData.concat(buserPageList.content);
+        if (page === 0) {
+          scrollData = buserPageList.content;
+        } else {
+          scrollData = scrollData.concat(buserPageList.content);
+        }
         let hasMore = true;
         if (buserPageList.length < pgSize) {
           hasMore = false;
@@ -180,11 +184,9 @@ class BuserSelWidget extends React.Component {
                     }
                     description={
                       <div>
-                        <Ellipsis tooltip={item.urName} style={{ display: 'inline' }} length={4}>
-                          {item.urName}
-                        </Ellipsis>
-                        <Divider type="vertical" />
                         <Icon type="phone" style={{ color: '#ffbf00' }} />
+                        {item.tel}
+                        <Divider type="vertical" />
                         {item.urTel}
                       </div>
                     }

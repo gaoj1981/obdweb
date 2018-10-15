@@ -140,7 +140,6 @@ class BaseInfo extends PureComponent {
   }
 
   handleDelete = id => {
-    console.log('delete', id);
     //
     const { dispatch } = this.props;
     dispatch({
@@ -173,7 +172,7 @@ class BaseInfo extends PureComponent {
   handleFormReset = () => {
     const { form } = this.props;
     form.resetFields();
-    this.dispatchPageList();
+    this.dispatchPageList(0, {});
   };
 
   handleModalVisible = flag => {
