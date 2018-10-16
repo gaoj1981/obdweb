@@ -1,15 +1,15 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Button, Card, Col, Divider, Dropdown, Form, Icon, Input, Menu, message, Row } from 'antd';
+import { Button, Card, Col, Form, Input, Row, message } from 'antd';
 
 import BizConst from '@/common/BizConst';
 import AddBizForm from '@/common/AddBizForm';
 import EditBizForm from '@/common/EditBizForm';
 import QueryBizForm from '@/common/QueryBizForm';
 import { TableListBase } from '@/common/TableLists';
-import { deleteConfirm } from '@/utils/BizUtil';
-import { addForm, editForm } from './BindUserForms';
+import { getAreaId } from '@/utils/BizUtil';
+import { addForm, editForm, getColumns } from './BindUserForms';
 
 import styles from './BindUser.less';
 
@@ -34,64 +34,6 @@ class BindUser extends PureComponent {
     queryHeight: 99,
   };
 
-  columns = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-    },
-    {
-      title: 'areaId',
-      dataIndex: 'areaId',
-    },
-    {
-      title: 'utype',
-      dataIndex: 'utype',
-    },
-    {
-      title: 'uname',
-      dataIndex: 'uname',
-    },
-    {
-      title: 'tel',
-      dataIndex: 'tel',
-    },
-    {
-      title: 'insTime',
-      dataIndex: 'insTime',
-    },
-    {
-      title: <FormattedMessage id="form.action" defaultMessage="No translate" />,
-      align: 'center',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleEditVisible(true, record.id)}>
-            <FormattedMessage id="form.edit" defaultMessage="No translate" />
-          </a>
-          <Divider type="vertical" />
-          <a
-            onClick={() => {
-              deleteConfirm('相关人员', record.id, this.handleDelete);
-            }}
-          >
-            <FormattedMessage id="form.delete" defaultMessage="No translate" />
-          </a>
-          <Divider type="vertical" />
-          <Dropdown
-            overlay={
-              <Menu onClick={({ key }) => this.moreBtnExc(key)}>
-                <Menu.Item key="more">更多操作</Menu.Item>
-              </Menu>
-            }
-          >
-            <a>
-              <FormattedMessage id="form.more" defaultMessage="No translate" /> <Icon type="down" />
-            </a>
-          </Dropdown>
-        </Fragment>
-      ),
-    },
-  ];
-
   componentDidMount() {
     this.dispatchPageList(0, {});
   }
@@ -106,6 +48,10 @@ class BindUser extends PureComponent {
     console.log(fields);
     const formParam = { ...fields };
     //
+    const { areaIds } = fields;
+    const areaId = getAreaId(areaIds);
+    formParam.areaId = areaId;
+    //
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',
@@ -114,9 +60,9 @@ class BindUser extends PureComponent {
       callback: () => {
         this.dispatchPageList(0, {});
         message.success('添加成功');
+        this.handleAddVisible();
       },
     });
-    this.handleAddVisible();
   };
 
   handleDelete = id => {
@@ -157,9 +103,9 @@ class BindUser extends PureComponent {
       callback: () => {
         this.dispatchPageList();
         message.success('修改成功');
+        this.handleEditVisible();
       },
     });
-    this.handleEditVisible();
   };
 
   handleQueryVisible = flag => {
@@ -260,10 +206,15 @@ class BindUser extends PureComponent {
     const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
     const { pageBindUser, bindUser, loading } = this.props;
 
+    const columnMethods = {
+      handleEditVisible: this.handleEditVisible,
+      handleDelete: this.handleDelete,
+      moreBtnExc: this.moreBtnExc,
+    };
     const propsTableList = {
       ...pageBindUser,
       loading,
-      columns: this.columns,
+      columns: getColumns(columnMethods),
     };
 
     const addMethods = {

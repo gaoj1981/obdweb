@@ -3,9 +3,29 @@ import { Form, Button, Drawer, Row, Col, Divider } from 'antd';
 import { FormattedMessage } from 'umi/locale';
 
 const FormItem = Form.Item;
+// 兼容Modal&&Drawer滚动条闪动
+let isViewed = false;
 
 @Form.create()
 class QueryBizForm extends PureComponent {
+  state = {
+    visible: true, // 兼容Modal&&Drawer滚动条闪动
+  };
+
+  componentWillReceiveProps(nextProps) {
+    // 兼容Modal&&Drawer滚动条闪动
+    if (!isViewed) {
+      if (!nextProps.loading) {
+        this.setState({ visible: false });
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    // 兼容Modal&&Drawer滚动条闪动
+    isViewed = false;
+  }
+
   handleSubmit = () => {
     const { form, handleQuery } = this.props;
     form.validateFields((err, fieldsValue) => {
@@ -16,17 +36,30 @@ class QueryBizForm extends PureComponent {
   };
 
   render() {
+    const { visible } = this.state;
     const { queryVisible, queryHeight, form, handleQueryVisible, bizForm } = this.props;
+
+    // 兼容Modal&&Drawer滚动条闪动
+    let realVisible = true;
+    let realHeight = 0;
+    if (!visible) {
+      realVisible = queryVisible;
+      if (isViewed) {
+        realHeight = queryHeight || 400;
+      }
+      isViewed = true;
+    }
+    // 兼容End
 
     return (
       <Drawer
         title=""
         placement="top"
-        height={queryHeight}
+        height={realHeight}
         closable={false}
         destroyOnClose
         onClose={() => handleQueryVisible()}
-        visible={queryVisible}
+        visible={realVisible}
         style={{ padding: 0, background: '#f9f9f9' }}
       >
         <Row gutter={16} style={{ height: queryHeight, padding: '8px 0' }}>
