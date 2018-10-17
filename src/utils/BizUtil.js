@@ -1,7 +1,27 @@
+import React, { Fragment } from 'react';
+import { Avatar, Modal, message } from 'antd';
+import { formatMessage } from 'umi/locale';
+import Ellipsis from '../components/Ellipsis';
 import BizConst from '@/common/BizConst';
 import { AREA_DATA, AREA_DATA_KEYVALUE } from '@/common/AreaJson';
-import { Modal, message } from 'antd';
-import { formatMessage } from 'umi/locale';
+
+function isResOK(response) {
+  if (response && response.status === 400) {
+    message.error(response.message || formatMessage({ id: 'validation.error.unknown' }));
+    return false;
+  }
+  return true;
+}
+
+function deleteConfirm(text, id, delExcute) {
+  Modal.confirm({
+    title: `删除${text}`,
+    content: `确定删除该${text}吗？`,
+    okText: '确认',
+    cancelText: '取消',
+    onOk: () => delExcute(id),
+  });
+}
 
 function getAreaId(areaIdArr) {
   if (areaIdArr) {
@@ -54,6 +74,26 @@ function getAreaNameTest() {
   console.log(strs);
 }
 
+function convUname(uname, sex) {
+  let icon = 'user';
+  let bgColor = '#E9E9E9';
+  if (sex === 'M') {
+    icon = 'man';
+    bgColor = '#d2eafb';
+  } else if (sex === 'F') {
+    icon = 'woman';
+    bgColor = '#fdd8e7';
+  }
+  return (
+    <Fragment>
+      <Avatar size="small" icon={icon} style={{ backgroundColor: bgColor }} />
+      <Ellipsis tooltip={uname} style={{ display: 'inline', marginLeft: 2 }} length={5}>
+        {uname}
+      </Ellipsis>
+    </Fragment>
+  );
+}
+
 function getStatus4FuelType(fuelType) {
   switch (fuelType) {
     case '汽油':
@@ -69,30 +109,13 @@ function getStatus4FuelType(fuelType) {
   }
 }
 
-function deleteConfirm(text, id, delExcute) {
-  Modal.confirm({
-    title: `删除${text}`,
-    content: `确定删除该${text}吗？`,
-    okText: '确认',
-    cancelText: '取消',
-    onOk: () => delExcute(id),
-  });
-}
-
-function isResOK(response) {
-  if (response && response.status === 400) {
-    message.error(response.message || formatMessage({ id: 'validation.error.unknown' }));
-    return false;
-  }
-  return true;
-}
-
 export {
+  isResOK,
+  deleteConfirm,
   getAreaId,
   getAreaArr,
-  getStatus4FuelType,
-  deleteConfirm,
   getAreaName,
   getAreaNameTest,
-  isResOK,
+  convUname,
+  getStatus4FuelType,
 };

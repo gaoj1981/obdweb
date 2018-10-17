@@ -74,7 +74,7 @@ class QueryBizForm extends PureComponent {
               onClick={() => this.handleSubmit()}
               style={{ position: 'absolute', top: 10, right: 20 }}
             >
-              <FormattedMessage id="form.search.advanced" defaultMessage="高级查询" />
+              <FormattedMessage id="form.search.advanced" defaultMessage="NoTrans" />
             </Button>
             <Button
               type="dashed"
@@ -82,7 +82,7 @@ class QueryBizForm extends PureComponent {
               onClick={() => this.handleSubmit()}
               style={{ position: 'absolute', top: queryHeight - 50, right: 20 }}
             >
-              <FormattedMessage id="form.reset.clear" defaultMessage="清除重置" />
+              <FormattedMessage id="form.reset.clear" defaultMessage="NoTrans" />
             </Button>
           </Col>
         </Row>

@@ -7,7 +7,14 @@ import {
   modifyCar,
   delCar,
 } from '@/services/equip';
-import { pageBindUser, addBindUser, delBindUser, editBindUser, getBindUser } from '@/services/cars';
+import {
+  pageBindUser,
+  addBindUser,
+  delBindUser,
+  editBindUser,
+  getBindUser,
+  editBindUserDefault,
+} from '@/services/cars';
 
 const servToReduce = {
   carCountSum: { method: getCarCountSum, reduce: 'saveCarSum' },
@@ -21,6 +28,7 @@ const servToReduce = {
   delBindUser: { method: delBindUser, reduce: null },
   editBindUser: { method: editBindUser, reduce: null },
   getBindUser: { method: getBindUser, reduce: 'getBindUser' },
+  editBindUserDefault: { method: editBindUserDefault, reduce: null },
 };
 //
 export default {

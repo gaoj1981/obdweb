@@ -15,23 +15,33 @@ export async function pageBindUser(params) {
     body: params,
   });
 }
+
 export async function addBindUser(params) {
   return request('/api/binduser/add', {
     method: 'POST',
     body: params,
   });
 }
+
 export async function delBindUser(params) {
   return request(`/api/binduser/del?${stringify(params)}`, {
     method: 'DELETE',
   });
 }
+
 export async function editBindUser(params) {
   return request('/api/binduser/edit', {
     method: 'POST',
     body: params,
   });
 }
+
 export async function getBindUser(params) {
   return request(`/api/binduser/get?${stringify(params)}`);
+}
+
+export async function editBindUserDefault(params) {
+  return request(`/api/binduser/edit.default?${stringify(params)}`, {
+    method: 'POST',
+  });
 }

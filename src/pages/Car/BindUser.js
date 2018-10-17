@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Button, Card, Col, Form, Input, Row, message } from 'antd';
+import { FormattedMessage } from 'umi/locale';
+import { Button, Card, Col, Form, Row, message } from 'antd';
 
 import BizConst from '@/common/BizConst';
 import AddBizForm from '@/common/AddBizForm';
@@ -9,7 +9,8 @@ import EditBizForm from '@/common/EditBizForm';
 import QueryBizForm from '@/common/QueryBizForm';
 import { TableListBase } from '@/common/TableLists';
 import { getAreaId } from '@/utils/BizUtil';
-import { addForm, editForm, getColumns } from './BindUserForms';
+import { searchForm, addForm, editForm, getColumns } from './BindUserForms';
+import BindUserStepDefault from './BindUserStepDefault';
 
 import styles from './BindUser.less';
 
@@ -32,6 +33,8 @@ class BindUser extends PureComponent {
     queryPage: 0,
     queryVisible: false,
     queryHeight: 99,
+    updateModalVisible: false,
+    stepFormValues: {},
   };
 
   componentDidMount() {
@@ -45,7 +48,6 @@ class BindUser extends PureComponent {
   };
 
   handleAdd = fields => {
-    console.log(fields);
     const formParam = { ...fields };
     //
     const { areaIds } = fields;
@@ -126,7 +128,8 @@ class BindUser extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      this.dispatchPageList(0, { id: fieldsValue.id });
+      const { orUnameTel, areaIds } = fieldsValue;
+      this.dispatchPageList(0, { orUnameTel, areaId: getAreaId(areaIds) });
     });
   };
 
@@ -140,8 +143,35 @@ class BindUser extends PureComponent {
     this.dispatchPageList(pagination.current - 1);
   };
 
-  moreBtnExc = key => {
-    console.log(key);
+  moreBtnExc = (key, record) => {
+    if (key === 'setDefault') {
+      this.handleStepModalVisible(true, record);
+    }
+  };
+
+  handleStepModalVisible = (flag, record) => {
+    this.setState({
+      updateModalVisible: !!flag,
+      stepFormValues: record || {},
+    });
+  };
+
+  handleStep = fields => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/reqCommon',
+      service: 'editBindUserDefault',
+      payload: {
+        id: fields.id,
+        isDefault: fields.isDefault,
+        isCoverAll: fields.isCoverAll,
+      },
+      callback: () => {
+        this.dispatchPageList();
+        message.success('设置成功');
+        this.handleStepModalVisible();
+      },
+    });
   };
 
   dispatchPageList(page, queryParam) {
@@ -163,19 +193,11 @@ class BindUser extends PureComponent {
   }
 
   renderSimpleForm() {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
+    const { form } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={14} sm={24}>
-            <FormItem label="id">
-              {getFieldDecorator('id')(
-                <Input placeholder={formatMessage({ id: 'form.weight.placeholder' })} />
-              )}
-            </FormItem>
-          </Col>
+          {searchForm(FormItem, form)}
           <Col md={6} sm={14}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
@@ -185,7 +207,7 @@ class BindUser extends PureComponent {
                 <FormattedMessage id="form.reset" defaultMessage="No translate" />
               </Button>
               <Button icon="search" onClick={() => this.handleQueryVisible(true)}>
-                高级查询
+                <FormattedMessage id="form.search.advanced" defaultMessage="No Trans" />
               </Button>
             </span>
           </Col>
@@ -203,7 +225,15 @@ class BindUser extends PureComponent {
   }
 
   render() {
-    const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
+    const {
+      addVisible,
+      editVisible,
+      editWidth,
+      queryVisible,
+      queryHeight,
+      updateModalVisible,
+      stepFormValues,
+    } = this.state;
     const { pageBindUser, bindUser, loading } = this.props;
 
     const columnMethods = {
@@ -234,6 +264,11 @@ class BindUser extends PureComponent {
       handleQueryVisible: this.handleQueryVisible,
     };
 
+    const stepMethods = {
+      handleStepModalVisible: this.handleStepModalVisible,
+      handleStep: this.handleStep,
+    };
+
     return (
       <div className={styles.testCss}>
         <Card bordered={false}>
@@ -251,6 +286,13 @@ class BindUser extends PureComponent {
           formValue={bindUser}
         />
         <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
+        {stepFormValues && Object.keys(stepFormValues).length ? (
+          <BindUserStepDefault
+            {...stepMethods}
+            updateModalVisible={updateModalVisible}
+            values={stepFormValues}
+          />
+        ) : null}
       </div>
     );
   }

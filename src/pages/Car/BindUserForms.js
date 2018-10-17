@@ -12,15 +12,36 @@ import {
   Icon,
   Menu,
   Divider,
+  Form,
 } from 'antd';
-import Ellipsis from '@/components/Ellipsis';
 
 import BizConst from '@/common/BizConst';
-import { deleteConfirm, getAreaName, getAreaArr } from '@/utils/BizUtil';
+import { deleteConfirm, getAreaName, getAreaArr, convUname } from '@/utils/BizUtil';
 import { AREA_DATA } from '@/common/AreaJson';
 
 const localVal = getLocale();
 const RadioGroup = Radio.Group;
+
+const searchForm = (FormItem, form) => {
+  const { getFieldDecorator } = form;
+  return (
+    // 注意Col总步长14
+    <Fragment>
+      <Col md={6} sm={24}>
+        <FormItem label="姓名/手机">
+          {getFieldDecorator('orUnameTel')(<Input placeholder="姓名或手机" />)}
+        </FormItem>
+      </Col>
+      <Col md={8} sm={24}>
+        <Form.Item label="所在区域">
+          {getFieldDecorator('areaIds')(
+            <Cascader placeholder="请选择" options={AREA_DATA.areaIds} allowClear />
+          )}
+        </Form.Item>
+      </Col>
+    </Fragment>
+  );
+};
 
 const addForm = (FormItem, form) => (
   <Row>
@@ -165,11 +186,7 @@ const getColumns = columnMethods => {
     {
       title: '姓名',
       dataIndex: 'uname',
-      render: val => (
-        <Ellipsis length={6} tooltip>
-          {val}
-        </Ellipsis>
-      ),
+      render: (text, record) => convUname(text, record.sex),
     },
     {
       title: '联系手机',
@@ -217,8 +234,8 @@ const getColumns = columnMethods => {
           <Divider type="vertical" />
           <Dropdown
             overlay={
-              <Menu onClick={({ key }) => moreBtnExc(key)}>
-                <Menu.Item key="more">更多操作</Menu.Item>
+              <Menu onClick={({ key }) => moreBtnExc(key, record)}>
+                <Menu.Item key="setDefault">默认设置</Menu.Item>
               </Menu>
             }
           >
@@ -232,4 +249,4 @@ const getColumns = columnMethods => {
   ];
 };
 
-export { addForm, editForm, getColumns };
+export { searchForm, addForm, editForm, getColumns };
