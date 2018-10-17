@@ -7,6 +7,7 @@ import Ellipsis from '@/components/Ellipsis';
 import styles from './BuserSelWidget.less';
 
 const { Search } = Input;
+const getBuObj = { 1: false, 2: false };
 
 @connect(({ car, loading }) => ({
   buserPageList: car.pageBindUser,
@@ -31,10 +32,11 @@ class BuserSelWidget extends React.Component {
   componentWillReceiveProps(nextProps) {
     // Should be a controlled component.
     if ('value' in nextProps) {
-      const { value, baseLoading } = nextProps;
+      const { value, utype } = nextProps;
       this.setState({ uid: value });
-      const { bindUser } = this.state;
-      if (!bindUser && value && !baseLoading) {
+      const { bindUser, uid } = this.state;
+      if (value && uid === value && !bindUser && utype && !getBuObj[utype]) {
+        console.log(uid);
         const { dispatch } = this.props;
         const param = { id: value };
         dispatch({
@@ -46,6 +48,7 @@ class BuserSelWidget extends React.Component {
             this.setState({ bindUser: bindUserInfo });
           },
         });
+        getBuObj[utype] = true;
       }
     }
   }
@@ -56,7 +59,8 @@ class BuserSelWidget extends React.Component {
       type: 'car/clearBindUser',
       payload: {},
     });
-    this.setState({ uid: null, scrollData: [], hasMore: false, curPg: 0, searVal: '' });
+    getBuObj[1] = false;
+    getBuObj[2] = false;
   }
 
   onVisiblePopover = () => {
