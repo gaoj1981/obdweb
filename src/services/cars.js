@@ -45,3 +45,7 @@ export async function editBindUserDefault(params) {
     method: 'POST',
   });
 }
+
+export async function getBindUserDefault(params) {
+  return request(`/api/binduser/get.default?${stringify(params)}`);
+}

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import {
   Cascader,
   Form,
@@ -24,10 +25,15 @@ const localVal = getLocale();
 // 兼容Modal&&Drawer滚动条闪动
 let isViewed = false;
 
+@connect(({ car }) => ({
+  bindUserDefault: car.bindUserDefault,
+}))
 @Form.create()
 class ModifyCarForm extends PureComponent {
   state = {
     visible: true, // 兼容Modal&&Drawer滚动条闪动
+    prinId: null,
+    maintId: null,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -53,8 +59,27 @@ class ModifyCarForm extends PureComponent {
     });
   };
 
+  handleAreaChange = value => {
+    const size = value.length;
+    console.log(value.length);
+    if (size > 0) {
+      const { dispatch } = this.props;
+      const areaId = value[size - 1];
+      console.log(areaId);
+      dispatch({
+        type: 'car/reqCommon',
+        service: 'getBindUserDefault',
+        payload: { areaId },
+        callback: () => {
+          const { bindUserDefault } = this.props;
+          console.log(bindUserDefault);
+        },
+      });
+    }
+  };
+
   render() {
-    const { visible } = this.state;
+    const { visible, prinId, maintId } = this.state;
     const { drawerVisible, drawerWidth, form, formValue, handleDrawerVisible } = this.props;
 
     // 兼容Modal&&Drawer滚动条闪动
@@ -122,6 +147,7 @@ class ModifyCarForm extends PureComponent {
                     style={{ width: '100%' }}
                     placeholder="请选择"
                     options={AREA_DATA.areaIds}
+                    onChange={value => this.handleAreaChange(value)}
                   />
                 )}
               </FormItem>
@@ -325,7 +351,7 @@ class ModifyCarForm extends PureComponent {
             <Col span={12}>
               <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="运营人">
                 {form.getFieldDecorator('prinId', {
-                  initialValue: formValue.prinId,
+                  initialValue: prinId || formValue.prinId,
                   rules: [],
                 })(<BuserSelWidget utype={1} />)}
               </FormItem>
@@ -333,7 +359,7 @@ class ModifyCarForm extends PureComponent {
             <Col span={12}>
               <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="维护人">
                 {form.getFieldDecorator('maintId', {
-                  initialValue: formValue.maintId,
+                  initialValue: maintId || formValue.maintId,
                   rules: [],
                 })(<BuserSelWidget utype={2} />)}
               </FormItem>
