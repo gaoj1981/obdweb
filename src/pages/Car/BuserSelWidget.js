@@ -33,21 +33,26 @@ class BuserSelWidget extends React.Component {
     // Should be a controlled component.
     if ('value' in nextProps) {
       const { value, utype } = nextProps;
-      this.setState({ uid: value });
-      const { bindUser, uid } = this.state;
-      if (value && uid === value && !bindUser && utype && !getBuObj[utype]) {
-        console.log(uid);
-        const { dispatch } = this.props;
-        const param = { id: value };
-        dispatch({
-          type: 'car/reqCommon',
-          service: 'getBindUser',
-          payload: param,
-          callback: () => {
-            const { bindUserInfo } = this.props;
-            this.setState({ bindUser: bindUserInfo });
-          },
-        });
+      const { uid } = this.state;
+      if (uid !== value) {
+        this.setState({ uid: value });
+        getBuObj[utype] = false;
+      } else if (!getBuObj[utype]) {
+        if (uid) {
+          const { dispatch } = this.props;
+          const param = { id: uid };
+          dispatch({
+            type: 'car/reqCommonNowarn',
+            service: 'getBindUser',
+            payload: param,
+            callback: () => {
+              const { bindUserInfo } = this.props;
+              this.setState({ bindUser: bindUserInfo });
+            },
+          });
+        } else {
+          this.setState({ bindUser: null });
+        }
         getBuObj[utype] = true;
       }
     }
@@ -76,7 +81,7 @@ class BuserSelWidget extends React.Component {
 
   remove = () => {
     this.setState({ bindUser: null, uid: null });
-    this.triggerChange(null);
+    this.triggerChange(0);
   };
 
   triggerChange = changedValue => {
@@ -106,8 +111,8 @@ class BuserSelWidget extends React.Component {
 
   dispatchList = (searVal, curPg) => {
     const pgSize = 10;
-    const { dispatch, utype } = this.props;
-    const param = { page: curPg, query: { orUnameTel: searVal, utype }, size: pgSize };
+    const { dispatch, utype, areaId } = this.props;
+    const param = { page: curPg, query: { orUnameTel: searVal, utype, areaId }, size: pgSize };
     dispatch({
       type: 'car/reqCommon',
       service: 'pageBindUser',

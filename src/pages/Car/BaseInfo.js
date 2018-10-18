@@ -228,6 +228,7 @@ class BaseInfo extends PureComponent {
       callback: () => {
         this.dispatchPageList();
         message.success('修改成功');
+        this.clearCarInfo();
       },
     });
     this.handleDrawerVisible();
@@ -236,6 +237,14 @@ class BaseInfo extends PureComponent {
   moreBtnExc = key => {
     console.log(key);
   };
+
+  clearCarInfo() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/clearCarInfo',
+      payload: {},
+    });
+  }
 
   dispatchPageList(page, queryParam) {
     const { dispatch } = this.props;

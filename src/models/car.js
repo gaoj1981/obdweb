@@ -61,6 +61,21 @@ export default {
         if (callback) callback();
       }
     },
+    *reqCommonNowarn({ service, payload, callback }, { call, put }) {
+      const postParamObj = servToReduce[service];
+      const response = yield call(postParamObj.method, payload);
+      //
+      if (isResOK(response, true)) {
+        const { reduce } = postParamObj;
+        if (reduce) {
+          yield put({
+            type: reduce,
+            payload: response,
+          });
+        }
+        if (callback) callback();
+      }
+    },
     *fetchCarCountSum(_, { call, put }) {
       const response = yield call(getCarCountSum);
       yield put({
@@ -71,6 +86,12 @@ export default {
     *clearBindUser({ payload }, { put }) {
       yield put({
         type: 'queryBindUser',
+        payload,
+      });
+    },
+    *clearCarInfo({ payload }, { put }) {
+      yield put({
+        type: 'queryCarInfo',
         payload,
       });
     },

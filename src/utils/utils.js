@@ -181,3 +181,10 @@ export function formatWan(val) {
 export function isAntdPro() {
   return window.location.hostname === 'preview.pro.ant.design';
 }
+
+export function isEmptyObject(e) {
+  let t;
+  /* eslint-disable */
+  for (t in e) return !1;
+  return !0;
+}

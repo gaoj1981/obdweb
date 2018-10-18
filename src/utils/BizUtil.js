@@ -5,9 +5,11 @@ import Ellipsis from '../components/Ellipsis';
 import BizConst from '@/common/BizConst';
 import { AREA_DATA, AREA_DATA_KEYVALUE } from '@/common/AreaJson';
 
-function isResOK(response) {
+function isResOK(response, noWarn) {
   if (response && response.status === 400) {
-    message.error(response.message || formatMessage({ id: 'validation.error.unknown' }));
+    if (!noWarn) {
+      message.error(response.message || formatMessage({ id: 'validation.error.unknown' }));
+    }
     return false;
   }
   return true;

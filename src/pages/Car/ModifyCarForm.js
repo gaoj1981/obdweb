@@ -15,6 +15,7 @@ import {
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import { AREA_DATA } from '@/common/AreaJson';
 import BizConst from '@/common/BizConst';
+import { isEmptyObject } from '@/utils/utils';
 import { getAreaArr } from '@/utils/BizUtil';
 import ColorInputWidget from './ColorInputWidget';
 import BuserSelWidget from './BuserSelWidget';
@@ -34,6 +35,7 @@ class ModifyCarForm extends PureComponent {
     visible: true, // 兼容Modal&&Drawer滚动条闪动
     prinId: null,
     maintId: null,
+    areaId: null,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -41,6 +43,19 @@ class ModifyCarForm extends PureComponent {
     if (!isViewed) {
       if (!nextProps.loading) {
         this.setState({ visible: false });
+      }
+    }
+    //
+    const { formValue } = nextProps;
+    if (isEmptyObject(formValue)) {
+      this.setState({ maintId: null, prinId: null });
+    } else {
+      const { prinId, maintId } = this.state;
+      if (!prinId && formValue) {
+        this.setState({ prinId: formValue.prinId });
+      }
+      if (!maintId && formValue) {
+        this.setState({ maintId: formValue.maintId });
       }
     }
   }
@@ -60,26 +75,34 @@ class ModifyCarForm extends PureComponent {
   };
 
   handleAreaChange = value => {
-    const size = value.length;
-    console.log(value.length);
-    if (size > 0) {
-      const { dispatch } = this.props;
-      const areaId = value[size - 1];
-      console.log(areaId);
+    const { length } = value;
+    if (length > 0) {
+      const { dispatch, formValue, form } = this.props;
+      const areaId = value[length - 1];
       dispatch({
         type: 'car/reqCommon',
         service: 'getBindUserDefault',
-        payload: { areaId },
+        payload: { areaId, eid: formValue.eid },
         callback: () => {
           const { bindUserDefault } = this.props;
-          console.log(bindUserDefault);
+          let prinId = null;
+          let maintId = null;
+          bindUserDefault.forEach(item => {
+            if (item.utype === 1) {
+              prinId = item.id;
+            } else if (item.utype === 2) {
+              maintId = item.id;
+            }
+          });
+          form.setFieldsValue({ prinId, maintId });
+          this.setState({ areaId });
         },
       });
     }
   };
 
   render() {
-    const { visible, prinId, maintId } = this.state;
+    const { visible, prinId, maintId, areaId } = this.state;
     const { drawerVisible, drawerWidth, form, formValue, handleDrawerVisible } = this.props;
 
     // 兼容Modal&&Drawer滚动条闪动
@@ -351,17 +374,17 @@ class ModifyCarForm extends PureComponent {
             <Col span={12}>
               <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="运营人">
                 {form.getFieldDecorator('prinId', {
-                  initialValue: prinId || formValue.prinId,
+                  initialValue: prinId,
                   rules: [],
-                })(<BuserSelWidget utype={1} />)}
+                })(<BuserSelWidget utype={1} areaId={areaId || formValue.areaId} />)}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="维护人">
                 {form.getFieldDecorator('maintId', {
-                  initialValue: maintId || formValue.maintId,
+                  initialValue: maintId,
                   rules: [],
-                })(<BuserSelWidget utype={2} />)}
+                })(<BuserSelWidget utype={2} areaId={areaId || formValue.areaId} />)}
               </FormItem>
             </Col>
 
