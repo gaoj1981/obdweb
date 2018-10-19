@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { Form, Button, Drawer } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 
+import styles from './EditBizCss.less';
+
 const FormItem = Form.Item;
 // 兼容Modal&&Drawer滚动条闪动
 let isViewed = false;
@@ -30,7 +32,7 @@ class EditBizForm extends PureComponent {
     const { form, handleEdit } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      form.resetFields();
+      // form.resetFields();
       handleEdit(fieldsValue);
     });
   };
@@ -79,7 +81,9 @@ class EditBizForm extends PureComponent {
             onClick={() => handleEditVisible()}
           />
         </div>
-        <Form layout="vertical">{bizForm ? bizForm(FormItem, form, formValue) : null}</Form>
+        <Form layout="vertical" className={styles.editComponent}>
+          {bizForm ? bizForm(FormItem, form, formValue) : null}
+        </Form>
         <div
           style={{
             position: 'absolute',

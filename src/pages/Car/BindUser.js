@@ -97,6 +97,15 @@ class BindUser extends PureComponent {
   handleEdit = fields => {
     const formParam = { ...fields };
     //
+    const { areaIds } = fields;
+    const areaId = getAreaId(areaIds);
+    formParam.areaId = areaId;
+    if (formParam.isDefault) {
+      formParam.isDefault = 1;
+    } else {
+      formParam.isDefault = 0;
+    }
+    //
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',
