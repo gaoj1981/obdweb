@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Alert, Badge, Button, Form, Icon, Input, Modal, Radio, Steps } from 'antd';
+import { Alert, Badge, Button, Form, Icon, Input, Modal, Radio, Steps, Switch } from 'antd';
 
 import BizConst from '@/common/BizConst';
 import { getAreaName, getAreaArr } from '@/utils/BizUtil';
@@ -22,6 +22,7 @@ class BindUserStepDefault extends PureComponent {
         id: props.values.id,
       },
       currentStep: 0,
+      loading: false,
     };
 
     this.formLayout = {
@@ -31,10 +32,14 @@ class BindUserStepDefault extends PureComponent {
   }
 
   handleNext = currentStep => {
+    if (currentStep === 2) this.setState({ loading: true });
     const { form, handleStep } = this.props;
     const { formVals: oldValue } = this.state;
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
+      if (err) {
+        this.setState({ loading: false });
+        return;
+      }
       const formVals = { ...oldValue, ...fieldsValue };
       this.setState(
         {
@@ -78,13 +83,9 @@ class BindUserStepDefault extends PureComponent {
         >
           {form.getFieldDecorator('isDefault', {
             rules: [{ required: true }],
-            initialValue: `${formVals.isDefault}`,
-          })(
-            <RadioGroup>
-              <Radio value="0">否</Radio>
-              <Radio value="1">是</Radio>
-            </RadioGroup>
-          )}
+            valuePropName: 'checked',
+            initialValue: formVals.isDefault === 1,
+          })(<Switch checkedChildren="是" unCheckedChildren="否" />)}
         </FormItem>,
         <Alert
           message="提醒：当选择【是】时，系统会自动取消该区县之前的默认车辆负责人。"
@@ -141,6 +142,7 @@ class BindUserStepDefault extends PureComponent {
 
   renderFooter = currentStep => {
     const { handleStepModalVisible } = this.props;
+    const { loading } = this.state;
     if (currentStep === 1) {
       return [
         <Button key="back" style={{ float: 'left' }} onClick={this.backward}>
@@ -162,7 +164,12 @@ class BindUserStepDefault extends PureComponent {
         <Button key="cancel" onClick={() => handleStepModalVisible()}>
           取消
         </Button>,
-        <Button key="submit" type="primary" onClick={() => this.handleNext(currentStep)}>
+        <Button
+          key="submit"
+          type="primary"
+          onClick={() => this.handleNext(currentStep)}
+          loading={loading}
+        >
           完成
         </Button>,
       ];

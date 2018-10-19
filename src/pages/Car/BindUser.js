@@ -9,7 +9,7 @@ import EditBizForm from '@/common/EditBizForm';
 import QueryBizForm from '@/common/QueryBizForm';
 import { TableListBase } from '@/common/TableLists';
 import { getAreaId } from '@/utils/BizUtil';
-import { searchForm, addForm, editForm, getColumns } from './BindUserForms';
+import { searchForm, addForm, editForm, getColumns, queryForm } from './BindUserForms';
 import BindUserStepDefault from './BindUserStepDefault';
 
 import styles from './BindUser.less';
@@ -127,9 +127,44 @@ class BindUser extends PureComponent {
 
   handleQuery = fields => {
     const formParam = { ...fields };
-    console.log('query', formParam);
+    // console.log(formParam.times[0].format('YYYY-MM-DD HH:mm:ss'));
+    if (formParam.areaIds) {
+      const areaId = getAreaId(formParam.areaIds);
+      formParam.areaId = areaId;
+    }
+    if (formParam.timeSel && formParam.times && formParam.times.length === 2) {
+      formParam.timeStart = formParam.times[0].format('YYYY-MM-DD');
+      formParam.timeEnd = formParam.times[1].format('YYYY-MM-DD');
+    } else {
+      formParam.timeSel = null;
+      formParam.timeStart = null;
+      formParam.timeEnd = null;
+    }
+    if (formParam.isDefaultSel && formParam.isDefaultSel.length === 1) {
+      [formParam.isDefault] = formParam.isDefaultSel;
+    }
+    console.log('request', formParam);
+    const {
+      areaId,
+      orUnameTel,
+      isDefault,
+      sexSel,
+      timeSel,
+      timeStart,
+      timeEnd,
+      utypeSel,
+    } = formParam;
     //
-    this.dispatchPageList();
+    this.dispatchPageList(0, {
+      areaId,
+      orUnameTel,
+      isDefault,
+      sexSel,
+      timeSel,
+      timeStart,
+      timeEnd,
+      utypeSel,
+    });
   };
 
   handleSearch = e => {
@@ -166,14 +201,22 @@ class BindUser extends PureComponent {
   };
 
   handleStep = fields => {
+    const formParam = { ...fields };
+    //
+    if (formParam.isDefault) {
+      formParam.isDefault = 1;
+    } else {
+      formParam.isDefault = 0;
+    }
+    //
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',
       service: 'editBindUserDefault',
       payload: {
-        id: fields.id,
-        isDefault: fields.isDefault,
-        isCoverAll: fields.isCoverAll,
+        id: formParam.id,
+        isDefault: formParam.isDefault,
+        isCoverAll: formParam.isCoverAll,
       },
       callback: () => {
         this.dispatchPageList();
@@ -271,6 +314,7 @@ class BindUser extends PureComponent {
     const queryMethods = {
       handleQuery: this.handleQuery,
       handleQueryVisible: this.handleQueryVisible,
+      bizForm: queryForm,
     };
 
     const stepMethods = {

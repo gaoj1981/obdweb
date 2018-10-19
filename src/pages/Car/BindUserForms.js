@@ -14,14 +14,19 @@ import {
   Divider,
   Form,
   Checkbox,
+  Select,
+  DatePicker,
 } from 'antd';
 
 import BizConst from '@/common/BizConst';
-import { deleteConfirm, getAreaName, getAreaArr, convUname } from '@/utils/BizUtil';
+import { deleteConfirm, getAreaName, getAreaArr, convUname, getAreaId } from '@/utils/BizUtil';
 import { AREA_DATA } from '@/common/AreaJson';
 
 const localVal = getLocale();
 const RadioGroup = Radio.Group;
+const SelectOption = Select.Option;
+const CheckboxGroup = Checkbox.Group;
+const DateRange = DatePicker.RangePicker;
 
 const searchForm = (FormItem, form) => {
   const { getFieldDecorator } = form;
@@ -175,10 +180,26 @@ const editForm = (FormItem, form, formValue) => {
     const { length } = value;
     if (length > 0) {
       const areaId = value[length - 1];
-      console.log(areaId, formValue.areaId);
       if (areaId !== `${formValue.areaId}`) {
         form.setFieldsValue({ isDefault: false });
       } else {
+        const utypeCurSel = form.getFieldValue('utype');
+        if (utypeCurSel === `${formValue.utype}`) {
+          form.setFieldsValue({ isDefault: formValue.isDefault === 1 });
+        }
+      }
+    }
+  };
+
+  const handleUtypeChange = e => {
+    const utypeCurSel = e.target.value;
+    const { utype } = formValue;
+    if (utypeCurSel !== `${utype}`) {
+      form.setFieldsValue({ isDefault: false });
+    } else {
+      const areaCurSel = form.getFieldValue('areaIds');
+      const areaIdCurSel = getAreaId(areaCurSel);
+      if (areaIdCurSel === formValue.areaId) {
         form.setFieldsValue({ isDefault: formValue.isDefault === 1 });
       }
     }
@@ -240,7 +261,7 @@ const editForm = (FormItem, form, formValue) => {
               },
             ],
           })(
-            <RadioGroup style={{ paddingTop: 6 }}>
+            <RadioGroup style={{ paddingTop: 6 }} onChange={handleUtypeChange}>
               <Radio value="1">运营</Radio>
               <Radio value="2">维护</Radio>
             </RadioGroup>
@@ -433,4 +454,105 @@ const getColumns = columnMethods => {
   ];
 };
 
-export { searchForm, addForm, editForm, getColumns };
+const queryForm = (FormItem, form) => {
+  const { getFieldDecorator } = form;
+  const defaultOptions = [{ label: '是', value: 1 }, { label: '否', value: 0 }];
+  const sexOptions = [
+    { label: '全部', value: 'All' },
+    { label: '男', value: 'M' },
+    { label: '女', value: 'F' },
+    { label: '保密', value: 'N' },
+  ];
+  const normalizeAll = (value, prevValue = []) => {
+    if (value) {
+      const allPosi = value.indexOf('All');
+      if (allPosi >= 0 && prevValue.indexOf('All') < 0) {
+        return ['All', 'M', 'F', 'N'];
+      }
+      if (allPosi < 0 && prevValue.indexOf('All') >= 0) {
+        return [];
+      }
+      if (value.length === 3 && allPosi < 0) {
+        return ['All', 'M', 'F', 'N'];
+      }
+      if (value.length !== 4) {
+        if (allPosi >= 0) {
+          value.splice(allPosi, 1);
+        }
+      }
+    }
+    return value;
+  };
+
+  return (
+    // 注意Col总步长占总屏宽20:24
+    <Row gutter={16}>
+      <Col span={8}>
+        <Form.Item label="所在区域" labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+          {getFieldDecorator('areaIds')(
+            <Cascader
+              style={{ width: '100%' }}
+              placeholder="请选择"
+              options={AREA_DATA.areaIds}
+              allowClear
+            />
+          )}
+        </Form.Item>
+      </Col>
+      <Col span={6}>
+        <FormItem label="姓名/手机" labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
+          {getFieldDecorator('orUnameTel')(<Input placeholder="姓名或手机" />)}
+        </FormItem>
+      </Col>
+      <Col span={6}>
+        <Form.Item label="所属部门" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+          {getFieldDecorator('utypeSel')(
+            <Select mode="multiple" placeholder="可多选查询" showArrow style={{ width: '100%' }}>
+              <SelectOption key="1">运营</SelectOption>
+              <SelectOption key="2">维护</SelectOption>
+            </Select>
+          )}
+        </Form.Item>
+      </Col>
+      <Col span={4}>
+        <Form.Item label="默认负责" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
+          {getFieldDecorator('isDefaultSel', {})(<CheckboxGroup options={defaultOptions} />)}
+        </Form.Item>
+      </Col>
+      <Col span={8}>
+        <Row>
+          <Col span={8}>
+            <Form.Item>
+              {getFieldDecorator('timeSel')(
+                <Select
+                  allowClear
+                  placeholder="时间类型"
+                  style={{ width: '100%', borderRadius: 0 }}
+                >
+                  <SelectOption key="1">添加时间</SelectOption>
+                  <SelectOption key="2">最后修改时间</SelectOption>
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={16}>
+            <FormItem>
+              {getFieldDecorator('times', { rules: [{ type: 'array' }] })(
+                <DateRange style={{ width: '100%', borderRadius: 0 }} />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+      </Col>
+      <Col span={8}>
+        <Form.Item label="性别" labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+          {getFieldDecorator('sexSel', { normalize: normalizeAll })(
+            <CheckboxGroup options={sexOptions} />
+          )}
+        </Form.Item>
+      </Col>
+    </Row>
+  );
+};
+
+export { searchForm, addForm, editForm, getColumns, queryForm };
