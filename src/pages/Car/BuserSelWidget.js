@@ -81,7 +81,7 @@ class BuserSelWidget extends React.Component {
 
   remove = () => {
     this.setState({ bindUser: null, uid: null });
-    this.triggerChange(0);
+    this.triggerChange('');
   };
 
   triggerChange = changedValue => {
@@ -235,7 +235,7 @@ class BuserSelWidget extends React.Component {
         >
           <Button
             type="dashed"
-            icon={uid ? 'retweet' : 'plus'}
+            icon={!uid ? 'plus' : 'retweet'}
             size="small"
             onClick={this.onVisiblePopover}
           />

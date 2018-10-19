@@ -15,7 +15,6 @@ import {
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import { AREA_DATA } from '@/common/AreaJson';
 import BizConst from '@/common/BizConst';
-import { isEmptyObject } from '@/utils/utils';
 import { getAreaArr } from '@/utils/BizUtil';
 import ColorInputWidget from './ColorInputWidget';
 import BuserSelWidget from './BuserSelWidget';
@@ -33,8 +32,6 @@ let isViewed = false;
 class ModifyCarForm extends PureComponent {
   state = {
     visible: true, // 兼容Modal&&Drawer滚动条闪动
-    prinId: null,
-    maintId: null,
     areaId: null,
   };
 
@@ -43,19 +40,6 @@ class ModifyCarForm extends PureComponent {
     if (!isViewed) {
       if (!nextProps.loading) {
         this.setState({ visible: false });
-      }
-    }
-    //
-    const { formValue } = nextProps;
-    if (isEmptyObject(formValue)) {
-      this.setState({ maintId: null, prinId: null });
-    } else {
-      const { prinId, maintId } = this.state;
-      if (!prinId && formValue) {
-        this.setState({ prinId: formValue.prinId });
-      }
-      if (!maintId && formValue) {
-        this.setState({ maintId: formValue.maintId });
       }
     }
   }
@@ -85,8 +69,8 @@ class ModifyCarForm extends PureComponent {
         payload: { areaId, eid: formValue.eid },
         callback: () => {
           const { bindUserDefault } = this.props;
-          let prinId = null;
-          let maintId = null;
+          let prinId = '';
+          let maintId = '';
           bindUserDefault.forEach(item => {
             if (item.utype === 1) {
               prinId = item.id;
@@ -102,7 +86,7 @@ class ModifyCarForm extends PureComponent {
   };
 
   render() {
-    const { visible, prinId, maintId, areaId } = this.state;
+    const { visible, areaId } = this.state;
     const { drawerVisible, drawerWidth, form, formValue, handleDrawerVisible } = this.props;
 
     // 兼容Modal&&Drawer滚动条闪动
@@ -374,7 +358,7 @@ class ModifyCarForm extends PureComponent {
             <Col span={12}>
               <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="运营人">
                 {form.getFieldDecorator('prinId', {
-                  initialValue: prinId,
+                  initialValue: formValue.prinId,
                   rules: [],
                 })(<BuserSelWidget utype={1} areaId={areaId || formValue.areaId} />)}
               </FormItem>
@@ -382,7 +366,7 @@ class ModifyCarForm extends PureComponent {
             <Col span={12}>
               <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="维护人">
                 {form.getFieldDecorator('maintId', {
-                  initialValue: maintId,
+                  initialValue: formValue.maintId,
                   rules: [],
                 })(<BuserSelWidget utype={2} areaId={areaId || formValue.areaId} />)}
               </FormItem>
