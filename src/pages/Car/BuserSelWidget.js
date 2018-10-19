@@ -196,7 +196,8 @@ class BuserSelWidget extends React.Component {
                         <Icon type="phone" style={{ color: '#ffbf00' }} />
                         {item.tel}
                         <Divider type="vertical" />
-                        {item.urTel}
+                        <Icon type="alert" style={{ color: '#f5222d' }} />
+                        {item.urTel || '暂无紧急电话'}
                       </div>
                     }
                   />
