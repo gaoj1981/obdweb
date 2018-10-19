@@ -178,7 +178,7 @@ class BindUserStepDefault extends PureComponent {
   };
 
   render() {
-    const { updateModalVisible, handleUpdateModalVisible } = this.props;
+    const { updateModalVisible, handleStepModalVisible } = this.props;
     const { currentStep, formVals } = this.state;
 
     return (
@@ -189,7 +189,7 @@ class BindUserStepDefault extends PureComponent {
         title="区县默认负责人设置"
         visible={updateModalVisible}
         footer={this.renderFooter(currentStep)}
-        onCancel={() => handleUpdateModalVisible()}
+        onCancel={() => handleStepModalVisible()}
       >
         <Steps style={{ marginBottom: 28 }} size="small" current={currentStep}>
           <Step title="基本信息" />
