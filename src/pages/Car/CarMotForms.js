@@ -107,7 +107,7 @@ const getColumns = columnMethods => {
           <Divider type="vertical" />
           <a
             onClick={() => {
-              deleteConfirm('相关人员', record.id, handleDelete);
+              deleteConfirm('车辆年检', record.id, handleDelete);
             }}
           >
             <FormattedMessage id="form.delete" defaultMessage="No translate" />
