@@ -15,6 +15,12 @@ import {
   getBindUser,
   editBindUserDefault,
   getBindUserDefault,
+  //
+  pageCarMot,
+  addCarMot,
+  delCarMot,
+  editCarMot,
+  getCarMot,
 } from '@/services/cars';
 
 const servToReduce = {
@@ -31,6 +37,12 @@ const servToReduce = {
   getBindUser: { method: getBindUser, reduce: 'getBindUser' },
   editBindUserDefault: { method: editBindUserDefault, reduce: null },
   getBindUserDefault: { method: getBindUserDefault, reduce: 'getBindUserDefault' },
+  //
+  pageCarMot: { method: pageCarMot, reduce: 'pageCarMot' },
+  addCarMot: { method: addCarMot, reduce: null },
+  delCarMot: { method: delCarMot, reduce: null },
+  editCarMot: { method: editCarMot, reduce: null },
+  getCarMot: { method: getCarMot, reduce: 'getCarMot' },
 };
 //
 export default {
@@ -43,6 +55,9 @@ export default {
     pageBindUser: {},
     bindUser: {},
     bindUserDefault: [],
+    //
+    pageCarMot: {},
+    carMot: {},
   },
 
   effects: {
@@ -132,6 +147,18 @@ export default {
       return {
         ...state,
         bindUserDefault: action.payload,
+      };
+    },
+    pageCarMot(state, action) {
+      return {
+        ...state,
+        pageCarMot: action.payload,
+      };
+    },
+    getCarMot(state, action) {
+      return {
+        ...state,
+        carMot: action.payload,
       };
     },
   },

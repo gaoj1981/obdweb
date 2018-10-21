@@ -1,40 +1,36 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'dva';
+import { connect } from 'dva/index';
+import { Form, Row, Col, Button, Card, message } from 'antd';
 import { FormattedMessage } from 'umi/locale';
-import { Button, Card, Col, Form, Row, message } from 'antd';
 
 import BizConst from '@/common/BizConst';
 import AddBizForm from '@/common/AddBizForm';
 import EditBizForm from '@/common/EditBizForm';
 import QueryBizForm from '@/common/QueryBizForm';
 import { TableListBase } from '@/common/TableLists';
-import { getAreaId } from '@/utils/BizUtil';
-import { searchForm, addForm, editForm, getColumns, queryForm } from './BindUserForms';
-import BindUserStepDefault from './BindUserStepDefault';
+import { searchForm, addForm, editForm, getColumns, queryForm } from './CarMotForms';
 
-import styles from './BindUser.less';
+import styles from './CarMot.less';
 
 // 页面常量
 const FormItem = Form.Item;
 
 // 底层组件
 @connect(({ car, loading }) => ({
-  pageBindUser: car.pageBindUser,
-  bindUser: car.bindUser,
+  pageCarMot: car.pageCarMot,
+  carMot: car.carMot,
   loading: loading.models.car,
 }))
 @Form.create()
-class BindUser extends PureComponent {
+class CarMot extends PureComponent {
   state = {
+    pageQuery: {},
+    queryPage: 0,
     addVisible: false,
     editVisible: false,
     editWidth: 666,
-    pageQuery: {},
-    queryPage: 0,
     queryVisible: false,
     queryHeight: 99,
-    updateModalVisible: false,
-    stepFormValues: {},
   };
 
   componentDidMount() {
@@ -50,14 +46,12 @@ class BindUser extends PureComponent {
   handleAdd = fields => {
     const formParam = { ...fields };
     //
-    const { areaIds } = fields;
-    const areaId = getAreaId(areaIds);
-    formParam.areaId = areaId;
+    console.log('add', formParam);
     //
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',
-      service: 'addBindUser',
+      service: 'addCarMot',
       payload: formParam,
       callback: () => {
         this.dispatchPageList(0, {});
@@ -71,7 +65,7 @@ class BindUser extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',
-      service: 'delBindUser',
+      service: 'delCarMot',
       payload: { id },
       callback: () => {
         this.dispatchPageList();
@@ -85,7 +79,7 @@ class BindUser extends PureComponent {
       const { dispatch } = this.props;
       dispatch({
         type: 'car/reqCommon',
-        service: 'getBindUser',
+        service: 'getCarMot',
         payload: { id },
       });
     }
@@ -97,19 +91,12 @@ class BindUser extends PureComponent {
   handleEdit = fields => {
     const formParam = { ...fields };
     //
-    const { areaIds } = fields;
-    const areaId = getAreaId(areaIds);
-    formParam.areaId = areaId;
-    if (formParam.isDefault) {
-      formParam.isDefault = 1;
-    } else {
-      formParam.isDefault = 0;
-    }
+    console.log('edit', formParam);
     //
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',
-      service: 'editBindUser',
+      service: 'editCarMot',
       payload: formParam,
       callback: () => {
         this.dispatchPageList();
@@ -119,60 +106,13 @@ class BindUser extends PureComponent {
     });
   };
 
-  handleQueryVisible = flag => {
-    this.setState({
-      queryVisible: !!flag,
-    });
-  };
-
-  handleQuery = fields => {
-    const formParam = { ...fields };
-    // console.log(formParam.times[0].format('YYYY-MM-DD HH:mm:ss'));
-    if (formParam.areaIds) {
-      const areaId = getAreaId(formParam.areaIds);
-      formParam.areaId = areaId;
-    }
-    if (formParam.timeSel && formParam.times && formParam.times.length === 2) {
-      formParam.timeStart = formParam.times[0].format('YYYY-MM-DD');
-      formParam.timeEnd = formParam.times[1].format('YYYY-MM-DD');
-    } else {
-      formParam.timeSel = null;
-      formParam.timeStart = null;
-      formParam.timeEnd = null;
-    }
-    if (formParam.isDefaultSel && formParam.isDefaultSel.length === 1) {
-      [formParam.isDefault] = formParam.isDefaultSel;
-    }
-    const {
-      areaId,
-      orUnameTel,
-      isDefault,
-      sexSel,
-      timeSel,
-      timeStart,
-      timeEnd,
-      utypeSel,
-    } = formParam;
-    //
-    this.dispatchPageList(0, {
-      areaId,
-      orUnameTel,
-      isDefault,
-      sexSel,
-      timeSel,
-      timeStart,
-      timeEnd,
-      utypeSel,
-    });
-  };
-
   handleSearch = e => {
     e.preventDefault();
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const { orUnameTel, areaIds } = fieldsValue;
-      this.dispatchPageList(0, { orUnameTel, areaId: getAreaId(areaIds) });
+      const { id } = fieldsValue;
+      this.dispatchPageList(0, { id });
     });
   };
 
@@ -186,43 +126,23 @@ class BindUser extends PureComponent {
     this.dispatchPageList(pagination.current - 1);
   };
 
-  moreBtnExc = (key, record) => {
-    if (key === 'setDefault') {
-      this.handleStepModalVisible(true, record);
-    }
-  };
-
-  handleStepModalVisible = (flag, record) => {
+  handleQueryVisible = flag => {
     this.setState({
-      updateModalVisible: !!flag,
-      stepFormValues: record || {},
+      queryVisible: !!flag,
     });
   };
 
-  handleStep = fields => {
+  handleQuery = fields => {
     const formParam = { ...fields };
+    console.log('request', formParam);
     //
-    if (formParam.isDefault) {
-      formParam.isDefault = 1;
-    } else {
-      formParam.isDefault = 0;
-    }
+    const { id } = formParam;
     //
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'car/reqCommon',
-      service: 'editBindUserDefault',
-      payload: {
-        id: formParam.id,
-        isDefault: formParam.isDefault,
-        isCoverAll: formParam.isCoverAll,
-      },
-      callback: () => {
-        this.dispatchPageList();
-        message.success('设置成功');
-        this.handleStepModalVisible();
-      },
-    });
+    this.dispatchPageList(0, { id });
+  };
+
+  moreBtnExc = (key, record) => {
+    console.log(key, record);
   };
 
   dispatchPageList(page, queryParam) {
@@ -237,7 +157,7 @@ class BindUser extends PureComponent {
     const param = { query: pageQuery, page: queryPage, size: BizConst.pageSize };
     dispatch({
       type: 'car/reqCommon',
-      service: 'pageBindUser',
+      service: 'pageCarMot',
       payload: param,
     });
     this.setState({ pageQuery, queryPage });
@@ -276,16 +196,8 @@ class BindUser extends PureComponent {
   }
 
   render() {
-    const {
-      addVisible,
-      editVisible,
-      editWidth,
-      queryVisible,
-      queryHeight,
-      updateModalVisible,
-      stepFormValues,
-    } = this.state;
-    const { pageBindUser, bindUser, loading } = this.props;
+    const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
+    const { pageCarMot, carMot, loading } = this.props;
 
     const columnMethods = {
       handleEditVisible: this.handleEditVisible,
@@ -293,7 +205,7 @@ class BindUser extends PureComponent {
       moreBtnExc: this.moreBtnExc,
     };
     const propsTableList = {
-      ...pageBindUser,
+      ...pageCarMot,
       loading,
       columns: getColumns(columnMethods),
     };
@@ -316,11 +228,6 @@ class BindUser extends PureComponent {
       bizForm: queryForm,
     };
 
-    const stepMethods = {
-      handleStepModalVisible: this.handleStepModalVisible,
-      handleStep: this.handleStep,
-    };
-
     return (
       <div className={styles.testCss}>
         <Card bordered={false}>
@@ -335,19 +242,12 @@ class BindUser extends PureComponent {
           editVisible={editVisible}
           editWidth={editWidth}
           loading={loading}
-          formValue={bindUser}
+          formValue={carMot}
         />
         <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
-        {stepFormValues && Object.keys(stepFormValues).length ? (
-          <BindUserStepDefault
-            {...stepMethods}
-            updateModalVisible={updateModalVisible}
-            values={stepFormValues}
-          />
-        ) : null}
       </div>
     );
   }
 }
 
-export default BindUser;
+export default CarMot;

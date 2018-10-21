@@ -77,7 +77,7 @@ export default [
           {
             path: '/car/mot',
             name: 'mot',
-            component: './Car/Mot',
+            component: './Car/CarMot',
             icon: 'safety-certificate',
           },
         ],

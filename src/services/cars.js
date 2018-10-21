@@ -49,3 +49,35 @@ export async function editBindUserDefault(params) {
 export async function getBindUserDefault(params) {
   return request(`/api/binduser/get.default?${stringify(params)}`);
 }
+
+// CarMot增删改查
+export async function pageCarMot(params) {
+  return request('/api/carmot/get.page', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function addCarMot(params) {
+  return request('/api/carmot/add', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function delCarMot(params) {
+  return request(`/api/carmot/del?${stringify(params)}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function editCarMot(params) {
+  return request('/api/carmot/edit', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function getCarMot(params) {
+  return request(`/api/carmot/get?${stringify(params)}`);
+}
