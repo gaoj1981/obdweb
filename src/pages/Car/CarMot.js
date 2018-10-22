@@ -31,10 +31,17 @@ class CarMot extends PureComponent {
     editWidth: 666,
     queryVisible: false,
     queryHeight: 99,
+    eidParam: null,
   };
 
   componentDidMount() {
-    this.dispatchPageList(0, {});
+    const {
+      match: {
+        params: { eidParam },
+      },
+    } = this.props;
+    this.dispatchPageList(0, { eidLike: eidParam });
+    this.setState({ eidParam });
   }
 
   handleAddVisible = flag => {
@@ -167,10 +174,10 @@ class CarMot extends PureComponent {
     const {
       form,
       match: {
-        params: { cid },
+        params: { eidParam },
       },
     } = this.props;
-    const extraVals = { cidLike: cid };
+    const extraVals = { eidParam };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -183,7 +190,7 @@ class CarMot extends PureComponent {
               <Button style={{ margin: '0 8px' }} onClick={this.handleFormReset}>
                 <FormattedMessage id="form.reset" defaultMessage="No translate" />
               </Button>
-              {!cid ? (
+              {!eidParam ? (
                 <Button icon="search" onClick={() => this.handleQueryVisible(true)}>
                   <FormattedMessage id="form.search.advanced" defaultMessage="No Trans" />
                 </Button>
@@ -204,7 +211,7 @@ class CarMot extends PureComponent {
   }
 
   render() {
-    const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
+    const { addVisible, editVisible, editWidth, queryVisible, queryHeight, eidParam } = this.state;
     const { pageCarMot, carMot, loading } = this.props;
 
     const columnMethods = {
@@ -244,7 +251,7 @@ class CarMot extends PureComponent {
             <TableListBase {...propsTableList} onChange={this.handlePageChange} />
           </div>
         </Card>
-        <AddBizForm {...addMethods} addVisible={addVisible} />
+        <AddBizForm {...addMethods} addVisible={addVisible} extraVals={{ eidParam }} />
         <EditBizForm
           {...editMethods}
           editVisible={editVisible}

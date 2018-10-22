@@ -81,7 +81,7 @@ export default [
             icon: 'safety-certificate',
           },
           {
-            path: '/car/mot/:cid',
+            path: '/car/mot/:eidParam',
             name: 'mot',
             component: './Car/CarMot',
             icon: 'safety-certificate',
