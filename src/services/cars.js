@@ -81,3 +81,35 @@ export async function editCarMot(params) {
 export async function getCarMot(params) {
   return request(`/api/carmot/get?${stringify(params)}`);
 }
+
+// 车辆保险增删改查
+export async function pageCarInsur(params) {
+  return request('/api/carinsur/get.page', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function addCarInsur(params) {
+  return request('/api/carinsur/add', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function delCarInsur(params) {
+  return request(`/api/carinsur/del?${stringify(params)}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function editCarInsur(params) {
+  return request('/api/carinsur/edit', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function getCarInsur(params) {
+  return request(`/api/carinsur/get?${stringify(params)}`);
+}

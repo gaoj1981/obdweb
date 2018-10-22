@@ -71,7 +71,7 @@ export default [
           {
             path: '/car/insur',
             name: 'insur',
-            component: './Car/Insur',
+            component: './Car/CarInsur',
             icon: 'insurance',
           },
           {
