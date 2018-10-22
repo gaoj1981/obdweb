@@ -5,12 +5,21 @@ import { deleteConfirm } from '@/utils/BizUtil';
 
 const localVal = getLocale();
 
-const searchForm = (FormItem, form) => {
+const searchForm = (FormItem, form, extraVals) => {
   const { getFieldDecorator } = form;
+  const cidLike = extraVals ? extraVals.cidLike : null;
+  console.log(cidLike);
   return (
     // 注意Col总步长14
     <Fragment>
-      <Col md={14} sm={24}>
+      <Col md={7} sm={24}>
+        <FormItem label="车辆编号">
+          {getFieldDecorator('cidLike', { initialValue: cidLike })(
+            <Input placeholder="请输入车辆编号" disabled={!!cidLike} />
+          )}
+        </FormItem>
+      </Col>
+      <Col md={7} sm={24}>
         <FormItem label="ID">{getFieldDecorator('id')(<Input placeholder="请输入ID" />)}</FormItem>
       </Col>
     </Fragment>

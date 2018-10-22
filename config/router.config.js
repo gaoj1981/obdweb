@@ -80,6 +80,13 @@ export default [
             component: './Car/CarMot',
             icon: 'safety-certificate',
           },
+          {
+            path: '/car/mot/:cid',
+            name: 'mot',
+            component: './Car/CarMot',
+            icon: 'safety-certificate',
+            hideInMenu: true,
+          },
         ],
       },
       // equip

@@ -164,11 +164,17 @@ class CarMot extends PureComponent {
   }
 
   renderSimpleForm() {
-    const { form } = this.props;
+    const {
+      form,
+      match: {
+        params: { cid },
+      },
+    } = this.props;
+    const extraVals = { cidLike: cid };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          {searchForm(FormItem, form)}
+          {searchForm(FormItem, form, extraVals)}
           <Col md={6} sm={14}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
@@ -177,9 +183,11 @@ class CarMot extends PureComponent {
               <Button style={{ margin: '0 8px' }} onClick={this.handleFormReset}>
                 <FormattedMessage id="form.reset" defaultMessage="No translate" />
               </Button>
-              <Button icon="search" onClick={() => this.handleQueryVisible(true)}>
-                <FormattedMessage id="form.search.advanced" defaultMessage="No Trans" />
-              </Button>
+              {!cid ? (
+                <Button icon="search" onClick={() => this.handleQueryVisible(true)}>
+                  <FormattedMessage id="form.search.advanced" defaultMessage="No Trans" />
+                </Button>
+              ) : null}
             </span>
           </Col>
           <Col md={4} sm={4} style={{ textAlign: 'right' }}>

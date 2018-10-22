@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { FormattedMessage } from 'umi/locale';
 import {
   Row,
@@ -118,7 +119,7 @@ class BaseInfo extends PureComponent {
           <Divider type="vertical" />
           <Dropdown
             overlay={
-              <Menu onClick={({ key }) => this.moreBtnExc(key)}>
+              <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
                 <Menu.Item key="record">维修保养</Menu.Item>
                 <Menu.Item key="buser">销售售后</Menu.Item>
                 <Menu.Item key="insur">车辆保险</Menu.Item>
@@ -234,8 +235,16 @@ class BaseInfo extends PureComponent {
     this.handleDrawerVisible();
   };
 
-  moreBtnExc = key => {
-    console.log(key);
+  moreBtnExc = (key, record) => {
+    switch (key) {
+      case 'mot':
+        router.push(`/car/mot/${record.id}`);
+        break;
+      case 'insur':
+        break;
+      default:
+        break;
+    }
   };
 
   clearCarInfo() {
