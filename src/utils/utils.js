@@ -188,3 +188,35 @@ export function isEmptyObject(e) {
   for (t in e) return !1;
   return !0;
 }
+
+//
+export function randomString(len) {
+  let rdmString = '';
+  // toSting接受的参数表示进制，默认为10进制。36进制为0-9 a-z
+  for (
+    ;
+    rdmString.length < len;
+    rdmString += Math.random()
+      .toString(36)
+      .substr(2)
+  );
+  return rdmString.substr(0, len);
+}
+
+export function getFilePrefix(filename) {
+  const pos = filename.lastIndexOf('.');
+  let prefix = '';
+  if (pos !== -1) {
+    prefix = filename.substring(0, pos);
+  }
+  return prefix;
+}
+
+export function getFileSuffix(filename) {
+  const pos = filename.lastIndexOf('.');
+  let suffix = '';
+  if (pos !== -1) {
+    suffix = filename.substring(pos);
+  }
+  return suffix;
+}

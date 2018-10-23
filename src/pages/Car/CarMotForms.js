@@ -1,8 +1,21 @@
 import React, { Fragment } from 'react';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import moment from 'moment';
-import { Input, Row, Col, Menu, Dropdown, Divider, DatePicker, Icon } from 'antd';
-import { deleteConfirm } from '@/utils/BizUtil';
+import {
+  Input,
+  Row,
+  Col,
+  Menu,
+  Dropdown,
+  Divider,
+  DatePicker,
+  Icon,
+  Tooltip,
+  Form,
+  Cascader,
+} from 'antd';
+import { deleteConfirm, getAreaName } from '@/utils/BizUtil';
+import { AREA_DATA } from '@/common/AreaJson';
 
 const localVal = getLocale();
 const { MonthPicker } = DatePicker;
@@ -21,7 +34,11 @@ const searchForm = (FormItem, form, extraVals) => {
         </FormItem>
       </Col>
       <Col md={7} sm={24}>
-        <FormItem label="ID">{getFieldDecorator('id')(<Input placeholder="请输入ID" />)}</FormItem>
+        <Form.Item label="所在区域">
+          {getFieldDecorator('areaIds')(
+            <Cascader placeholder="请选择" options={AREA_DATA.areaIds} allowClear />
+          )}
+        </Form.Item>
       </Col>
     </Fragment>
   );
@@ -172,8 +189,28 @@ const getColumns = columnMethods => {
   const { handleEditVisible, handleDelete, moreBtnExc } = columnMethods;
   return [
     {
-      title: 'ID',
-      dataIndex: 'id',
+      title: '车辆编号',
+      dataIndex: 'eid',
+    },
+    {
+      title: <FormattedMessage id="biz.car.areaid" defaultMessage="No translate" />,
+      dataIndex: 'areaId',
+      render: (text, record) => (
+        <Tooltip
+          placement="top"
+          title={`${getAreaName(record.provId)}${getAreaName(record.cityId)}`}
+        >
+          {getAreaName(text)}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '年检有效期',
+      dataIndex: 'expDate',
+    },
+    {
+      title: '操作日期',
+      dataIndex: 'motDate',
     },
     {
       title: <FormattedMessage id="form.action" defaultMessage="No translate" />,

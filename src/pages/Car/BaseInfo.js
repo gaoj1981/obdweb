@@ -121,7 +121,9 @@ class BaseInfo extends PureComponent {
             overlay={
               <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
                 <Menu.Item key="record">维修保养</Menu.Item>
-                <Menu.Item key="buser">销售售后</Menu.Item>
+                <Menu.Item key="buser" style={{ display: 'none' }}>
+                  销售售后
+                </Menu.Item>
                 <Menu.Item key="insur">车辆保险</Menu.Item>
                 <Menu.Item key="mot">车辆年检</Menu.Item>
               </Menu>

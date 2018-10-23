@@ -25,7 +25,7 @@ export default {
       // Login successfully
       console.log(response);
       if (response && response.status === 'ok') {
-        reloadAuthorized();
+        reloadAuthorized(response.currentAuthority);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;

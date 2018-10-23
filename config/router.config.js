@@ -111,6 +111,7 @@ export default [
           {
             path: '/equip/consum',
             name: 'consum',
+            authority: ['admin'],
             component: './Equip/Consum',
             icon: 'gold',
           },
@@ -128,6 +129,7 @@ export default [
         path: '/sales',
         name: 'sales',
         icon: 'shop',
+        authority: ['admin'],
         routes: [
           {
             path: '/sales/score',
@@ -156,6 +158,7 @@ export default [
         path: '/form',
         icon: 'form',
         name: 'form',
+        authority: ['admin'],
         hideInMenu: true,
         routes: [
           {
@@ -204,6 +207,7 @@ export default [
         path: '/list',
         icon: 'table',
         name: 'list',
+        authority: ['admin'],
         hideInMenu: true,
         routes: [
           {
@@ -253,6 +257,7 @@ export default [
         path: '/profile',
         name: 'profile',
         icon: 'profile',
+        authority: ['admin'],
         hideInMenu: true,
         routes: [
           // profile
@@ -273,6 +278,7 @@ export default [
         name: 'result',
         icon: 'check-circle-o',
         path: '/result',
+        authority: ['admin'],
         hideInMenu: true,
         routes: [
           // result
