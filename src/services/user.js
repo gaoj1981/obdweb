@@ -7,3 +7,7 @@ export async function query() {
 export async function queryCurrent() {
   return request('/api/get.current_user');
 }
+
+export async function queryCurRole() {
+  return request('/api/get.current_role');
+}

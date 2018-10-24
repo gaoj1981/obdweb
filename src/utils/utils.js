@@ -189,6 +189,23 @@ export function isEmptyObject(e) {
   return !0;
 }
 
+export function isArray(obj) {
+  return Object.prototype.toString.call(obj) == '[object Array]';
+}
+
+export function isArrContained(a, b) {
+  console.log('arrcontained', isArray(a), isArray(b));
+  if (!isArray(a) || !isArray(b)) return false;
+  console.log('1111111111111');
+  if (a.length < b.length) return false;
+  console.log('22222222222222222');
+  for (let i = 0, len = b.length; i < len; i++) {
+    if (a.indexOf(b[i]) == -1) return false;
+  }
+  console.log('33333333333333');
+  return true;
+}
+
 //
 export function randomString(len) {
   let rdmString = '';

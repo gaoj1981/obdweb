@@ -3,7 +3,6 @@ import { notification } from 'antd';
 import router from 'umi/router';
 import hash from 'hash.js';
 import { isAntdPro } from './utils';
-import { reloadAuthorized } from './Authorized';
 
 // 防止ERR上报多次
 let isHaveErr = false;
@@ -41,7 +40,6 @@ const checkStatus = response => {
     });
     if (status === 401) {
       isHaveErr = true;
-      reloadAuthorized();
       // @HACK
       /* eslint-disable no-underscore-dangle */
       window.g_app._store.dispatch({
