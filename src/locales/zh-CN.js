@@ -5,7 +5,7 @@ export default {
   'layout.user.link.privacy': '隐私',
   'layout.user.link.terms': '条款',
   'layout.copyright.year': '2018',
-  'layout.copyright.ltd': '码诺智能科技出品',
+  'layout.copyright.ltd': ' ',
   'layout.system.title': '云巡诊系统',
   'layout.system.desc': '维康恒巡诊车采集、监控、管理云平台',
   'validation.error.unknown': '未知异常！',
