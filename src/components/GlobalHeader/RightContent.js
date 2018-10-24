@@ -4,7 +4,6 @@ import { Spin, Tag, Menu, Icon, Dropdown, Avatar, Tooltip } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import NoticeIcon from '../NoticeIcon';
-import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
 
@@ -51,15 +50,19 @@ export default class GlobalHeaderRight extends PureComponent {
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="userCenter">
-          <Icon type="user" />
-          <FormattedMessage id="menu.account.center" defaultMessage="account center" />
-        </Menu.Item>
-        <Menu.Item key="userinfo">
-          <Icon type="setting" />
-          <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
-        </Menu.Item>
-        <Menu.Divider />
+        {currentUser && currentUser.userid === '2' ? (
+          <Menu.Item key="userCenter">
+            <Icon type="user" />
+            <FormattedMessage id="menu.account.center" defaultMessage="account center" />
+          </Menu.Item>
+        ) : null}
+        {currentUser && currentUser.userid === '2' ? (
+          <Menu.Item key="userinfo">
+            <Icon type="setting" />
+            <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
+          </Menu.Item>
+        ) : null}
+        {currentUser && currentUser.userid === '2' ? <Menu.Divider /> : null}
         <Menu.Item key="logout">
           <Icon type="logout" />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
@@ -73,21 +76,6 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
-        <HeaderSearch
-          className={`${styles.action} ${styles.search}`}
-          placeholder={formatMessage({ id: 'component.globalHeader.search' })}
-          dataSource={[
-            formatMessage({ id: 'component.globalHeader.search.example1' }),
-            formatMessage({ id: 'component.globalHeader.search.example2' }),
-            formatMessage({ id: 'component.globalHeader.search.example3' }),
-          ]}
-          onSearch={value => {
-            console.log('input', value); // eslint-disable-line
-          }}
-          onPressEnter={value => {
-            console.log('enter', value); // eslint-disable-line
-          }}
-        />
         {currentUser && currentUser.userid === '2' ? (
           <Tooltip title={formatMessage({ id: 'component.globalHeader.api.doc' })}>
             <a
@@ -152,7 +140,9 @@ export default class GlobalHeaderRight extends PureComponent {
         ) : (
           <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
         )}
-        <SelectLang className={styles.action} />
+        {currentUser && currentUser.userid === '2' ? (
+          <SelectLang className={styles.action} />
+        ) : null}
       </div>
     );
   }

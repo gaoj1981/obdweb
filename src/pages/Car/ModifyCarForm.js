@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
 import {
   Cascader,
@@ -25,7 +25,8 @@ const localVal = getLocale();
 // 兼容Modal&&Drawer滚动条闪动
 let isViewed = false;
 
-@connect(({ car }) => ({
+@connect(({ user, car }) => ({
+  currentUser: user.currentUser,
   bindUserDefault: car.bindUserDefault,
 }))
 @Form.create()
@@ -87,7 +88,14 @@ class ModifyCarForm extends PureComponent {
 
   render() {
     const { visible, areaId } = this.state;
-    const { drawerVisible, drawerWidth, form, formValue, handleDrawerVisible } = this.props;
+    const {
+      currentUser,
+      drawerVisible,
+      drawerWidth,
+      form,
+      formValue,
+      handleDrawerVisible,
+    } = this.props;
 
     // 兼容Modal&&Drawer滚动条闪动
     let realVisible = true;
@@ -344,33 +352,37 @@ class ModifyCarForm extends PureComponent {
                 })(<Input />)}
               </FormItem>
             </Col>
-            <Col span={24}>
-              <FormItem>
-                {form.getFieldDecorator('carColor', {
-                  initialValue: formValue.carColor,
-                  rules: [],
-                })(<ColorInputWidget />)}
-              </FormItem>
-            </Col>
-            <Col>
-              <Divider dashed>车辆相关人员</Divider>
-            </Col>
-            <Col span={12}>
-              <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="运营人">
-                {form.getFieldDecorator('prinId', {
-                  initialValue: formValue.prinId,
-                  rules: [],
-                })(<BuserSelWidget utype={1} areaId={areaId || formValue.areaId} />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="维护人">
-                {form.getFieldDecorator('maintId', {
-                  initialValue: formValue.maintId,
-                  rules: [],
-                })(<BuserSelWidget utype={2} areaId={areaId || formValue.areaId} />)}
-              </FormItem>
-            </Col>
+            {currentUser && currentUser.userid === '2' ? (
+              <Fragment>
+                <Col span={24}>
+                  <FormItem>
+                    {form.getFieldDecorator('carColor', {
+                      initialValue: formValue.carColor,
+                      rules: [],
+                    })(<ColorInputWidget />)}
+                  </FormItem>
+                </Col>
+                <Col>
+                  <Divider dashed>车辆相关人员</Divider>
+                </Col>
+                <Col span={12}>
+                  <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="运营人">
+                    {form.getFieldDecorator('prinId', {
+                      initialValue: formValue.prinId,
+                      rules: [],
+                    })(<BuserSelWidget utype={1} areaId={areaId || formValue.areaId} />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="维护人">
+                    {form.getFieldDecorator('maintId', {
+                      initialValue: formValue.maintId,
+                      rules: [],
+                    })(<BuserSelWidget utype={2} areaId={areaId || formValue.areaId} />)}
+                  </FormItem>
+                </Col>
+              </Fragment>
+            ) : null}
 
             <FormItem style={{ display: 'none' }}>
               {form.getFieldDecorator('id', {

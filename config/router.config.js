@@ -152,6 +152,7 @@ export default [
         icon: 'setting',
         component: './Sys/Index',
         routes: [],
+        authority: ['admin'],
       },
       // forms
       {

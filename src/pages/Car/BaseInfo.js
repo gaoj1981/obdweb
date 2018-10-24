@@ -29,7 +29,8 @@ import styles from './BaseInfo.less';
 // 共通常量
 const FormItem = Form.Item;
 
-@connect(({ car, loading }) => ({
+@connect(({ user, car, loading }) => ({
+  currentUser: user.currentUser,
   carPageList: car.carPageList,
   carInfo: car.carInfo,
   loading: loading.models.car,
@@ -119,14 +120,20 @@ class BaseInfo extends PureComponent {
           <Divider type="vertical" />
           <Dropdown
             overlay={
-              <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
-                <Menu.Item key="record">维修保养</Menu.Item>
-                <Menu.Item key="buser" style={{ display: 'none' }}>
-                  销售售后
-                </Menu.Item>
-                <Menu.Item key="insur">车辆保险</Menu.Item>
-                <Menu.Item key="mot">车辆年检</Menu.Item>
-              </Menu>
+              /* eslint-disable */
+              this.props.currentUser && this.props.currentUser.userid === '2' ? (
+                <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
+                  <Menu.Item key="record">维修保养</Menu.Item>
+                  <Menu.Item key="buser">销售售后</Menu.Item>
+                  <Menu.Item key="insur">车辆保险</Menu.Item>
+                  <Menu.Item key="mot">车辆年检</Menu.Item>
+                </Menu>
+              ) : (
+                <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
+                  <Menu.Item key="insur">车辆保险</Menu.Item>
+                  <Menu.Item key="mot">车辆年检</Menu.Item>
+                </Menu>
+              )
             }
           >
             <a>

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import Link from 'umi/link';
@@ -65,17 +65,21 @@ class MainPage extends PureComponent {
           <p>{formatMessage({ id: 'biz.car.count.total', defaultMessage: 'No Translate' })}</p>
           <p>{carCountSum || 0}</p>
         </div>
-        <div className={styles.statItem}>
-          <p>{formatMessage({ id: 'biz.lic.count.sum', defaultMessage: 'No Translate' })}</p>
-          <p>
-            {licCountSum ? licCountSum[0] : 0}
-            <span> / {licCountSum ? licCountSum[1] : 0}</span>
-          </p>
-        </div>
-        <div className={styles.statItem}>
-          <p>{formatMessage({ id: 'biz.car.count.record', defaultMessage: 'No Translate' })}</p>
-          <p>2,223</p>
-        </div>
+        {currentUser && currentUser.userid === '2' ? (
+          <Fragment>
+            <div className={styles.statItem}>
+              <p>{formatMessage({ id: 'biz.lic.count.sum', defaultMessage: 'No Translate' })}</p>
+              <p>
+                {licCountSum ? licCountSum[0] : 0}
+                <span> / {licCountSum ? licCountSum[1] : 0}</span>
+              </p>
+            </div>
+            <div className={styles.statItem}>
+              <p>{formatMessage({ id: 'biz.car.count.record', defaultMessage: 'No Translate' })}</p>
+              <p>2,223</p>
+            </div>
+          </Fragment>
+        ) : null}
       </div>
     );
 
