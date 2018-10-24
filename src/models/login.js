@@ -23,7 +23,6 @@ export default {
         payload: response,
       });
       // Login successfully
-      console.log(response);
       if (response && response.status === 'ok') {
         reloadAuthorized(response.currentAuthority);
         const urlParams = new URL(window.location.href);

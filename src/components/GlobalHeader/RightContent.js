@@ -88,20 +88,18 @@ export default class GlobalHeaderRight extends PureComponent {
             console.log('enter', value); // eslint-disable-line
           }}
         />
-        <Tooltip
-          title={formatMessage({ id: 'component.globalHeader.api.doc' })}
-          style={{ display: 'none' }}
-        >
-          <a
-            target="_blank"
-            href=""
-            rel="noopener noreferrer"
-            className={styles.action}
-            style={{ display: 'none' }}
-          >
-            <Icon type="question-circle-o" />
-          </a>
-        </Tooltip>
+        {currentUser && currentUser.userid === '2' ? (
+          <Tooltip title={formatMessage({ id: 'component.globalHeader.api.doc' })}>
+            <a
+              target="_blank"
+              href="http://obdapi.5dwo.com/swagger-ui.html"
+              rel="noopener noreferrer"
+              className={styles.action}
+            >
+              <Icon type="question-circle-o" />
+            </a>
+          </Tooltip>
+        ) : null}
         <NoticeIcon
           className={styles.action}
           count={currentUser.notifyCount}
