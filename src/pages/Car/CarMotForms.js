@@ -18,6 +18,7 @@ import OssMultiUpload from '@/widgets/OssMultiUpload';
 import { deleteConfirm, getAreaName } from '@/utils/BizUtil';
 import { AREA_DATA } from '@/common/AreaJson';
 import { normFile, getFormExtraMsg } from '@/utils/uploadUtils';
+import CarInputWidget from './CarInputWidget';
 
 const localVal = getLocale();
 const { MonthPicker } = DatePicker;
@@ -79,7 +80,7 @@ const addForm = (FormItem, form, extraVals) => {
                     : null,
               },
             ],
-          })(<Input disabled={!!eidParam} />)}
+          })(<CarInputWidget disabled={!!eidParam} />)}
         </FormItem>
       </Col>
       <Col span={12}>
