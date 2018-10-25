@@ -21,6 +21,7 @@ import {
   delCarMot,
   editCarMot,
   getCarMot,
+  getCarMotInfo,
   // 车辆保险
   pageCarInsur,
   addCarInsur,
@@ -49,6 +50,7 @@ const servToReduce = {
   delCarMot: { method: delCarMot, reduce: null },
   editCarMot: { method: editCarMot, reduce: null },
   getCarMot: { method: getCarMot, reduce: 'getCarMot' },
+  getCarMotInfo: { method: getCarMotInfo, reduce: 'getCarMotInfo' },
   // 车辆保险
   pageCarInsur: { method: pageCarInsur, reduce: 'pageCarInsur' },
   addCarInsur: { method: addCarInsur, reduce: null },
@@ -70,6 +72,7 @@ export default {
     //
     pageCarMot: {},
     carMot: {},
+    carMotInfo: {},
     // 车辆保险
     pageCarInsur: {},
     carInsur: {},
@@ -174,6 +177,12 @@ export default {
       return {
         ...state,
         carMot: action.payload,
+      };
+    },
+    getCarMotInfo(state, action) {
+      return {
+        ...state,
+        carMotInfo: action.payload,
       };
     },
     // 车辆保险

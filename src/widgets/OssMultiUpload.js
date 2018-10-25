@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Upload, Modal, Icon } from 'antd';
-import { randomString, getFileSuffix, Compare } from '@/utils/utils';
+import { randomString, Compare } from '@/utils/utils';
+import { getFileSuffix, checkImgMax } from '@/utils/uploadUtils';
 
 import styles from './OssMultiUpload.less';
 
@@ -57,14 +58,14 @@ class OssMultiUpload extends PureComponent {
   };
 
   beforeUpload = (file, fileList) => {
-    const { dispatch, maxUpdNum, checkImgMax, filedName } = this.props;
+    const { dispatch, maxUpdNum, filedName, curForm } = this.props;
     const { fileList: fileListState } = this.state;
     if (maxUpdNum > 0 && fileListState.length + fileList.length > maxUpdNum) {
       file.status = 'removed';
-      if (checkImgMax) checkImgMax(fileListState.length, filedName, true);
+      if (checkImgMax) checkImgMax(maxUpdNum, fileListState.length, curForm, filedName, true);
       return false;
     } else {
-      if (checkImgMax) checkImgMax(fileListState.length, filedName, false);
+      if (checkImgMax) checkImgMax(maxUpdNum, fileListState.length, curForm, filedName, false);
       return dispatch({
         type: 'main/fetchOssPolicy',
         payload: {
@@ -77,6 +78,7 @@ class OssMultiUpload extends PureComponent {
           const { accessid, policy, signature, dir, host, fn } = ossPolicyInfo;
           /* eslint-disable */
           file.newName = fn + suffix;
+          console.log(`${dir}/${fn}${suffix}`);
           this.setState({
             action: host,
             data: {

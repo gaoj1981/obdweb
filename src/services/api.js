@@ -2,7 +2,7 @@ import { stringify } from 'qs';
 import request from '@/utils/request';
 
 export async function queryOssPolicy(params) {
-  return request(`/api/oss_policy?${stringify(params)}`);
+  return request(`/api/third/oss_policy?${stringify(params)}`);
 }
 
 export async function queryProjectNotice() {

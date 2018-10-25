@@ -19,7 +19,7 @@ const FormItem = Form.Item;
 // 底层组件
 @connect(({ car, loading }) => ({
   pageCarMot: car.pageCarMot,
-  carMot: car.carMot,
+  carMotInfo: car.carMotInfo,
   loading: loading.models.car,
 }))
 @Form.create()
@@ -29,7 +29,7 @@ class CarMot extends PureComponent {
     queryPage: 0,
     addVisible: false,
     editVisible: false,
-    editWidth: 666,
+    editWidth: 450,
     queryVisible: false,
     queryHeight: 99,
     eidParam: null,
@@ -54,7 +54,14 @@ class CarMot extends PureComponent {
   handleAdd = fields => {
     const formParam = { ...fields };
     //
-    console.log('add', formParam);
+    const impNameArr = [];
+    const { motImgArr } = formParam;
+    if (motImgArr) {
+      motImgArr.forEach(item => {
+        impNameArr.push(item.newName || item.name);
+      });
+    }
+    formParam.motImgs = impNameArr.join(',');
     //
     const { dispatch } = this.props;
     dispatch({
@@ -87,7 +94,7 @@ class CarMot extends PureComponent {
       const { dispatch } = this.props;
       dispatch({
         type: 'car/reqCommon',
-        service: 'getCarMot',
+        service: 'getCarMotInfo',
         payload: { id },
       });
     }
@@ -213,7 +220,7 @@ class CarMot extends PureComponent {
 
   render() {
     const { addVisible, editVisible, editWidth, queryVisible, queryHeight, eidParam } = this.state;
-    const { pageCarMot, carMot, loading } = this.props;
+    const { pageCarMot, carMotInfo, loading } = this.props;
 
     const columnMethods = {
       handleEditVisible: this.handleEditVisible,
@@ -258,7 +265,8 @@ class CarMot extends PureComponent {
           editVisible={editVisible}
           editWidth={editWidth}
           loading={loading}
-          formValue={carMot}
+          formValue={carMotInfo}
+          extraVals={{ eidParam }}
         />
         <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
       </div>

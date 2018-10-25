@@ -14,8 +14,10 @@ import {
   Form,
   Cascader,
 } from 'antd';
+import OssMultiUpload from '@/widgets/OssMultiUpload';
 import { deleteConfirm, getAreaName } from '@/utils/BizUtil';
 import { AREA_DATA } from '@/common/AreaJson';
+import { normFile, getFormExtraMsg } from '@/utils/uploadUtils';
 
 const localVal = getLocale();
 const { MonthPicker } = DatePicker;
@@ -47,6 +49,8 @@ const searchForm = (FormItem, form, extraVals) => {
 const addForm = (FormItem, form, extraVals) => {
   const { getFieldDecorator } = form;
   const eidParam = extraVals ? extraVals.eidParam : null;
+  // 图片最大上传数
+  const maxUpdNum = 3;
   return (
     <Row gutter={16}>
       <Col span={24}>
@@ -135,10 +139,13 @@ const addForm = (FormItem, form, extraVals) => {
         </FormItem>
       </Col>
       <Col span={24}>
-        <FormItem label="年检资料上传">
-          {getFieldDecorator('motImgs', {
+        <FormItem label="年检资料上传" extra={getFormExtraMsg(maxUpdNum)}>
+          {getFieldDecorator('motImgArr', {
+            initialValue: [],
+            valuePropName: 'fileList',
+            getValueFromEvent: normFile,
             rules: [],
-          })(<Input />)}
+          })(<OssMultiUpload maxUpdNum={maxUpdNum} filedName="motImgArr" curForm={form} />)}
         </FormItem>
       </Col>
     </Row>
@@ -148,18 +155,23 @@ const addForm = (FormItem, form, extraVals) => {
 const editForm = (FormItem, form, formValue, extraVals) => {
   if (!formValue) return null;
   const { getFieldDecorator } = form;
-  console.log(extraVals);
+  const eidParam = extraVals ? extraVals.eidParam : null;
   return (
     <Row gutter={16}>
       <Col span={24}>
-        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="ID">
-          {getFieldDecorator('id', {
-            initialValue: formValue.id,
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="车辆编号">
+          {getFieldDecorator('eid', {
+            initialValue: formValue.eid,
             rules: [
               {
                 required: true,
                 message:
-                  localVal === 'zh-CN' ? formatMessage({ id: 'biz.common.require.input' }) : null,
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
               },
               {
                 max: 20,
@@ -172,7 +184,7 @@ const editForm = (FormItem, form, formValue, extraVals) => {
                     : null,
               },
             ],
-          })(<Input />)}
+          })(<Input disabled={!!eidParam} />)}
         </FormItem>
       </Col>
       <FormItem style={{ display: 'none' }}>

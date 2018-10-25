@@ -189,21 +189,31 @@ export function isEmptyObject(e) {
   return !0;
 }
 
+function isObj(object) {
+  return (
+    object &&
+    typeof object === 'object' &&
+    Object.prototype.toString.call(object).toLowerCase() === '[object object]'
+  );
+}
+
 export function isArray(obj) {
   return Object.prototype.toString.call(obj) == '[object Array]';
 }
 
 export function isArrContained(a, b) {
-  console.log('arrcontained', isArray(a), isArray(b));
   if (!isArray(a) || !isArray(b)) return false;
-  console.log('1111111111111');
   if (a.length < b.length) return false;
-  console.log('22222222222222222');
   for (let i = 0, len = b.length; i < len; i++) {
     if (a.indexOf(b[i]) == -1) return false;
   }
-  console.log('33333333333333');
   return true;
+}
+
+function getLength(object) {
+  let count = 0;
+  for (let i in object) count += 1;
+  return count;
 }
 
 //
@@ -220,20 +230,45 @@ export function randomString(len) {
   return rdmString.substr(0, len);
 }
 
-export function getFilePrefix(filename) {
-  const pos = filename.lastIndexOf('.');
-  let prefix = '';
-  if (pos !== -1) {
-    prefix = filename.substring(0, pos);
-  }
-  return prefix;
+export function Compare(objA, objB) {
+  if (!isObj(objA) || !isObj(objB)) return false; //判断类型是否正确
+  if (getLength(objA) != getLength(objB)) return false; //判断长度是否一致
+  return CompareObj(objA, objB, true); //默认为true
 }
 
-export function getFileSuffix(filename) {
-  const pos = filename.lastIndexOf('.');
-  let suffix = '';
-  if (pos !== -1) {
-    suffix = filename.substring(pos);
+function CompareObj(objA, objB, flag) {
+  for (const key in objA) {
+    if (!flag)
+      //跳出整个循环
+      break;
+    if (!objB.hasOwnProperty(key)) {
+      flag = false;
+      break;
+    }
+    if (!isArray(objA[key])) {
+      //子级不是数组时,比较属性值
+      if (objB[key] != objA[key]) {
+        flag = false;
+        break;
+      }
+    } else {
+      if (!isArray(objB[key])) {
+        flag = false;
+        break;
+      }
+      var oA = objA[key],
+        oB = objB[key];
+      if (oA.length != oB.length) {
+        flag = false;
+        break;
+      }
+      for (var k in oA) {
+        if (!flag)
+          //这里跳出循环是为了不让递归继续
+          break;
+        flag = CompareObj(oA[k], oB[k], flag);
+      }
+    }
   }
-  return suffix;
+  return flag;
 }

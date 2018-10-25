@@ -82,6 +82,10 @@ export async function getCarMot(params) {
   return request(`/api/carmot/get?${stringify(params)}`);
 }
 
+export async function getCarMotInfo(params) {
+  return request(`/api/carmot/get.info?${stringify(params)}`);
+}
+
 // 车辆保险增删改查
 export async function pageCarInsur(params) {
   return request('/api/carinsur/get.page', {

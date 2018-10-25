@@ -336,6 +336,7 @@ class BindUser extends PureComponent {
           editWidth={editWidth}
           loading={loading}
           formValue={bindUser}
+          layout="vertical"
         />
         <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
         {stepFormValues && Object.keys(stepFormValues).length ? (

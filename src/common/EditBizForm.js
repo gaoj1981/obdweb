@@ -39,7 +39,16 @@ class EditBizForm extends PureComponent {
 
   render() {
     const { visible } = this.state;
-    const { editVisible, editWidth, form, formValue, handleEditVisible, bizForm } = this.props;
+    const {
+      layout,
+      editVisible,
+      editWidth,
+      form,
+      formValue,
+      handleEditVisible,
+      bizForm,
+      extraVals,
+    } = this.props;
 
     // 兼容Modal&&Drawer滚动条闪动
     let realVisible = true;
@@ -81,8 +90,11 @@ class EditBizForm extends PureComponent {
             onClick={() => handleEditVisible()}
           />
         </div>
-        <Form layout="vertical" className={styles.editComponent}>
-          {bizForm ? bizForm(FormItem, form, formValue) : null}
+        <Form
+          layout={layout || 'horizontal'}
+          className={layout === 'vertical' ? styles.editComponent : null}
+        >
+          {bizForm ? bizForm(FormItem, form, formValue, extraVals) : null}
         </Form>
         <div
           style={{
