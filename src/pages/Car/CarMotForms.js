@@ -13,15 +13,22 @@ import {
   Tooltip,
   Form,
   Cascader,
+  Select,
+  Radio,
 } from 'antd';
+import BizConst from '@/common/BizConst';
 import OssMultiUpload from '@/widgets/OssMultiUpload';
 import { deleteConfirm, getAreaName } from '@/utils/BizUtil';
 import { AREA_DATA } from '@/common/AreaJson';
-import { normFile, getFormExtraMsg } from '@/utils/uploadUtils';
+import { normFile, getFormExtraMsg, getFilePrefix } from '@/utils/uploadUtils';
 import CarInputWidget from './CarInputWidget';
 
 const localVal = getLocale();
-const { MonthPicker } = DatePicker;
+const SelectOption = Select.Option;
+const { MonthPicker, RangePicker } = DatePicker;
+const { Group } = Radio;
+// 图片最大上传数
+const maxUpdNum = 3;
 
 const searchForm = (FormItem, form, extraVals) => {
   const { getFieldDecorator } = form;
@@ -50,8 +57,6 @@ const searchForm = (FormItem, form, extraVals) => {
 const addForm = (FormItem, form, extraVals) => {
   const { getFieldDecorator } = form;
   const eidParam = extraVals ? extraVals.eidParam : null;
-  // 图片最大上传数
-  const maxUpdNum = 3;
   return (
     <Row gutter={16}>
       <Col span={24}>
@@ -153,10 +158,25 @@ const addForm = (FormItem, form, extraVals) => {
   );
 };
 
-const editForm = (FormItem, form, formValue, extraVals) => {
+const editForm = (FormItem, form, formValue) => {
   if (!formValue) return null;
   const { getFieldDecorator } = form;
-  const eidParam = extraVals ? extraVals.eidParam : null;
+
+  const motImgArr = [];
+  const formImgArr = formValue.motImgs ? formValue.motImgs.split(',') : [];
+  let fileTmpObj;
+  if (formImgArr) {
+    formImgArr.forEach(item => {
+      fileTmpObj = {
+        uid: `-${getFilePrefix(item)}`,
+        name: item,
+        url: `${BizConst.ossBaseUrl}${item}`,
+        status: 'done',
+      };
+      motImgArr.push(fileTmpObj);
+    });
+  }
+
   return (
     <Row gutter={16}>
       <Col span={24}>
@@ -185,7 +205,81 @@ const editForm = (FormItem, form, formValue, extraVals) => {
                     : null,
               },
             ],
-          })(<Input disabled={!!eidParam} />)}
+          })(<Input disabled />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="年检截止">
+          {getFieldDecorator('expDate', {
+            initialValue: formValue.expDate ? moment(formValue.expDate, 'YYYY-MM') : null,
+            rules: [
+              {
+                type: 'object',
+                required: true,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
+              },
+            ],
+          })(
+            <MonthPicker
+              style={{ width: '100%' }}
+              format="YYYY年MM月"
+              placeholder="年检有效截止期"
+            />
+          )}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="年检日期">
+          {getFieldDecorator('motDate', {
+            initialValue: formValue.expDate ? moment(formValue.expDate, 'YYYY-MM-DD') : null,
+            rules: [
+              {
+                required: true,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
+              },
+            ],
+          })(<DatePicker style={{ width: '100%' }} />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="经办单位">
+          {getFieldDecorator('dealLtd', {
+            initialValue: formValue.dealLtd,
+            rules: [
+              {
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem label="年检资料" extra={getFormExtraMsg(maxUpdNum)}>
+          {getFieldDecorator('motImgArr', {
+            initialValue: motImgArr,
+            valuePropName: 'fileList',
+            getValueFromEvent: normFile,
+            rules: [],
+          })(<OssMultiUpload maxUpdNum={maxUpdNum} filedName="motImgArr" curForm={form} />)}
         </FormItem>
       </Col>
       <FormItem style={{ display: 'none' }}>
@@ -262,13 +356,66 @@ const getColumns = columnMethods => {
 
 const queryForm = (FormItem, form) => {
   const { getFieldDecorator } = form;
+  const expDayChange = e => {
+    form.setFieldsValue({ expDayFlag: e.target.value });
+  };
   return (
     // 注意Col总步长占总屏宽21:24
     <Row gutter={16}>
-      <Col span={24}>
-        <FormItem label="ID" labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
-          {getFieldDecorator('id', {})(<Input />)}
+      <Col md={8} sm={24}>
+        <Row>
+          <Col span={8}>
+            <Form.Item>
+              {getFieldDecorator('timeSel')(
+                <Select
+                  allowClear
+                  placeholder="时间类型"
+                  style={{ width: '100%', borderRadius: 0 }}
+                >
+                  <SelectOption key="3">年检有效期</SelectOption>
+                  <SelectOption key="4">年检执行日期</SelectOption>
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={16}>
+            <FormItem>
+              {getFieldDecorator('times', { rules: [{ type: 'array' }] })(
+                <RangePicker style={{ width: '100%', borderRadius: 0 }} />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+      </Col>
+      <Col md={8} sm={24}>
+        <FormItem label="车辆编号" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+          {getFieldDecorator('eidLike')(<Input placeholder="请输入车辆编号" />)}
         </FormItem>
+      </Col>
+      <Col md={8} sm={24}>
+        <Form.Item label="所在区域" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+          {getFieldDecorator('areaIds')(
+            <Cascader
+              placeholder="请选择"
+              style={{ width: '100%' }}
+              options={AREA_DATA.areaIds}
+              allowClear
+            />
+          )}
+        </Form.Item>
+      </Col>
+      <Col md={24} sm={24}>
+        <Form.Item label="到期年检车辆" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
+          {getFieldDecorator('expDayFlag', { initialValue: 0 })(
+            <Group onChange={expDayChange}>
+              <Radio value={0}>忽略到期</Radio>
+              <Radio value={1}>30天内到期</Radio>
+              <Radio value={2}>60天内到期</Radio>
+              <Radio value={3}>90天内到期</Radio>
+              <Radio value={4}>已过期</Radio>
+            </Group>
+          )}
+        </Form.Item>
       </Col>
     </Row>
   );

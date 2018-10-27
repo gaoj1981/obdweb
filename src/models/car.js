@@ -128,6 +128,12 @@ export default {
         payload,
       });
     },
+    *clearCarMotInfo({ payload }, { put }) {
+      yield put({
+        type: 'getCarMotInfo',
+        payload,
+      });
+    },
   },
 
   reducers: {

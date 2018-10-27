@@ -90,12 +90,17 @@ class CarMot extends PureComponent {
   };
 
   handleEditVisible = (flag, id) => {
+    const { dispatch } = this.props;
     if (flag) {
-      const { dispatch } = this.props;
       dispatch({
         type: 'car/reqCommon',
         service: 'getCarMotInfo',
         payload: { id },
+      });
+    } else {
+      dispatch({
+        type: 'car/clearCarMotInfo',
+        payload: {},
       });
     }
     this.setState({
@@ -106,7 +111,14 @@ class CarMot extends PureComponent {
   handleEdit = fields => {
     const formParam = { ...fields };
     //
-    console.log('edit', formParam);
+    const impNameArr = [];
+    const { motImgArr } = formParam;
+    if (motImgArr) {
+      motImgArr.forEach(item => {
+        impNameArr.push(item.newName || item.name);
+      });
+    }
+    formParam.motImgs = impNameArr.join(',');
     //
     const { dispatch } = this.props;
     dispatch({
