@@ -211,7 +211,9 @@ const editForm = (FormItem, form, formValue) => {
       <Col span={24}>
         <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="年检截止">
           {getFieldDecorator('expDate', {
-            initialValue: formValue.expDate ? moment(formValue.expDate, 'YYYY-MM') : null,
+            initialValue: formValue.expDate
+              ? moment(formValue.expDate, 'YYYY-MM-DD HH:mm:ss')
+              : null,
             rules: [
               {
                 type: 'object',
@@ -237,7 +239,7 @@ const editForm = (FormItem, form, formValue) => {
       <Col span={24}>
         <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="年检日期">
           {getFieldDecorator('motDate', {
-            initialValue: formValue.expDate ? moment(formValue.expDate, 'YYYY-MM-DD') : null,
+            initialValue: formValue.motDate ? moment(formValue.motDate, 'YYYY-MM-DD') : null,
             rules: [
               {
                 required: true,
@@ -357,6 +359,7 @@ const getColumns = columnMethods => {
 const queryForm = (FormItem, form) => {
   const { getFieldDecorator } = form;
   const expDayChange = e => {
+    form.resetFields();
     form.setFieldsValue({ expDayFlag: e.target.value });
   };
   return (
