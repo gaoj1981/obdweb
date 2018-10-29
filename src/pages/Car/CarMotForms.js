@@ -1,21 +1,7 @@
 import React, { Fragment } from 'react';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import moment from 'moment';
-import {
-  Input,
-  Row,
-  Col,
-  Menu,
-  Dropdown,
-  Divider,
-  DatePicker,
-  Icon,
-  Tooltip,
-  Form,
-  Cascader,
-  Select,
-  Radio,
-} from 'antd';
+import { Input, Row, Col, Divider, DatePicker, Tooltip, Form, Cascader, Select, Radio } from 'antd';
 import BizConst from '@/common/BizConst';
 import OssMultiUpload from '@/widgets/OssMultiUpload';
 import { deleteConfirm, getAreaName } from '@/utils/BizUtil';
@@ -295,7 +281,7 @@ const editForm = (FormItem, form, formValue) => {
 };
 
 const getColumns = columnMethods => {
-  const { handleEditVisible, handleDelete, moreBtnExc } = columnMethods;
+  const { handleEditVisible, handleDelete } = columnMethods;
   return [
     {
       title: '车辆编号',
@@ -338,18 +324,6 @@ const getColumns = columnMethods => {
           >
             <FormattedMessage id="form.delete" defaultMessage="No translate" />
           </a>
-          <Divider type="vertical" />
-          <Dropdown
-            overlay={
-              <Menu onClick={({ key }) => moreBtnExc(key, record)}>
-                <Menu.Item key="setDefault">默认设置</Menu.Item>
-              </Menu>
-            }
-          >
-            <a>
-              <FormattedMessage id="form.more" defaultMessage="No translate" /> <Icon type="down" />
-            </a>
-          </Dropdown>
         </Fragment>
       ),
     },

@@ -226,9 +226,11 @@ class CarMot extends PureComponent {
               <Button type="primary" htmlType="submit">
                 <FormattedMessage id="form.search" defaultMessage="No translate" />
               </Button>
-              <Button style={{ margin: '0 8px' }} onClick={this.handleFormReset}>
-                <FormattedMessage id="form.reset" defaultMessage="No translate" />
-              </Button>
+              {!eidParam ? (
+                <Button style={{ margin: '0 8px' }} onClick={this.handleFormReset}>
+                  <FormattedMessage id="form.reset" defaultMessage="No translate" />
+                </Button>
+              ) : null}
               {!eidParam ? (
                 <Button icon="search" onClick={() => this.handleQueryVisible(true)}>
                   <FormattedMessage id="form.search.advanced" defaultMessage="No Trans" />
