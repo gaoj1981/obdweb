@@ -61,7 +61,6 @@ export default {
   //
   'form.invites.label': '邀评人',
   'form.invites.placeholder': '请直接 @姓名／工号，最多可邀请 5 人',
-
   //
   'form.weight.label': '权重',
   'form.weight.placeholder': '请输入',
@@ -114,6 +113,7 @@ export default {
   'menu.equip.license': '设备授权',
   'menu.equip.consum': '耗材管理',
   'menu.equip.warning': '预警配置',
+  'menu.equip.upload': '设备上传',
   'menu.sales': '销售售后',
   'menu.sales.record': '维修保养',
   'menu.sales.score': '业绩分析',

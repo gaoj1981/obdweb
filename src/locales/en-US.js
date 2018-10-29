@@ -113,6 +113,7 @@ export default {
   'menu.equip.license': 'Equip License',
   'menu.equip.consum': 'Consumables',
   'menu.equip.warning': 'Warning Set',
+  'menu.equip.upload': 'Equip Upload',
   'menu.sales': 'Sales Manage',
   'menu.sales.record': 'Maintenance',
   'menu.sales.score': 'Score Analysis',

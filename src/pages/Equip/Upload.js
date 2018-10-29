@@ -1,0 +1,83 @@
+import React, { PureComponent } from 'react';
+import { FormattedMessage } from 'umi/locale';
+import { Steps, Button, message, Divider } from 'antd';
+
+import UploadOne from './UploadOne';
+
+import styles from './Upload.less';
+
+const { Step } = Steps;
+
+class Upload extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      current: 0,
+    };
+  }
+
+  componentDidMount() {}
+
+  next = () => {
+    let { current } = this.state;
+    current += 1;
+    this.setState({ current });
+  };
+
+  prev = () => {
+    let { current } = this.state;
+    current -= 1;
+    this.setState({ current });
+  };
+
+  render() {
+    const { current } = this.state;
+    const steps = [
+      {
+        title: '下载与上传',
+        content: <UploadOne next={this.next} />,
+      },
+      {
+        title: '导入预览',
+        content: 'Second-content',
+      },
+      {
+        title: '导入数据',
+        content: 'Last-content',
+      },
+    ];
+
+    return (
+      <div className={styles.testCss}>
+        <Divider>
+          <FormattedMessage id="menu.equip.upload" />
+        </Divider>
+        <Steps current={current}>
+          {steps.map(item => (
+            <Step key={item.title} title={item.title} />
+          ))}
+        </Steps>
+        <div className="steps-content">{steps[current].content}</div>
+        <div className="steps-action">
+          {current < steps.length - 1 && (
+            <Button type="primary" onClick={() => this.next()}>
+              Next
+            </Button>
+          )}
+          {current === steps.length - 1 && (
+            <Button type="primary" onClick={() => message.success('Processing complete!')}>
+              Done
+            </Button>
+          )}
+          {current > 0 && (
+            <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
+              Previous
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Upload;

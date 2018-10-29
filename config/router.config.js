@@ -122,6 +122,13 @@ export default [
             component: './Equip/Warning',
             icon: 'warning',
           },
+          {
+            path: '/equip/upload',
+            name: 'upload',
+            authority: ['admin'],
+            component: './Equip/Upload',
+            icon: 'cloud-upload',
+          },
         ],
       },
       // sales
