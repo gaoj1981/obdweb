@@ -69,7 +69,7 @@ class CarMot extends PureComponent {
       service: 'addCarMot',
       payload: formParam,
       callback: () => {
-        this.dispatchPageList(0, {});
+        this.dispatchPageList(0);
         message.success('添加成功');
         this.handleAddVisible();
       },
