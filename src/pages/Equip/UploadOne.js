@@ -130,14 +130,14 @@ class UploadOne extends PureComponent {
       name: 'file',
       multiple: false,
       beforeUpload: this.beforeUpload,
-      action: '/api/equip/upload',
+      action: '/api/device/upload',
       onChange: this.onChange,
       onRemove: this.onRemove,
     };
     return (
       <div className={styles.stepCss}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem style={{ fontSize: 16, fontWeight: 'bold', marginTop: 28 }}>
+          <FormItem style={{ fontSize: 16, fontWeight: 'bold', marginTop: 40 }}>
             <div>1、下载Excel模板，填入对应设备信息。</div>
             <div>
               <Button type="primary" onClick={this.downloadTemplete}>
@@ -148,7 +148,7 @@ class UploadOne extends PureComponent {
               模板中包含两个sheet，红色标记为必填项。
             </div>
           </FormItem>
-          <div style={{ fontSize: 16, fontWeight: 'bold', marginTop: 28 }}>
+          <div style={{ fontSize: 16, fontWeight: 'bold', marginTop: 40 }}>
             2、选择导入设备的所属区县。
           </div>
           <FormItem
@@ -162,7 +162,7 @@ class UploadOne extends PureComponent {
               validateFirst: true,
             })(<Cascader placeholder="请选择设备所属区县" options={AREA_DATA.areaIds} />)}
           </FormItem>
-          <div style={{ fontSize: 16, fontWeight: 'bold', marginTop: 28 }}>
+          <div style={{ fontSize: 16, fontWeight: 'bold', marginTop: 40 }}>
             3、选择填好设备信息的Excel文件。
           </div>
           <FormItem {...uploadTip}>

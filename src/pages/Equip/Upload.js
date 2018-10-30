@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FormattedMessage } from 'umi/locale';
-import { Steps, Button, message, Divider } from 'antd';
+import { Steps, Button, message } from 'antd';
 
 import UploadOne from './UploadOne';
 
@@ -49,9 +48,6 @@ class Upload extends PureComponent {
 
     return (
       <div className={styles.testCss}>
-        <Divider>
-          <FormattedMessage id="menu.equip.upload" />
-        </Divider>
         <Steps current={current}>
           {steps.map(item => (
             <Step key={item.title} title={item.title} />
