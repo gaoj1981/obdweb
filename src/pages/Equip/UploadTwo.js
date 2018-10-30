@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { FormattedMessage } from 'umi/locale';
 import { Button, List, Icon, Avatar, Tooltip } from 'antd';
 
 import styles from './Upload.less';
@@ -11,16 +10,6 @@ const IconText = ({ type, text, tip }) => (
     {text}
   </Tooltip>
 );
-
-const listData = [];
-for (let i = 0; i < 23; i += 1) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `ant design part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    content: '',
-  });
-}
 
 @connect(({ equip, loading }) => ({
   equipAnalysisInfo: equip.equipAnalysisInfo,
@@ -53,28 +42,38 @@ class UploadTwo extends PureComponent {
   };
 
   render() {
+    const { loading, equipAnalysisInfo } = this.props;
     return (
       <div className={styles.stepTwoCss}>
-        <FormattedMessage id="menu.equip.listview" />
-
         <List
           itemLayout="vertical"
           size="large"
-          dataSource={listData}
+          dataSource={equipAnalysisInfo}
+          loading={loading}
           renderItem={item => (
             <List.Item
-              key={item.title}
+              key={item.name}
               actions={[
-                <IconText type="star-o" text="瑞光康泰" tip="厂家" />,
-                <IconText type="like-o" text="TDL-200型" tip="型号" />,
-                <IconText type="message" text="J40G022N-608-69BZA" tip="编号" />,
-                <IconText type="message" text="WIN10专业版操作系统" tip="软件版本" />,
-                <IconText type="message" text="2" tip="出厂时间" />,
+                <IconText type="bank" text={item.factory} tip="厂家" />,
+                <IconText type="sliders" text={item.xhNum} tip="型号" />,
+                <IconText type="profile" text={item.bhNum} tip="编号" />,
+                <IconText type="code" text={item.version} tip="软件版本" />,
+                <IconText type="clock-circle" text={item.birthDate} tip="出厂时间" />,
               ]}
               extra={<Icon type="check" />}
             >
-              <List.Item.Meta avatar={<Avatar src={item.avatar} />} title={item.title} />
-              {item.content}
+              <List.Item.Meta
+                avatar={
+                  <Avatar
+                    style={{ backgroundColor: '#f56a00' }}
+                    size="small"
+                    icon="robot"
+                    alt="固定信息"
+                  />
+                }
+                title={item.name}
+              />
+              {item.note}
             </List.Item>
           )}
         />
