@@ -98,7 +98,7 @@ export default [
           {
             path: '/equip/list',
             name: 'listview',
-            component: './Equip/ListView',
+            component: './Equip/EquipInfo',
             icon: 'deployment-unit',
           },
           {

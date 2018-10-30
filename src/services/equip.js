@@ -39,3 +39,35 @@ export async function delCar(params) {
     method: 'DELETE',
   });
 }
+
+// 设备详情增删改查
+export async function pageEquipInfo(params) {
+  return request('/api/equipinfo/get.page', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function addEquipInfo(params) {
+  return request('/api/equipinfo/add', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function delEquipInfo(params) {
+  return request(`/api/equipinfo/del?${stringify(params)}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function editEquipInfo(params) {
+  return request('/api/equipinfo/edit', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function getEquipInfo(params) {
+  return request(`/api/equipinfo/get?${stringify(params)}`);
+}
