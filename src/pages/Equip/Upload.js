@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Steps, Button, message } from 'antd';
 
 import UploadOne from './UploadOne';
+import UploadTwo from './UploadTwo';
 
 import styles from './Upload.less';
 
@@ -12,15 +13,16 @@ class Upload extends PureComponent {
     super(props);
     this.state = {
       current: 0,
+      stepVal: {},
     };
   }
 
   componentDidMount() {}
 
-  next = () => {
+  next = stepVal => {
     let { current } = this.state;
     current += 1;
-    this.setState({ current });
+    this.setState({ current, stepVal });
   };
 
   prev = () => {
@@ -30,7 +32,7 @@ class Upload extends PureComponent {
   };
 
   render() {
-    const { current } = this.state;
+    const { current, stepVal } = this.state;
     const steps = [
       {
         title: '下载与上传',
@@ -38,7 +40,7 @@ class Upload extends PureComponent {
       },
       {
         title: '导入预览',
-        content: 'Second-content',
+        content: <UploadTwo next={this.next} prev={this.prev} stepVal={stepVal} />,
       },
       {
         title: '导入数据',

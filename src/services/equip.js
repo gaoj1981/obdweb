@@ -40,6 +40,13 @@ export async function delCar(params) {
   });
 }
 
+// 设备上传解析
+export async function equipAnalysis(params) {
+  return request(`/api/device/excel.analysis?${stringify(params)}`, {
+    method: 'POST',
+  });
+}
+
 // 设备详情增删改查
 export async function pageEquipInfo(params) {
   return request('/api/equipinfo/get.page', {

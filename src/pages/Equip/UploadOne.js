@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Form, Button, Upload, Icon, Cascader, Input } from 'antd';
 import { AREA_DATA } from '@/common/AreaJson';
+import { getAreaId } from '@/utils/BizUtil';
 
 import styles from './Upload.less';
 
@@ -12,7 +13,6 @@ class UploadOne extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      excelFile: null,
       uploadTip: {},
     };
   }
@@ -20,8 +20,9 @@ class UploadOne extends PureComponent {
   componentDidMount() {}
 
   beforeUpload = file => {
-    const { excelFile } = this.state;
-    if (excelFile) {
+    const { form } = this.props;
+    const excelPath = form.getFieldValue('excelPath');
+    if (excelPath) {
       this.setState({
         uploadTip: {
           help: '',
@@ -48,23 +49,26 @@ class UploadOne extends PureComponent {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { excelFile } = this.state;
     const { form, next } = this.props;
     form.validateFields((err, values) => {
+      const { excelPath } = values;
       if (err) {
-        if (!excelFile) {
-          this.setState({
-            uploadTip: {
-              help: '',
-              helpHint: '请选择上传文件',
-              validateStatus: 'error',
-            },
-          });
-        }
         return;
       }
-      console.log(values);
-      if (next) next();
+      if (!excelPath) {
+        this.setState({
+          uploadTip: {
+            help: '',
+            helpHint: '请选择上传文件',
+            validateStatus: 'error',
+          },
+        });
+        return;
+      }
+      //
+      const { areaIds } = values;
+      const areaId = getAreaId(areaIds);
+      if (next) next({ areaId, excelPath });
     });
   };
 
@@ -80,10 +84,10 @@ class UploadOne extends PureComponent {
     const { status } = info.file;
     if (status === 'done') {
       const uploadRes = info.file.response;
-      console.log(uploadRes);
       if (uploadRes.isSuc) {
+        const { form } = this.props;
+        form.setFieldsValue({ excelPath: `${uploadRes.fdir}${uploadRes.fname}` });
         this.setState({
-          excelFile: info.file,
           uploadTip: {
             help: '',
             helpHint: '',
@@ -113,13 +117,14 @@ class UploadOne extends PureComponent {
 
   onRemove = () => {
     this.setState({
-      excelFile: null,
       uploadTip: {
         help: '',
         helpHint: '',
         validateStatus: 'error',
       },
     });
+    const { form } = this.props;
+    form.setFieldsValue({ excelPath: null });
   };
 
   render() {
