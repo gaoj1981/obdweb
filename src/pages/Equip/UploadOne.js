@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Form, Button, Upload, Icon, Cascader } from 'antd';
+import { Form, Button, Upload, Icon, Cascader, Input } from 'antd';
 import { AREA_DATA } from '@/common/AreaJson';
 
 import styles from './Upload.less';
@@ -20,25 +20,29 @@ class UploadOne extends PureComponent {
   componentDidMount() {}
 
   beforeUpload = file => {
-    const filename = file.name;
-    const suffix = filename.substring(filename.lastIndexOf('.') + 1);
-    if (suffix && (suffix.toLowerCase() === 'xls' || suffix.toLowerCase() === 'xlsx')) {
-      this.setState({
-        excelFile: file,
-        uploadTip: {
-          help: filename,
-          validateStatus: 'success',
-        },
-      });
-    } else {
-      //            message.error('文件格式不正确, 请上传Excel文件');
+    const { excelFile } = this.state;
+    if (excelFile) {
       this.setState({
         uploadTip: {
-          help: '文件格式不正确,请选择Excel文件',
+          help: '',
+          helpHint: '已存在Excel文件，如要重新上传，请先删除已上传文件！',
           validateStatus: 'error',
         },
       });
+      return false;
     }
+    const filename = file.name;
+    const suffix = filename.substring(filename.lastIndexOf('.') + 1);
+    if (suffix) {
+      return true;
+    }
+    this.setState({
+      uploadTip: {
+        help: '',
+        helpHint: '文件格式不正确,请选择Excel文件',
+        validateStatus: 'error',
+      },
+    });
     return false;
   };
 
@@ -51,7 +55,8 @@ class UploadOne extends PureComponent {
         if (!excelFile) {
           this.setState({
             uploadTip: {
-              help: '请选择上传文件',
+              help: '',
+              helpHint: '请选择上传文件',
               validateStatus: 'error',
             },
           });
@@ -69,25 +74,52 @@ class UploadOne extends PureComponent {
   };
 
   onChange = info => {
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
+    if (info.fileList.length > 1) {
+      info.fileList.pop();
     }
+    const { status } = info.file;
     if (status === 'done') {
-      this.setState({
-        uploadTip: {
-          help: `${info.file.name} file uploaded successfully.`,
-          validateStatus: 'success',
-        },
-      });
+      const uploadRes = info.file.response;
+      console.log(uploadRes);
+      if (uploadRes.isSuc) {
+        this.setState({
+          excelFile: info.file,
+          uploadTip: {
+            help: '',
+            helpHint: '',
+            validateStatus: 'success',
+          },
+        });
+      } else {
+        this.setState({
+          uploadTip: {
+            help: '',
+            helpHint: uploadRes.errMsg,
+            validateStatus: 'error',
+          },
+        });
+        info.fileList.pop();
+      }
     } else if (status === 'error') {
       this.setState({
         uploadTip: {
-          help: `${info.file.name} file upload failed.`,
+          help: '',
+          helpHint: `${info.file.name} 上传失败`,
           validateStatus: 'error',
         },
       });
     }
+  };
+
+  onRemove = () => {
+    this.setState({
+      excelFile: null,
+      uploadTip: {
+        help: '',
+        helpHint: '',
+        validateStatus: 'error',
+      },
+    });
   };
 
   render() {
@@ -97,10 +129,10 @@ class UploadOne extends PureComponent {
     const props = {
       name: 'file',
       multiple: false,
-      showUploadList: false,
       beforeUpload: this.beforeUpload,
-      action: '/api/upload',
+      action: '/api/equip/upload',
       onChange: this.onChange,
+      onRemove: this.onRemove,
     };
     return (
       <div className={styles.stepCss}>
@@ -140,11 +172,19 @@ class UploadOne extends PureComponent {
                   <Icon type="inbox" />
                 </p>
                 <p className="ant-upload-text">点击或拖拽文件到这里进行上传</p>
+                <p className="ant-upload-hint" style={{ color: 'red' }}>
+                  {uploadTip.helpHint}
+                </p>
               </Dragger>
             </div>
           </FormItem>
+          <FormItem style={{ display: 'none' }}>
+            {form.getFieldDecorator('excelPath', {
+              rules: [],
+            })(<Input type="hidden" />)}
+          </FormItem>
           <FormItem>
-            <Button type="primary" htmlType="submit" style={{ width: 200 }}>
+            <Button type="primary" htmlType="submit" style={{ width: 200, marginTop: 30 }}>
               下一步
             </Button>
           </FormItem>
