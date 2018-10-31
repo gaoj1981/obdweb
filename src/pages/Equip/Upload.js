@@ -3,6 +3,7 @@ import { Steps, Button, message } from 'antd';
 
 import UploadOne from './UploadOne';
 import UploadTwo from './UploadTwo';
+import UploadThree from './UploadThree';
 
 import styles from './Upload.less';
 
@@ -44,7 +45,7 @@ class Upload extends PureComponent {
       },
       {
         title: '导入数据',
-        content: 'Last-content',
+        content: <UploadThree prev={this.prev} stepVal={stepVal} />,
       },
     ];
 

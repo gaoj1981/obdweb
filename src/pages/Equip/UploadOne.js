@@ -51,7 +51,7 @@ class UploadOne extends PureComponent {
     e.preventDefault();
     const { form, next } = this.props;
     form.validateFields((err, values) => {
-      const { excelPath } = values;
+      const { excelPath, originalName } = values;
       if (err) {
         return;
       }
@@ -68,7 +68,7 @@ class UploadOne extends PureComponent {
       //
       const { areaIds } = values;
       const areaId = getAreaId(areaIds);
-      if (next) next({ areaId, excelPath });
+      if (next) next({ areaId, excelPath, originalName });
     });
   };
 
@@ -86,7 +86,10 @@ class UploadOne extends PureComponent {
       const uploadRes = info.file.response;
       if (uploadRes.isSuc) {
         const { form } = this.props;
-        form.setFieldsValue({ excelPath: `${uploadRes.fdir}${uploadRes.fname}` });
+        form.setFieldsValue({
+          excelPath: `${uploadRes.fdir}${uploadRes.fname}`,
+          originalName: uploadRes.oname,
+        });
         this.setState({
           uploadTip: {
             help: '',
@@ -182,6 +185,11 @@ class UploadOne extends PureComponent {
                 </p>
               </Dragger>
             </div>
+          </FormItem>
+          <FormItem style={{ display: 'none' }}>
+            {form.getFieldDecorator('originalName', {
+              rules: [],
+            })(<Input type="hidden" />)}
           </FormItem>
           <FormItem style={{ display: 'none' }}>
             {form.getFieldDecorator('excelPath', {

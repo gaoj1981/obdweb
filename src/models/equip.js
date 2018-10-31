@@ -11,7 +11,7 @@ import {
 } from '@/services/equip';
 
 const servToReduce = {
-  equipAnalysis: { method: equipAnalysis, reduce: 'equipAnalysis' },
+  equipAnalysis: { method: equipAnalysis, reduce: 'equipAnalysis', err: 'equipAnalysisClear' },
   // 设备详情
   pageEquipInfo: { method: pageEquipInfo, reduce: 'pageEquipInfo' },
   addEquipInfo: { method: addEquipInfo, reduce: null },
@@ -46,6 +46,13 @@ export default {
           });
         }
         if (callback) callback();
+      } else {
+        const { err } = postParamObj;
+        if (err) {
+          yield put({
+            type: err,
+          });
+        }
       }
     },
     *fetchLicCountSum(_, { call, put }) {
@@ -68,6 +75,12 @@ export default {
       return {
         ...state,
         equipAnalysisInfo: action.payload,
+      };
+    },
+    equipAnalysisClear(state) {
+      return {
+        ...state,
+        equipAnalysisInfo: {},
       };
     },
     pageEquipInfo(state, action) {
