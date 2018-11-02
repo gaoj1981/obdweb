@@ -26,15 +26,12 @@ class UploadTwo extends PureComponent {
       type: 'equip/reqCommon',
       service: 'equipAnalysis',
       payload: stepVal,
-      callback: () => {
-        console.log(stepVal);
-      },
     });
   }
 
   onClickNext = () => {
-    const { next } = this.props;
-    const { stepVal } = this.props;
+    const { next, stepVal, equipAnalysisInfo } = this.props;
+    stepVal.eid = equipAnalysisInfo.eid;
     if (next) next(stepVal);
   };
 

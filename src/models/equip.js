@@ -2,6 +2,7 @@ import { isResOK } from '@/utils/BizUtil';
 import {
   getLicCountSum,
   equipAnalysis,
+  equipImport,
   // 设备详情
   pageEquipInfo,
   addEquipInfo,
@@ -12,6 +13,7 @@ import {
 
 const servToReduce = {
   equipAnalysis: { method: equipAnalysis, reduce: 'equipAnalysis', err: 'equipAnalysisClear' },
+  equipImport: { method: equipImport, reduce: 'equipImport', err: 'equipImportClear' },
   // 设备详情
   pageEquipInfo: { method: pageEquipInfo, reduce: 'pageEquipInfo' },
   addEquipInfo: { method: addEquipInfo, reduce: null },
@@ -27,6 +29,7 @@ export default {
   state: {
     licCountSum: [],
     equipAnalysisInfo: {},
+    equipImportInfo: null,
     // 设备详情
     pageEquipInfo: {},
     equipInfo: {},
@@ -81,6 +84,18 @@ export default {
       return {
         ...state,
         equipAnalysisInfo: {},
+      };
+    },
+    equipImport(state, action) {
+      return {
+        ...state,
+        equipImportInfo: action.payload,
+      };
+    },
+    equipImportClear(state) {
+      return {
+        ...state,
+        equipImportInfo: null,
       };
     },
     pageEquipInfo(state, action) {

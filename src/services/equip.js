@@ -47,6 +47,12 @@ export async function equipAnalysis(params) {
   });
 }
 
+export async function equipImport(params) {
+  return request(`/api/device/excel.import?${stringify(params)}`, {
+    method: 'POST',
+  });
+}
+
 // 设备详情增删改查
 export async function pageEquipInfo(params) {
   return request('/api/equipinfo/get.page', {

@@ -59,37 +59,47 @@ const actions = (
 );
 
 @connect(({ equip, loading }) => ({
-  equipAnalysisInfo: equip.equipAnalysisInfo,
+  equipImportInfo: equip.equipImportInfo,
   loading: loading.models.equip,
 }))
 class UploadThree extends PureComponent {
   componentDidMount() {
     //
-    // const { dispatch, stepVal } = this.props;
-    // dispatch({
-    //   type: 'equip/reqCommon',
-    //   service: 'equipAnalysis',
-    //   payload: stepVal,
-    //   callback: () => {
-    //     console.log(stepVal);
-    //   },
-    // });
+    const { dispatch, stepVal } = this.props;
+    dispatch({
+      type: 'equip/reqCommon',
+      service: 'equipImport',
+      payload: stepVal,
+      callback: () => {
+        console.log(stepVal);
+      },
+    });
   }
 
   render() {
-    const { stepVal } = this.props;
-    console.log(stepVal);
+    const { stepVal, equipImportInfo } = this.props;
     return (
       <div className={styles.stepThreeCss}>
         <Card bordered={false}>
-          <Result
-            type="success"
-            title="导入成功"
-            description="提交结果页用于反馈一系列操作任务的处理结果， 如果仅是简单操作，使用 Message 全局提示反馈即可。"
-            extra={extra}
-            actions={actions}
-            style={{ marginTop: 48, marginBottom: 16 }}
-          />
+          {equipImportInfo ? (
+            <Result
+              type="success"
+              title="导入成功"
+              description={`文件（${stepVal.originalName}）中的设备数据导入完成。详情如下：`}
+              extra={extra}
+              actions={actions}
+              style={{ marginTop: 48, marginBottom: 16 }}
+            />
+          ) : (
+            <Result
+              type="error"
+              title="导入失败"
+              description={`文件（${stepVal.originalName}）中的设备数据导入异常。请尝试重新上传！`}
+              extra={extra}
+              actions={actions}
+              style={{ marginTop: 48, marginBottom: 16 }}
+            />
+          )}
         </Card>
       </div>
     );
