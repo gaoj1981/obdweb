@@ -252,7 +252,7 @@ class BaseInfo extends PureComponent {
   moreBtnExc = (key, record) => {
     switch (key) {
       case 'equip':
-        router.push(`/device/detail/${record.eid}`);
+        router.push(`/device/${record.eid}`);
         break;
       case 'mot':
         router.push(`/car/mot/${record.eid}`);

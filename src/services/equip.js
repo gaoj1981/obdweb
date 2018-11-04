@@ -90,3 +90,7 @@ export async function editEquipInfo(params) {
 export async function getEquipInfo(params) {
   return request(`/api/equipinfo/get?${stringify(params)}`);
 }
+
+export async function getEquipDetail(params) {
+  return request(`/api/equipinfo/get.detail?${stringify(params)}`);
+}

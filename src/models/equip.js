@@ -10,6 +10,7 @@ import {
   editEquipInfo,
   getEquipInfo,
   delEquipBatch,
+  getEquipDetail,
 } from '@/services/equip';
 
 const servToReduce = {
@@ -22,6 +23,7 @@ const servToReduce = {
   editEquipInfo: { method: editEquipInfo, reduce: null },
   getEquipInfo: { method: getEquipInfo, reduce: 'getEquipInfo' },
   delEquipBatch: { method: delEquipBatch, reduce: null },
+  getEquipDetail: { method: getEquipDetail, reduce: 'getEquipDetail' },
 };
 
 //
@@ -35,6 +37,7 @@ export default {
     // 设备详情
     pageEquipInfo: {},
     equipInfo: {},
+    equipDetail: {},
   },
 
   effects: {
@@ -120,6 +123,12 @@ export default {
       return {
         ...state,
         equipInfo: action.payload,
+      };
+    },
+    getEquipDetail(state, action) {
+      return {
+        ...state,
+        equipDetail: action.payload,
       };
     },
   },

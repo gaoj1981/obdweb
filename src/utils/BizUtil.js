@@ -122,6 +122,11 @@ function getEquipByType(type) {
   }
 }
 
+function renderForNull(val, rtnVal) {
+  if (!val) return rtnVal;
+  return val;
+}
+
 export {
   isResOK,
   deleteConfirm,
@@ -132,4 +137,5 @@ export {
   convUname,
   getStatus4FuelType,
   getEquipByType,
+  renderForNull,
 };
