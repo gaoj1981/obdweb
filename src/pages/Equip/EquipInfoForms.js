@@ -1,18 +1,35 @@
 import React, { Fragment } from 'react';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
-import { Input, Row, Col, Menu, Dropdown, Divider, Icon } from 'antd';
-import { deleteConfirm } from '@/utils/BizUtil';
+import { Input, Row, Col, Select } from 'antd';
+
+import { getEquipByType } from '@/utils/BizUtil';
 
 const localVal = getLocale();
+const { Option } = Select;
 
 const searchForm = (FormItem, form, extraVals) => {
   console.log(extraVals);
   const { getFieldDecorator } = form;
+  const eidParam = extraVals ? extraVals.eidParam : null;
   return (
     // 注意Col总步长14
     <Fragment>
-      <Col md={14} sm={24}>
-        <FormItem label="ID">{getFieldDecorator('id')(<Input placeholder="请输入ID" />)}</FormItem>
+      <Col md={8} sm={24}>
+        <FormItem label="车辆编号">
+          {getFieldDecorator('eidLike', { initialValue: eidParam })(
+            <Input placeholder="请输入车辆编号" disabled={!!eidParam} />
+          )}
+        </FormItem>
+      </Col>
+      <Col md={6} sm={24}>
+        <FormItem label="设备类型">
+          {getFieldDecorator('type')(
+            <Select allowClear>
+              <Option value="0">固定设备</Option>
+              <Option value="1">辅助设备</Option>
+            </Select>
+          )}
+        </FormItem>
       </Col>
     </Fragment>
   );
@@ -96,41 +113,38 @@ const editForm = (FormItem, form, formValue, extraVals) => {
 };
 
 const getColumns = columnMethods => {
-  const { handleEditVisible, handleDelete, moreBtnExc } = columnMethods;
+  const { handleEditVisible } = columnMethods;
   return [
     {
-      title: 'ID',
-      dataIndex: 'id',
+      title: '所属车辆',
+      dataIndex: 'eid',
+    },
+    {
+      title: '设备名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '厂家',
+      dataIndex: 'factory',
+    },
+    {
+      title: '型号',
+      dataIndex: 'xhNum',
+    },
+    {
+      title: '设备类型',
+      dataIndex: 'type',
+      render: val => getEquipByType(val),
     },
     {
       title: <FormattedMessage id="form.action" defaultMessage="No translate" />,
-      width: 188,
+      width: 88,
       align: 'center',
       render: (text, record) => (
         <Fragment>
           <a onClick={() => handleEditVisible(true, record.id)}>
             <FormattedMessage id="form.edit" defaultMessage="No translate" />
           </a>
-          <Divider type="vertical" />
-          <a
-            onClick={() => {
-              deleteConfirm('设备详情', record.id, handleDelete);
-            }}
-          >
-            <FormattedMessage id="form.delete" defaultMessage="No translate" />
-          </a>
-          <Divider type="vertical" />
-          <Dropdown
-            overlay={
-              <Menu onClick={({ key }) => moreBtnExc(key, record)}>
-                <Menu.Item key="setDefault">默认设置</Menu.Item>
-              </Menu>
-            }
-          >
-            <a>
-              <FormattedMessage id="form.more" defaultMessage="No translate" /> <Icon type="down" />
-            </a>
-          </Dropdown>
         </Fragment>
       ),
     },

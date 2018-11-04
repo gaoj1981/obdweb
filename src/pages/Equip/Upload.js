@@ -32,6 +32,10 @@ class Upload extends PureComponent {
     this.setState({ current });
   };
 
+  goStepOne = () => {
+    this.setState({ current: 0 });
+  };
+
   render() {
     const { current, stepVal } = this.state;
     const steps = [
@@ -45,7 +49,7 @@ class Upload extends PureComponent {
       },
       {
         title: '导入数据',
-        content: <UploadThree prev={this.prev} stepVal={stepVal} />,
+        content: <UploadThree goStepOne={this.goStepOne} stepVal={stepVal} />,
       },
     ];
 

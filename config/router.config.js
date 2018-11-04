@@ -10,6 +10,15 @@ export default [
       { path: '/user/register-result', component: './User/RegisterResult' },
     ],
   },
+  // blank
+  {
+    path: '/device',
+    component: '../layouts/BlankLayout',
+    routes: [
+      { path: '/device', redirect: '/device/0' },
+      { path: '/device/:eidParam', component: './Equip/EquipDetail' },
+    ],
+  },
   // app
   {
     path: '/',
@@ -102,6 +111,13 @@ export default [
             icon: 'deployment-unit',
           },
           {
+            path: '/equip/list/:eidParam',
+            name: 'listview',
+            component: './Equip/EquipInfo',
+            icon: 'deployment-unit',
+            hideInMenu: true,
+          },
+          {
             path: '/equip/lic',
             name: 'license',
             authority: ['admin'],
@@ -128,6 +144,7 @@ export default [
             authority: ['admin'],
             component: './Equip/Upload',
             icon: 'cloud-upload',
+            hideInMenu: true,
           },
         ],
       },

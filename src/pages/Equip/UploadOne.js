@@ -115,6 +115,7 @@ class UploadOne extends PureComponent {
           validateStatus: 'error',
         },
       });
+      info.fileList.pop();
     }
   };
 

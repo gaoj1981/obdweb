@@ -29,9 +29,17 @@ class UploadTwo extends PureComponent {
     });
   }
 
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'equip/clearEquipAnalysis',
+    });
+  }
+
   onClickNext = () => {
     const { next, stepVal, equipAnalysisInfo } = this.props;
     stepVal.eid = equipAnalysisInfo.eid;
+    stepVal.total = equipAnalysisInfo.total;
     if (next) next(stepVal);
   };
 
@@ -49,7 +57,7 @@ class UploadTwo extends PureComponent {
         <List
           itemLayout="vertical"
           size="large"
-          dataSource={lstData}
+          dataSource={lstData || []}
           loading={loading}
           renderItem={item => {
             let actions = [];

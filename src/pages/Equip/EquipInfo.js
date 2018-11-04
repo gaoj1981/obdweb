@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import router from 'umi/router';
 import { connect } from 'dva/index';
 import { Form, Row, Col, Button, Card, message } from 'antd';
 import { FormattedMessage } from 'umi/locale';
@@ -7,7 +8,7 @@ import BizConst from '@/common/BizConst';
 import AddBizForm from '@/common/AddBizForm';
 import EditBizForm from '@/common/EditBizForm';
 import QueryBizForm from '@/common/QueryBizForm';
-import { TableListBase } from '@/common/TableLists';
+import TableWithSel from '@/common/TableWithSel';
 import { searchForm, addForm, editForm, getColumns, queryForm } from './EquipInfoForms';
 
 import styles from './EquipInfo.less';
@@ -31,10 +32,18 @@ class EquipInfo extends PureComponent {
     editWidth: 666,
     queryVisible: false,
     queryHeight: 99,
+    selectedRows: [],
+    eidParam: null,
   };
 
   componentDidMount() {
-    this.dispatchPageList(0, {});
+    const {
+      match: {
+        params: { eidParam },
+      },
+    } = this.props;
+    this.dispatchPageList(0, { eidLike: eidParam });
+    this.setState({ eidParam });
   }
 
   handleAddVisible = flag => {
@@ -74,6 +83,27 @@ class EquipInfo extends PureComponent {
     });
   };
 
+  handleDeleteSel = () => {
+    const { selectedRows } = this.state;
+    if (selectedRows) {
+      const idsArr = [];
+      selectedRows.forEach(item => {
+        idsArr.push(item.id);
+      });
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'equip/reqCommon',
+        service: 'delEquipBatch',
+        payload: { ids: idsArr.join(',') },
+        callback: () => {
+          this.dispatchPageList();
+          message.success('删除成功');
+          this.setState({ selectedRows: [] });
+        },
+      });
+    }
+  };
+
   handleEditVisible = (flag, id) => {
     if (flag) {
       const { dispatch } = this.props;
@@ -111,8 +141,7 @@ class EquipInfo extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const { id } = fieldsValue;
-      this.dispatchPageList(0, { id });
+      this.dispatchPageList(0, fieldsValue);
     });
   };
 
@@ -123,13 +152,24 @@ class EquipInfo extends PureComponent {
   };
 
   handlePageChange = pagination => {
-    this.dispatchPageList(pagination.current - 1);
+    let { current } = pagination;
+    current -= 1;
+    const { queryPage } = this.state;
+    if (current !== queryPage) {
+      this.dispatchPageList(current);
+    }
+    //
+    this.setState({ selectedRows: [] });
   };
 
   handleQueryVisible = flag => {
     this.setState({
       queryVisible: !!flag,
     });
+  };
+
+  handleExcelImport = () => {
+    router.push('/equip/upload');
   };
 
   handleQuery = fields => {
@@ -139,6 +179,12 @@ class EquipInfo extends PureComponent {
     const { id } = formParam;
     //
     this.dispatchPageList(0, { id });
+  };
+
+  handleSelectRows = rows => {
+    this.setState({
+      selectedRows: rows,
+    });
   };
 
   moreBtnExc = (key, record) => {
@@ -159,16 +205,32 @@ class EquipInfo extends PureComponent {
       type: 'equip/reqCommon',
       service: 'pageEquipInfo',
       payload: param,
+      callback: response => {
+        if (response.numberOfElements === 0 && response.totalElements > 0) {
+          dispatch({
+            type: 'equip/reqCommon',
+            service: 'pageEquipInfo',
+            payload: { query: pageQuery, page: 0, size: BizConst.pageSize },
+          });
+          this.setState({ queryPage: 0 });
+        }
+      },
     });
     this.setState({ pageQuery, queryPage });
   }
 
   renderSimpleForm() {
-    const { form } = this.props;
+    const {
+      form,
+      match: {
+        params: { eidParam },
+      },
+    } = this.props;
+    const extraVals = { eidParam };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          {searchForm(FormItem, form)}
+          {searchForm(FormItem, form, extraVals)}
           <Col md={6} sm={14}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
@@ -177,8 +239,8 @@ class EquipInfo extends PureComponent {
               <Button style={{ margin: '0 8px' }} onClick={this.handleFormReset}>
                 <FormattedMessage id="form.reset" defaultMessage="No translate" />
               </Button>
-              <Button icon="search" onClick={() => this.handleQueryVisible(true)}>
-                <FormattedMessage id="form.search.advanced" defaultMessage="No Trans" />
+              <Button icon="file-excel" onClick={() => this.handleExcelImport()}>
+                EXCEL导入
               </Button>
             </span>
           </Col>
@@ -196,7 +258,15 @@ class EquipInfo extends PureComponent {
   }
 
   render() {
-    const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
+    const {
+      addVisible,
+      editVisible,
+      editWidth,
+      queryVisible,
+      queryHeight,
+      selectedRows,
+      eidParam,
+    } = this.state;
     const { pageEquipInfo, equipInfo, loading } = this.props;
 
     const columnMethods = {
@@ -207,6 +277,7 @@ class EquipInfo extends PureComponent {
     const propsTableList = {
       ...pageEquipInfo,
       loading,
+      selectedRows,
       columns: getColumns(columnMethods),
     };
 
@@ -233,10 +304,15 @@ class EquipInfo extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-            <TableListBase {...propsTableList} onChange={this.handlePageChange} />
+            <TableWithSel
+              {...propsTableList}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handlePageChange}
+              onDelete={this.handleDeleteSel}
+            />
           </div>
         </Card>
-        <AddBizForm {...addMethods} addVisible={addVisible} />
+        <AddBizForm {...addMethods} addVisible={addVisible} extraVals={{ eidParam }} />
         <EditBizForm
           {...editMethods}
           editVisible={editVisible}

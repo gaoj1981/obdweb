@@ -124,9 +124,9 @@ class BaseInfo extends PureComponent {
               this.props.currentUser && this.props.currentUser.userid === '2' ? (
                 <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
                   <Menu.Item key="record">维修保养</Menu.Item>
-                  <Menu.Item key="buser">销售售后</Menu.Item>
                   <Menu.Item key="insur">车辆保险</Menu.Item>
                   <Menu.Item key="mot">车辆年检</Menu.Item>
+                  <Menu.Item key="equip">设备详情</Menu.Item>
                 </Menu>
               ) : (
                 <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
@@ -176,7 +176,12 @@ class BaseInfo extends PureComponent {
   };
 
   handleTableChange = pagination => {
-    this.dispatchPageList(pagination.current - 1);
+    let { current } = pagination;
+    current -= 1;
+    const { queryPage } = this.state;
+    if (current !== queryPage) {
+      this.dispatchPageList(current);
+    }
   };
 
   handleFormReset = () => {
@@ -246,6 +251,9 @@ class BaseInfo extends PureComponent {
 
   moreBtnExc = (key, record) => {
     switch (key) {
+      case 'equip':
+        router.push(`/device/detail/${record.eid}`);
+        break;
       case 'mot':
         router.push(`/car/mot/${record.eid}`);
         break;

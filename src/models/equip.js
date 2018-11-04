@@ -9,6 +9,7 @@ import {
   delEquipInfo,
   editEquipInfo,
   getEquipInfo,
+  delEquipBatch,
 } from '@/services/equip';
 
 const servToReduce = {
@@ -20,6 +21,7 @@ const servToReduce = {
   delEquipInfo: { method: delEquipInfo, reduce: null },
   editEquipInfo: { method: editEquipInfo, reduce: null },
   getEquipInfo: { method: getEquipInfo, reduce: 'getEquipInfo' },
+  delEquipBatch: { method: delEquipBatch, reduce: null },
 };
 
 //
@@ -48,7 +50,7 @@ export default {
             payload: response,
           });
         }
-        if (callback) callback();
+        if (callback) callback(response);
       } else {
         const { err } = postParamObj;
         if (err) {
@@ -63,6 +65,16 @@ export default {
       yield put({
         type: 'save',
         payload: response,
+      });
+    },
+    *clearEquipAnalysis(_, { put }) {
+      yield put({
+        type: 'equipAnalysisClear',
+      });
+    },
+    *clearEquipImport(_, { put }) {
+      yield put({
+        type: 'equipImportClear',
       });
     },
   },

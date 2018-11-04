@@ -1,62 +1,11 @@
 import React, { Fragment, PureComponent } from 'react';
-import { FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import { connect } from 'dva';
 import { Button, Row, Col, Card } from 'antd';
 import Result from '@/components/Result';
+import { getAreaArr, getAreaName } from '@/utils/BizUtil';
 
 import styles from './Upload.less';
-
-const extra = (
-  <Fragment>
-    <div
-      style={{
-        fontSize: 16,
-        color: 'rgba(0, 0, 0, 0.85)',
-        fontWeight: '500',
-        marginBottom: 20,
-      }}
-    >
-      <FormattedMessage id="app.result.success.operate-title" defaultMessage="Project Name" />
-    </div>
-    <Row style={{ marginBottom: 16 }}>
-      <Col xs={24} sm={12} md={12} lg={12} xl={6}>
-        <span style={{ color: 'rgba(0, 0, 0, 0.85)' }}>
-          <FormattedMessage id="app.result.success.operate-id" defaultMessage="Project ID：" />
-        </span>
-        23421
-      </Col>
-      <Col xs={24} sm={12} md={12} lg={12} xl={6}>
-        <span style={{ color: 'rgba(0, 0, 0, 0.85)' }}>
-          <FormattedMessage id="app.result.success.principal" defaultMessage="Principal：" />
-        </span>
-        <FormattedMessage id="app.result.success.step1-operator" defaultMessage="Qu Lili" />
-      </Col>
-      <Col xs={24} sm={24} md={24} lg={24} xl={12}>
-        <span style={{ color: 'rgba(0, 0, 0, 0.85)' }}>
-          <FormattedMessage
-            id="app.result.success.operate-time"
-            defaultMessage="Effective time："
-          />
-        </span>
-        2016-12-12 ~ 2017-12-12
-      </Col>
-    </Row>
-  </Fragment>
-);
-
-const actions = (
-  <Fragment>
-    <Button type="primary">
-      <FormattedMessage id="app.result.success.btn-return" defaultMessage="Back to list" />
-    </Button>
-    <Button>
-      <FormattedMessage id="app.result.success.btn-project" defaultMessage="View project" />
-    </Button>
-    <Button>
-      <FormattedMessage id="app.result.success.btn-print" defaultMessage="Print" />
-    </Button>
-  </Fragment>
-);
 
 @connect(({ equip, loading }) => ({
   equipImportInfo: equip.equipImportInfo,
@@ -76,11 +25,65 @@ class UploadThree extends PureComponent {
     });
   }
 
+  componentWillUnmount() {
+    console.log('unmount three');
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'equip/clearEquipImport',
+    });
+    dispatch({
+      type: 'equip/clearEquipAnalysis',
+    });
+  }
+
+  viewInfo = () => {
+    const { stepVal } = this.props;
+    router.push(`/equip/list/${stepVal.eid}`);
+  };
+
   render() {
-    const { stepVal, equipImportInfo } = this.props;
+    const { stepVal, equipImportInfo, goStepOne, loading } = this.props;
+    const { areaId } = stepVal;
+    const areaArr = getAreaArr(areaId);
+    const extra = (
+      <Fragment>
+        <div
+          style={{
+            fontSize: 16,
+            color: 'rgba(0, 0, 0, 0.85)',
+            fontWeight: '500',
+            marginBottom: 20,
+          }}
+        >
+          所属区县：
+          {equipImportInfo
+            ? `${getAreaName(areaArr[0])} ${getAreaName(areaArr[1])} ${getAreaName(areaId)}`
+            : null}
+        </div>
+        <Row style={{ marginBottom: 16 }}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            车辆编号：
+            {equipImportInfo ? stepVal.eid : null}
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+            成功导入设备数： {equipImportInfo ? stepVal.total : 0}
+          </Col>
+        </Row>
+      </Fragment>
+    );
+
+    const actions = (
+      <Fragment>
+        <Button type="primary" onClick={goStepOne}>
+          {equipImportInfo ? '继续导入' : '重新导入'}
+        </Button>
+        <Button onClick={this.viewInfo}>查看设备</Button>
+      </Fragment>
+    );
+
     return (
       <div className={styles.stepThreeCss}>
-        <Card bordered={false}>
+        <Card bordered={false} loading={loading}>
           {equipImportInfo ? (
             <Result
               type="success"
@@ -94,7 +97,7 @@ class UploadThree extends PureComponent {
             <Result
               type="error"
               title="导入失败"
-              description={`文件（${stepVal.originalName}）中的设备数据导入异常。请尝试重新上传！`}
+              description={`文件（${stepVal.originalName}）中的设备数据导入异常。请尝试重新导入！`}
               extra={extra}
               actions={actions}
               style={{ marginTop: 48, marginBottom: 16 }}

@@ -74,6 +74,12 @@ export async function delEquipInfo(params) {
   });
 }
 
+export async function delEquipBatch(params) {
+  return request(`/api/equipinfo/delete.batch?${stringify(params)}`, {
+    method: 'DELETE',
+  });
+}
+
 export async function editEquipInfo(params) {
   return request('/api/equipinfo/edit', {
     method: 'POST',

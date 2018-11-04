@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Avatar, Modal, message } from 'antd';
+import { Avatar, Modal, Badge, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import Ellipsis from '../components/Ellipsis';
 import BizConst from '@/common/BizConst';
@@ -111,6 +111,17 @@ function getStatus4FuelType(fuelType) {
   }
 }
 
+function getEquipByType(type) {
+  switch (type) {
+    case 0:
+      return <Badge status="processing" text="固定设备" />;
+    case 1:
+      return <Badge status="warning" text="辅助设备" />;
+    default:
+      return null;
+  }
+}
+
 export {
   isResOK,
   deleteConfirm,
@@ -120,4 +131,5 @@ export {
   getAreaNameTest,
   convUname,
   getStatus4FuelType,
+  getEquipByType,
 };
