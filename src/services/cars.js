@@ -8,6 +8,12 @@ export async function getBuserPage(params) {
   });
 }
 
+export async function getObdInfo(params) {
+  return request(`/api/car/get.obd?${stringify(params)}`, {
+    method: 'POST',
+  });
+}
+
 // 增删改查
 export async function pageBindUser(params) {
   return request('/api/binduser/get.page', {

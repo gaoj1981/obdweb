@@ -8,6 +8,7 @@ import {
   delCar,
 } from '@/services/equip';
 import {
+  getObdInfo,
   pageBindUser,
   addBindUser,
   delBindUser,
@@ -37,6 +38,8 @@ const servToReduce = {
   delCar: { method: delCar, reduce: null },
   queryCarList: { method: getCarPage, reduce: 'queryList' },
   getCarInfo: { method: getCarInfo, reduce: 'queryCarInfo' },
+  getObdInfo: { method: getObdInfo, reduce: 'queryObdInfo' },
+  //
   pageBindUser: { method: pageBindUser, reduce: 'pageBindUser' },
   addBindUser: { method: addBindUser, reduce: null },
   delBindUser: { method: delBindUser, reduce: null },
@@ -66,6 +69,7 @@ export default {
     carCountSum: 0,
     carPageList: {},
     carInfo: {},
+    obdInfo: {},
     pageBindUser: {},
     bindUser: {},
     bindUserDefault: [],
@@ -153,6 +157,12 @@ export default {
       return {
         ...state,
         carInfo: action.payload,
+      };
+    },
+    queryObdInfo(state, action) {
+      return {
+        ...state,
+        obdInfo: action.payload,
       };
     },
     pageBindUser(state, action) {
