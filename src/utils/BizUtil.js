@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import moment from 'moment';
 import { Avatar, Modal, Badge, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 import Ellipsis from '../components/Ellipsis';
@@ -127,6 +128,16 @@ function renderForNull(val, rtnVal) {
   return val;
 }
 
+function disabledDateCurAfter(current) {
+  // Can not select days before today and today
+  return current && current < moment().endOf('day');
+}
+
+function disabledDateCurBefore(current) {
+  // Can not select days before today and today
+  return current && current >= moment().endOf('day');
+}
+
 export {
   isResOK,
   deleteConfirm,
@@ -138,4 +149,6 @@ export {
   getStatus4FuelType,
   getEquipByType,
   renderForNull,
+  disabledDateCurAfter,
+  disabledDateCurBefore,
 };
