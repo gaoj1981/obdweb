@@ -1,11 +1,14 @@
 import React, { Fragment } from 'react';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
-import { Input, Row, Col, Select } from 'antd';
+import { Input, Row, Col, Select, Radio, InputNumber, DatePicker } from 'antd';
 
+import CarInputWidget from '../Car/CarInputWidget';
 import { getEquipByType } from '@/utils/BizUtil';
 
 const localVal = getLocale();
 const { Option } = Select;
+const RadioGroup = Radio.Group;
+const { TextArea } = Input;
 
 const searchForm = (FormItem, form, extraVals) => {
   console.log(extraVals);
@@ -37,12 +40,22 @@ const searchForm = (FormItem, form, extraVals) => {
 
 const addForm = (FormItem, form, extraVals) => {
   const { getFieldDecorator } = form;
-  console.log(extraVals);
+  const eidParam = extraVals ? extraVals.eidParam : null;
+  const formDisplay0 = extraVals ? extraVals.formDisplay0 : false;
+  const formDisplay1 = extraVals ? extraVals.formDisplay1 : false;
+
+  const onTypeChange = e => {
+    const typeCurSel = e.target.value;
+    const { handleFormDisplay } = extraVals;
+    if (handleFormDisplay) handleFormDisplay(typeCurSel);
+  };
+
   return (
-    <Row>
-      <Col span={24}>
-        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="ID">
-          {getFieldDecorator('id', {
+    <Row gutter={6}>
+      <Col span={14}>
+        <FormItem labelCol={{ span: 7 }} wrapperCol={{ span: 17 }} label="车辆编号">
+          {getFieldDecorator('eid', {
+            initialValue: eidParam,
             rules: [
               {
                 required: true,
@@ -65,7 +78,162 @@ const addForm = (FormItem, form, extraVals) => {
                     : null,
               },
             ],
+          })(<CarInputWidget disabled={!!eidParam} />)}
+        </FormItem>
+      </Col>
+      <Col span={10}>
+        <FormItem>
+          {form.getFieldDecorator('type', {
+            initialValue: '0',
+            rules: [
+              {
+                message:
+                  localVal === 'zh-CN' ? formatMessage({ id: 'biz.common.require.sel' }) : null,
+              },
+            ],
+          })(
+            <RadioGroup onChange={onTypeChange}>
+              <Radio value="0">固定设备</Radio>
+              <Radio value="1">辅助设备</Radio>
+            </RadioGroup>
+          )}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="设备名称">
+          {getFieldDecorator('name', {
+            rules: [
+              {
+                required: true,
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
           })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="生产厂家">
+          {getFieldDecorator('factory', {
+            rules: [
+              {
+                required: true,
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      {formDisplay0 ? (
+        <Col span={12}>
+          <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="出厂日期">
+            {form.getFieldDecorator('birthDate', {
+              rules: [],
+            })(<DatePicker />)}
+          </FormItem>
+        </Col>
+      ) : null}
+      {formDisplay1 ? (
+        <Col span={12}>
+          <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="设备数量">
+            {form.getFieldDecorator('countNum', {
+              initialValue: 0,
+              rules: [
+                {
+                  required: true,
+                  message:
+                    localVal === 'zh-CN' ? formatMessage({ id: 'biz.common.require.input' }) : null,
+                },
+              ],
+            })(<InputNumber min={0} max={999999999} style={{ width: '100%' }} />)}
+          </FormItem>
+        </Col>
+      ) : null}
+      <Col span={12}>
+        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="设备型号">
+          {getFieldDecorator('xhNum', {
+            rules: [
+              {
+                max: 100,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 100 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="设备编号">
+          {getFieldDecorator('bhNum', {
+            rules: [
+              {
+                max: 100,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 100 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      {formDisplay0 ? (
+        <Col span={24}>
+          <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="软件版本">
+            {getFieldDecorator('version', {
+              rules: [
+                {
+                  max: 100,
+                  message:
+                    localVal === 'zh-CN'
+                      ? formatMessage(
+                          { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                          { length: 100 }
+                        )
+                      : null,
+                },
+              ],
+            })(<Input />)}
+          </FormItem>
+        </Col>
+      ) : null}
+      <Col span={24}>
+        <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="设备备注">
+          {getFieldDecorator('note', {
+            rules: [
+              {
+                max: 500,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 500 }
+                      )
+                    : null,
+              },
+            ],
+          })(<TextArea rows={1} />)}
         </FormItem>
       </Col>
     </Row>
@@ -78,6 +246,35 @@ const editForm = (FormItem, form, formValue, extraVals) => {
   console.log(extraVals);
   return (
     <Row gutter={16}>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="车辆编号">
+          {getFieldDecorator('eid', {
+            initialValue: formValue.eid,
+            rules: [
+              {
+                required: true,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
+              },
+              {
+                max: 20,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 20 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input disabled />)}
+        </FormItem>
+      </Col>
       <Col span={24}>
         <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="ID">
           {getFieldDecorator('id', {

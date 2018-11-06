@@ -29,11 +29,13 @@ class EquipInfo extends PureComponent {
     queryPage: 0,
     addVisible: false,
     editVisible: false,
-    editWidth: 666,
+    editWidth: 400,
     queryVisible: false,
     queryHeight: 99,
     selectedRows: [],
     eidParam: null,
+    formDisplay0: true,
+    formDisplay1: false,
   };
 
   componentDidMount() {
@@ -63,9 +65,10 @@ class EquipInfo extends PureComponent {
       service: 'addEquipInfo',
       payload: formParam,
       callback: () => {
-        this.dispatchPageList(0, {});
+        this.dispatchPageList();
         message.success('添加成功');
         this.handleAddVisible();
+        this.setState({ formDisplay0: true, formDisplay1: false });
       },
     });
   };
@@ -187,6 +190,14 @@ class EquipInfo extends PureComponent {
     });
   };
 
+  handleFormDisplay = type => {
+    if (type === '0') {
+      this.setState({ formDisplay0: true, formDisplay1: false });
+    } else if (type === '1') {
+      this.setState({ formDisplay1: true, formDisplay0: false });
+    }
+  };
+
   moreBtnExc = (key, record) => {
     console.log(key, record);
   };
@@ -236,10 +247,16 @@ class EquipInfo extends PureComponent {
               <Button type="primary" htmlType="submit">
                 <FormattedMessage id="form.search" defaultMessage="No translate" />
               </Button>
-              <Button style={{ margin: '0 8px' }} onClick={this.handleFormReset}>
-                <FormattedMessage id="form.reset" defaultMessage="No translate" />
-              </Button>
-              <Button icon="file-excel" onClick={() => this.handleExcelImport()}>
+              {!eidParam ? (
+                <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                  <FormattedMessage id="form.reset" defaultMessage="No translate" />
+                </Button>
+              ) : null}
+              <Button
+                style={{ marginLeft: 8 }}
+                icon="file-excel"
+                onClick={() => this.handleExcelImport()}
+              >
                 EXCEL导入
               </Button>
             </span>
@@ -266,6 +283,8 @@ class EquipInfo extends PureComponent {
       queryHeight,
       selectedRows,
       eidParam,
+      formDisplay0,
+      formDisplay1,
     } = this.state;
     const { pageEquipInfo, equipInfo, loading } = this.props;
 
@@ -312,7 +331,16 @@ class EquipInfo extends PureComponent {
             />
           </div>
         </Card>
-        <AddBizForm {...addMethods} addVisible={addVisible} extraVals={{ eidParam }} />
+        <AddBizForm
+          {...addMethods}
+          addVisible={addVisible}
+          extraVals={{
+            eidParam,
+            formDisplay0,
+            formDisplay1,
+            handleFormDisplay: this.handleFormDisplay,
+          }}
+        />
         <EditBizForm
           {...editMethods}
           editVisible={editVisible}
