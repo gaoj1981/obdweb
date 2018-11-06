@@ -70,6 +70,12 @@ export default {
         payload: response,
       });
     },
+    *clearEquipInfo({ payload }, { put }) {
+      yield put({
+        type: 'getEquipInfo',
+        payload,
+      });
+    },
     *clearEquipAnalysis(_, { put }) {
       yield put({
         type: 'equipAnalysisClear',

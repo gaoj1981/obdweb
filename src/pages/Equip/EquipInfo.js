@@ -29,7 +29,7 @@ class EquipInfo extends PureComponent {
     queryPage: 0,
     addVisible: false,
     editVisible: false,
-    editWidth: 400,
+    editWidth: 600,
     queryVisible: false,
     queryHeight: 99,
     selectedRows: [],
@@ -108,12 +108,17 @@ class EquipInfo extends PureComponent {
   };
 
   handleEditVisible = (flag, id) => {
+    const { dispatch } = this.props;
     if (flag) {
-      const { dispatch } = this.props;
       dispatch({
         type: 'equip/reqCommon',
         service: 'getEquipInfo',
         payload: { id },
+      });
+    } else {
+      dispatch({
+        type: 'equip/clearEquipInfo',
+        payload: {},
       });
     }
     this.setState({

@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
+import moment from 'moment';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import { Input, Row, Col, Select, Radio, InputNumber, DatePicker } from 'antd';
 
 import CarInputWidget from '../Car/CarInputWidget';
-import { getEquipByType } from '@/utils/BizUtil';
+import { getEquipByType, renderForNull, disabledDateCurBefore } from '@/utils/BizUtil';
 
 const localVal = getLocale();
 const { Option } = Select;
@@ -142,7 +143,7 @@ const addForm = (FormItem, form, extraVals) => {
           <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="出厂日期">
             {form.getFieldDecorator('birthDate', {
               rules: [],
-            })(<DatePicker />)}
+            })(<DatePicker placeholder="设备出厂日期" />)}
           </FormItem>
         </Col>
       ) : null}
@@ -246,13 +247,12 @@ const editForm = (FormItem, form, formValue, extraVals) => {
   console.log(extraVals);
   return (
     <Row gutter={16}>
-      <Col span={24}>
+      <Col span={12}>
         <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="车辆编号">
           {getFieldDecorator('eid', {
             initialValue: formValue.eid,
             rules: [
               {
-                required: true,
                 message:
                   localVal === 'zh-CN'
                     ? formatMessage({
@@ -275,28 +275,169 @@ const editForm = (FormItem, form, formValue, extraVals) => {
           })(<Input disabled />)}
         </FormItem>
       </Col>
-      <Col span={24}>
-        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="ID">
-          {getFieldDecorator('id', {
-            initialValue: formValue.id,
+      <Col span={12}>
+        <FormItem>
+          {form.getFieldDecorator('type', {
+            initialValue: `${formValue.type}`,
+            rules: [
+              {
+                message:
+                  localVal === 'zh-CN' ? formatMessage({ id: 'biz.common.require.sel' }) : null,
+              },
+            ],
+          })(
+            <RadioGroup>
+              <Radio value="0">固定设备</Radio>
+              <Radio value="1">辅助设备</Radio>
+            </RadioGroup>
+          )}
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem label="设备名称">
+          {getFieldDecorator('name', {
+            initialValue: formValue.name,
             rules: [
               {
                 required: true,
-                message:
-                  localVal === 'zh-CN' ? formatMessage({ id: 'biz.common.require.input' }) : null,
-              },
-              {
-                max: 20,
+                max: 50,
                 message:
                   localVal === 'zh-CN'
                     ? formatMessage(
                         { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
-                        { length: 20 }
+                        { length: 50 }
                       )
                     : null,
               },
             ],
           })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem label="生产厂家">
+          {getFieldDecorator('factory', {
+            initialValue: formValue.factory,
+            rules: [
+              {
+                required: true,
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem label="设备型号">
+          {getFieldDecorator('xhNum', {
+            initialValue: formValue.xhNum,
+            rules: [
+              {
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem label="设备编号">
+          {getFieldDecorator('bhNum', {
+            initialValue: formValue.bhNum,
+            rules: [
+              {
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={8}>
+        <FormItem label="出厂日期">
+          {getFieldDecorator('birthDate', {
+            initialValue: formValue.birthDate ? moment(formValue.birthDate, 'YYYY-MM-DD') : null,
+            rules: [],
+          })(
+            <DatePicker
+              style={{ width: '100%' }}
+              disabledDate={disabledDateCurBefore}
+              format="YYYY年MM月DD日"
+              placeholder="设备出厂日期"
+            />
+          )}
+        </FormItem>
+      </Col>
+      <Col span={8}>
+        <FormItem label="设备数量">
+          {getFieldDecorator('countNum', {
+            initialValue: formValue.countNum,
+            rules: [],
+          })(<InputNumber min={0} max={999999999} style={{ width: '100%' }} />)}
+        </FormItem>
+      </Col>
+      <Col span={8}>
+        <FormItem label="排序号">
+          {getFieldDecorator('orderNo', {
+            initialValue: formValue.orderNo,
+            rules: [],
+          })(<InputNumber min={0} max={999999999} style={{ width: '100%' }} />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 3 }} wrapperCol={{ span: 21 }} label="设备版本">
+          {getFieldDecorator('version', {
+            initialValue: formValue.version,
+            rules: [
+              {
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem label="备注说明">
+          {getFieldDecorator('note', {
+            initialValue: formValue.note,
+            rules: [
+              {
+                max: 500,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 500 }
+                      )
+                    : null,
+              },
+            ],
+          })(<TextArea rows={2} placeholder="该设备的备注说明" />)}
         </FormItem>
       </Col>
       <FormItem style={{ display: 'none' }}>
@@ -327,6 +468,7 @@ const getColumns = columnMethods => {
     {
       title: '型号',
       dataIndex: 'xhNum',
+      render: val => renderForNull(val, '/'),
     },
     {
       title: '设备类型',
