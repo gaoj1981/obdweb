@@ -130,6 +130,7 @@ export default [
             authority: ['admin'],
             component: './Equip/Consum',
             icon: 'gold',
+            hideInMenu: true,
           },
           {
             path: '/equip/warning',
@@ -137,6 +138,7 @@ export default [
             authority: ['admin'],
             component: './Equip/Warning',
             icon: 'warning',
+            hideInMenu: true,
           },
           {
             path: '/equip/upload',
@@ -160,6 +162,7 @@ export default [
             name: 'score',
             component: './Sales/Score',
             icon: 'shopping-cart',
+            hideInMenu: true,
           },
           {
             path: '/sales/record',

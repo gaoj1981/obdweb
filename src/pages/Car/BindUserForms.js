@@ -269,11 +269,7 @@ const editForm = (FormItem, form, formValue) => {
         </FormItem>
       </Col>
       <Col span={15}>
-        <FormItem
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 19 }}
-          label={formatMessage({ id: 'biz.car.areaid', defaultMessage: 'No Translate' })}
-        >
+        <FormItem labelCol={{ span: 3 }} wrapperCol={{ span: 21 }} label="区县">
           {form.getFieldDecorator('areaIds', {
             initialValue: getAreaArr(formValue.areaId),
             rules: [

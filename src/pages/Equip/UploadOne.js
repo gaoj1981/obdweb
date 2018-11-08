@@ -74,7 +74,7 @@ class UploadOne extends PureComponent {
 
   // 下载导入模版
   downloadTemplete = () => {
-    window.open('/static/名单导入模板.xls');
+    window.open('/equip_template.xls');
   };
 
   onChange = info => {
