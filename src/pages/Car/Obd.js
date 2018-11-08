@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import { Row, Col, Input, Button, Form, Divider, Slider, Alert } from 'antd';
+import { Map } from 'react-amap';
 import ObdGaugeWidget from './ObdGaugeWidget';
-import ObdMileageWidget from './ObdMileageWidget';
 import ObdSpeedWidget from './ObdSpeedWidget';
 import WaterWave from '@/components/Charts/WaterWave';
 
@@ -17,7 +17,12 @@ const FormItem = Form.Item;
   loading: loading.models.car,
 }))
 @Form.create()
-class BaseInfo extends PureComponent {
+class Obd extends PureComponent {
+  state = {
+    center: { longitude: 116.46, latitude: 39.92 },
+    zoom: 3,
+  };
+
   componentDidMount() {}
 
   componentWillUnmount() {
@@ -38,11 +43,20 @@ class BaseInfo extends PureComponent {
         type: 'car/reqCommon',
         service: 'getObdInfo',
         payload: fieldsValue,
+        callback: () => {
+          const { obdInfo } = this.props;
+          if (obdInfo.lng && obdInfo.lat) {
+            this.setState({ center: { longitude: obdInfo.lng, latitude: obdInfo.lat }, zoom: 15 });
+          } else {
+            this.setState({ center: { longitude: 116.46, latitude: 39.92 }, zoom: 3 });
+          }
+        },
       });
     });
   };
 
   render() {
+    const { center, zoom } = this.state;
     const {
       form: { getFieldDecorator },
       obdInfo,
@@ -57,15 +71,6 @@ class BaseInfo extends PureComponent {
         label: <strong>100°C</strong>,
       },
     };
-
-    const chartData = [];
-    for (let i = 0; i < 20; i += 1) {
-      chartData.push({
-        x: new Date().getTime() + 1000 * 60 * 30 * i,
-        y1: Math.floor(Math.random() * 100) + 1000,
-        y2: Math.floor(Math.random() * 100) + 10,
-      });
-    }
 
     return (
       <div className={styles.testCss}>
@@ -139,10 +144,11 @@ class BaseInfo extends PureComponent {
             <Divider />
           </Col>
           <Col span={24}>
-            <ObdMileageWidget
-              val={Math.floor(obdInfo.dashboardTotalMileage / 10000)}
-              realVal={Math.round(obdInfo.dashboardTotalMileage) / 10000 || 0}
-            />
+            {obdInfo.lng}
+            {obdInfo.lat}
+            <div style={{ width: '100%', height: '400px' }}>
+              <Map amapkey="2ec66eeb79bec886849c43b34e26323c" center={center} zoom={zoom} />
+            </div>
           </Col>
         </Row>
       </div>
@@ -150,4 +156,4 @@ class BaseInfo extends PureComponent {
   }
 }
 
-export default BaseInfo;
+export default Obd;
