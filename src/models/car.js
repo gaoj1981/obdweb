@@ -132,6 +132,12 @@ export default {
         payload,
       });
     },
+    *clearObdInfo({ payload }, { put }) {
+      yield put({
+        type: 'queryObdInfo',
+        payload,
+      });
+    },
     *clearCarMotInfo({ payload }, { put }) {
       yield put({
         type: 'getCarMotInfo',
