@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import { Row, Col, Input, Button, Form, Divider, Slider, Alert } from 'antd';
-import { Map } from 'react-amap';
+import { Map, Marker } from 'react-amap';
 import ObdGaugeWidget from './ObdGaugeWidget';
 import ObdSpeedWidget from './ObdSpeedWidget';
 import WaterWave from '@/components/Charts/WaterWave';
@@ -11,6 +11,14 @@ import styles from './Obd.less';
 
 // 共通常量
 const FormItem = Form.Item;
+const styleA = {
+  position: 'absolute',
+  top: '10px',
+  left: '10px',
+  padding: '5px 10px',
+  border: '1px solid #d3d3d3',
+  backgroundColor: 'rgba(255,255,255,0.8)',
+};
 
 @connect(({ car, loading }) => ({
   obdInfo: car.obdInfo,
@@ -144,10 +152,20 @@ class Obd extends PureComponent {
             <Divider />
           </Col>
           <Col span={24}>
-            {obdInfo.lng}
-            {obdInfo.lat}
             <div style={{ width: '100%', height: '400px' }}>
-              <Map amapkey="2ec66eeb79bec886849c43b34e26323c" center={center} zoom={zoom} />
+              <Map amapkey="2ec66eeb79bec886849c43b34e26323c" center={center} zoom={zoom}>
+                <Marker position={center} />
+                <div className="customLayer" style={styleA}>
+                  <h4>
+                    当前经度：
+                    {obdInfo && obdInfo.lng ? center.longitude : '暂无'}
+                  </h4>
+                  <h4>
+                    当前纬度：
+                    {obdInfo && obdInfo.lat ? center.latitude : '暂无'}
+                  </h4>
+                </div>
+              </Map>
             </div>
           </Col>
         </Row>
