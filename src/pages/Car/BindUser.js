@@ -11,6 +11,7 @@ import { TableListBase } from '@/common/TableLists';
 import { getAreaId } from '@/utils/BizUtil';
 import { searchForm, addForm, editForm, getColumns, queryForm } from './BindUserForms';
 import BindUserStepDefault from './BindUserStepDefault';
+import CarInfoWidget from './CarInfoWidget';
 
 import styles from './BindUser.less';
 
@@ -35,6 +36,8 @@ class BindUser extends PureComponent {
     queryHeight: 99,
     updateModalVisible: false,
     stepFormValues: {},
+    carModalVisible: false,
+    carModalValues: {},
   };
 
   componentDidMount() {
@@ -189,6 +192,8 @@ class BindUser extends PureComponent {
   moreBtnExc = (key, record) => {
     if (key === 'setDefault') {
       this.handleStepModalVisible(true, record);
+    } else if (key === 'forCar') {
+      this.handleCarModalVisible(true, record);
     }
   };
 
@@ -222,6 +227,13 @@ class BindUser extends PureComponent {
         message.success('设置成功');
         this.handleStepModalVisible();
       },
+    });
+  };
+
+  handleCarModalVisible = (flag, record) => {
+    this.setState({
+      carModalVisible: !!flag,
+      carModalValues: record || {},
     });
   };
 
@@ -284,6 +296,8 @@ class BindUser extends PureComponent {
       queryHeight,
       updateModalVisible,
       stepFormValues,
+      carModalVisible,
+      carModalValues,
     } = this.state;
     const { pageBindUser, bindUser, loading } = this.props;
 
@@ -321,6 +335,10 @@ class BindUser extends PureComponent {
       handleStep: this.handleStep,
     };
 
+    const CarInfoMethods = {
+      handleCarModalVisible: this.handleCarModalVisible,
+    };
+
     return (
       <div className={styles.testCss}>
         <Card bordered={false}>
@@ -346,6 +364,7 @@ class BindUser extends PureComponent {
             values={stepFormValues}
           />
         ) : null}
+        {carModalVisible ? <CarInfoWidget {...CarInfoMethods} values={carModalValues} /> : null}
       </div>
     );
   }

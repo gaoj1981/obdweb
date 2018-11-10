@@ -135,6 +135,34 @@ const addForm = (FormItem, form) => (
         )}
       </FormItem>
     </Col>
+    <Col span={24}>
+      <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="所属公司">
+        {form.getFieldDecorator('ltd', {
+          rules: [
+            {
+              required: true,
+              message:
+                localVal === 'zh-CN'
+                  ? formatMessage({
+                      id: 'biz.common.require.input',
+                      defaultMessage: 'No Translate',
+                    })
+                  : null,
+            },
+            {
+              max: 100,
+              message:
+                localVal === 'zh-CN'
+                  ? formatMessage(
+                      { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                      { length: 100 }
+                    )
+                  : null,
+            },
+          ],
+        })(<Input />)}
+      </FormItem>
+    </Col>
     <Col span={12}>
       <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="所属部门">
         {form.getFieldDecorator('utype', {
@@ -297,6 +325,30 @@ const editForm = (FormItem, form, formValue) => {
           })(<Checkbox disabled>是否默认该区县负责人</Checkbox>)}
         </FormItem>
       </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 2 }} wrapperCol={{ span: 22 }} label="公司">
+          {form.getFieldDecorator('ltd', {
+            initialValue: formValue.ltd,
+            rules: [
+              {
+                required: true,
+                message:
+                  localVal === 'zh-CN' ? formatMessage({ id: 'biz.common.require.input' }) : null,
+              },
+              {
+                max: 100,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 100 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
       <Col span={15}>
         <FormItem label="职位" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
           {form.getFieldDecorator('job', {
@@ -437,6 +489,7 @@ const getColumns = columnMethods => {
             overlay={
               <Menu onClick={({ key }) => moreBtnExc(key, record)}>
                 <Menu.Item key="setDefault">默认设置</Menu.Item>
+                <Menu.Item key="forCar">负责车辆</Menu.Item>
               </Menu>
             }
           >
