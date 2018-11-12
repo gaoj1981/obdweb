@@ -3,12 +3,12 @@ import { FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import { Modal, Table, Tooltip } from 'antd';
 import Ellipsis from '@/components/Ellipsis';
-import BizConst from '@/common/BizConst';
 import { getAreaName } from '@/utils/BizUtil';
+import { getPagination } from '../../common/TableLists';
 
 // 底层组件
 @connect(({ car, loading }) => ({
-  carInfo: car.carInfo,
+  carPageList: car.carPageList,
   loading: loading.models.car,
 }))
 class CarInfoWidget extends PureComponent {
@@ -64,9 +64,25 @@ class CarInfoWidget extends PureComponent {
   ];
 
   componentDidMount() {
+    this.dispatchCarPage(0);
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'car/clearCarPage',
+      payload: {},
+    });
+  }
+
+  handleTableChange = pagination => {
+    const { current } = pagination;
+    this.dispatchCarPage(current ? current - 1 : 0);
+  };
+
+  dispatchCarPage(curPage) {
     const { dispatch, values } = this.props;
-    console.log(values.id);
-    const param = { query: {}, page: 0, size: BizConst.size };
+    const param = { query: { buserId: values.id }, page: curPage, size: 8 };
     dispatch({
       type: 'car/reqCommon',
       service: 'queryCarList',
@@ -75,7 +91,11 @@ class CarInfoWidget extends PureComponent {
   }
 
   render() {
-    const { handleCarModalVisible, loading } = this.props;
+    const {
+      handleCarModalVisible,
+      carPageList: { content, totalElements, size, number },
+      loading,
+    } = this.props;
 
     return (
       <Modal
@@ -84,9 +104,16 @@ class CarInfoWidget extends PureComponent {
         title="车辆一览"
         visible
         onCancel={() => handleCarModalVisible()}
-        onOk={() => handleCarModalVisible()}
+        footer={null}
       >
-        <Table columns={this.columns} dataSource={[]} size="small" loading={loading} />
+        <Table
+          columns={this.columns}
+          dataSource={content || []}
+          pagination={getPagination({ totalElements, size, number })}
+          onChange={this.handleTableChange}
+          size="small"
+          loading={loading}
+        />
       </Modal>
     );
   }

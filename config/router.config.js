@@ -138,7 +138,6 @@ export default [
             authority: ['admin'],
             component: './Equip/Warning',
             icon: 'warning',
-            hideInMenu: true,
           },
           {
             path: '/equip/upload',
@@ -180,6 +179,7 @@ export default [
         component: './Sys/Index',
         routes: [],
         authority: ['admin'],
+        hideInMenu: true,
       },
       // forms
       {

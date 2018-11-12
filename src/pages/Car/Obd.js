@@ -86,7 +86,9 @@ class Obd extends PureComponent {
           } else {
             this.setState({ center: { longitude: 116.46, latitude: 39.92 }, zoom: 3 });
           }
-          this.subscribe(`/queue/obd.data.${obdInfo.eid}`);
+          if (stompClient && stompClient.connected) {
+            this.subscribe(`/queue/obd.data.${obdInfo.eid}`);
+          }
         },
       });
     });
