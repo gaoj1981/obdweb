@@ -19,11 +19,12 @@ for (let i = 0; i < 12; i += 1) {
   });
 }
 
-@connect(({ user, loading, equip, car }) => ({
+@connect(({ user, loading, equip, car, charts }) => ({
   currentUser: user.currentUser,
   currentUserLoading: loading.effects['user/fetchCurrent'],
   licCountSum: equip.licCountSum,
   carCountSum: car.carCountSum,
+  carProvGroup: charts.carProvGroup,
 }))
 class MainPage extends PureComponent {
   componentDidMount() {
@@ -39,6 +40,12 @@ class MainPage extends PureComponent {
     //
     dispatch({
       type: 'car/fetchCarCountSum',
+    });
+    //
+    dispatch({
+      type: 'charts/reqCommon',
+      service: 'chartCarProvGroup',
+      payload: { groupType: 1 },
     });
   }
 
@@ -69,7 +76,7 @@ class MainPage extends PureComponent {
   };
 
   render() {
-    const { currentUser, currentUserLoading, licCountSum, carCountSum } = this.props;
+    const { currentUser, currentUserLoading, licCountSum, carCountSum, carProvGroup } = this.props;
 
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (
@@ -192,7 +199,7 @@ class MainPage extends PureComponent {
               })}
               bordered={false}
               extra={
-                <Link to="/">
+                <Link to="/dashboard">
                   {formatMessage({
                     id: 'biz.dashboard.project.all',
                     defaultMessage: 'No Translate',
@@ -200,7 +207,11 @@ class MainPage extends PureComponent {
                 </Link>
               }
             >
-              <CarBarWidget height={200} title="区域车辆对比" data={salesData} />
+              <Row>
+                <Col span={24}>
+                  <CarBarWidget height={400} padding={0} title="区域车辆对比" data={carProvGroup} />
+                </Col>
+              </Row>
               <Divider dashed />
               <MiniArea title="销售趋势" line color="#cceafe" height={145} data={salesData} />
             </Card>

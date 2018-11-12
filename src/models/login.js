@@ -65,14 +65,18 @@ export default {
         }
       }
       yield call(fakeAccountLogout);
-      yield put(
-        routerRedux.push({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: redirectUrl,
-          }),
-        })
-      );
+      if (window.location.href && window.location.href.indexOf('dashboard') > 0) {
+        window.location.href = '/';
+      } else {
+        yield put(
+          routerRedux.push({
+            pathname: '/user/login',
+            search: stringify({
+              redirect: redirectUrl,
+            }),
+          })
+        );
+      }
     },
   },
 

@@ -123,3 +123,10 @@ export async function editCarInsur(params) {
 export async function getCarInsur(params) {
   return request(`/api/carinsur/get?${stringify(params)}`);
 }
+
+// 车辆图表
+export async function chartCarProvGroup(params) {
+  return request(`/api/charts/car.group?${stringify(params)}`, {
+    method: 'POST',
+  });
+}
