@@ -7,6 +7,7 @@ import styles from '../index.less';
 class MiniArea extends React.PureComponent {
   render() {
     const {
+      title,
       height,
       data = [],
       forceFit = true,
@@ -46,6 +47,7 @@ class MiniArea extends React.PureComponent {
 
     return (
       <div className={styles.miniChart} style={{ height }}>
+        {title && <h4 style={{ marginBottom: 14 }}>{title}</h4>}
         <div className={styles.chartContent}>
           {height > 0 && (
             <Chart

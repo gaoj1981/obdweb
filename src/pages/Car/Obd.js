@@ -63,7 +63,9 @@ class Obd extends PureComponent {
       type: 'car/clearObdInfo',
       payload: {},
     });
-    stompClient.disconnect();
+    if (stompClient && stompClient.connected) {
+      stompClient.disconnect();
+    }
   }
 
   handleSearch = e => {

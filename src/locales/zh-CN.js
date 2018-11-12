@@ -356,6 +356,7 @@ export default {
   'biz.common.length.max': '最多 {length} 个字符！',
   'biz.common.length.range': '请输入 {lenMin} ~ {lenMax} 个字符！',
   'biz.car': '车辆',
+  'biz.car.list': '车辆一览',
   'biz.car.name': '车辆名称 ',
   'biz.car.eid': '车辆编号',
   'biz.car.platenum': '车牌号',
@@ -368,4 +369,8 @@ export default {
   'biz.car.count.record': '维修保养记录',
   'biz.obd.device.number': 'OBD设备编号',
   'biz.lic.count.sum': '授权用量',
+  'biz.equip.upload': '设备上传',
+  'biz.obd.monitor': 'OBD监控',
+  'biz.car.insur': '车辆保险',
+  'biz.chart.list': '图表一览',
 };

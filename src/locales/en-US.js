@@ -345,4 +345,10 @@ export default {
   // =========================================================================
   'biz.dashboard.hello.prefix': 'Hello,',
   'biz.dashboard.hello.suffix': 'Hope you will be happy every day!',
+
+  'biz.car.list': 'VehicleList',
+  'biz.equip.upload': 'DeviceUpload',
+  'biz.obd.monitor': 'OBDMonitor',
+  'biz.car.insur': 'Insurance',
+  'biz.chart.list': 'ChartList',
 };
