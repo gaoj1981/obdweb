@@ -43,11 +43,11 @@ class MiniArea extends React.PureComponent {
       }),
     ];
 
-    const chartHeight = height + 54;
+    const chartHeight = height + 44;
 
     return (
-      <div className={styles.miniChart} style={{ height }}>
-        {title && <h4 style={{ marginBottom: 14 }}>{title}</h4>}
+      <div className={styles.miniChart} style={{ height, marginBottom: 8 }}>
+        {title && <h4>{title}</h4>}
         <div className={styles.chartContent}>
           {height > 0 && (
             <Chart

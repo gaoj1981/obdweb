@@ -12,10 +12,11 @@ import MiniArea from '@/components/Charts/MiniArea';
 import styles from './MainPage.less';
 
 const salesData = [];
+const testPeople = [1192, 1097, 1175, 1136, 794, 1119, 590, 569, 600, 282, 1048, 0];
 for (let i = 0; i < 12; i += 1) {
   salesData.push({
     x: `${i + 1}月`,
-    y: i === 11 ? 0 : Math.floor(Math.random() * 1000) + 200,
+    y: testPeople[i],
   });
 }
 
@@ -209,11 +210,22 @@ class MainPage extends PureComponent {
             >
               <Row>
                 <Col span={24}>
-                  <CarBarWidget height={400} padding={0} title="区域车辆对比" data={carProvGroup} />
+                  <CarBarWidget
+                    height={400}
+                    padding={0}
+                    title="区域车辆对比（单位：辆）"
+                    data={carProvGroup}
+                  />
                 </Col>
               </Row>
               <Divider dashed />
-              <MiniArea title="销售趋势" line color="#cceafe" height={145} data={salesData} />
+              <MiniArea
+                title="车载设备检测趋势（单位：人）"
+                line
+                color="#cceafe"
+                height={145}
+                data={salesData}
+              />
             </Card>
           </Col>
         </Row>
