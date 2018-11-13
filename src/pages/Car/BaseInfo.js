@@ -210,9 +210,9 @@ class BaseInfo extends PureComponent {
       callback: () => {
         this.dispatchPageList(0);
         message.success('添加成功');
+        this.handleModalVisible();
       },
     });
-    this.handleModalVisible();
   };
 
   handleDrawerVisible = (flag, id) => {
@@ -244,9 +244,9 @@ class BaseInfo extends PureComponent {
         this.dispatchPageList();
         message.success('修改成功');
         this.clearCarInfo();
+        this.handleDrawerVisible();
       },
     });
-    this.handleDrawerVisible();
   };
 
   moreBtnExc = (key, record) => {

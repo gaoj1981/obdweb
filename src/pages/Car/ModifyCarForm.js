@@ -307,14 +307,44 @@ class ModifyCarForm extends PureComponent {
               </FormItem>
             </Col>
             <Col span={8}>
-              <FormItem label="百公里油耗">
-                {form.getFieldDecorator('baiOilUsed', {
-                  initialValue: formValue.baiOilUsed,
-                  rules: [],
-                })(<InputNumber style={{ width: '100%' }} min={1} max={500} />)}
+              <FormItem label="车型">
+                {form.getFieldDecorator('carModel', {
+                  initialValue: formValue.carModel,
+                  rules: [
+                    {
+                      max: 15,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                              { length: 15 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input />)}
               </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
+              <FormItem label="尺寸">
+                {form.getFieldDecorator('carSize', {
+                  initialValue: formValue.carSize,
+                  rules: [
+                    {
+                      max: 20,
+                      message:
+                        localVal === 'zh-CN'
+                          ? formatMessage(
+                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                              { length: 20 }
+                            )
+                          : null,
+                    },
+                  ],
+                })(<Input />)}
+              </FormItem>
+            </Col>
+            <Col span={6}>
               <FormItem label="发动机排量">
                 {form.getFieldDecorator('enginePower', {
                   initialValue: formValue.enginePower,
@@ -333,23 +363,12 @@ class ModifyCarForm extends PureComponent {
                 })(<Input />)}
               </FormItem>
             </Col>
-            <Col span={8}>
-              <FormItem label="尺寸">
-                {form.getFieldDecorator('carSize', {
-                  initialValue: formValue.carSize,
-                  rules: [
-                    {
-                      max: 20,
-                      message:
-                        localVal === 'zh-CN'
-                          ? formatMessage(
-                              { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
-                              { length: 20 }
-                            )
-                          : null,
-                    },
-                  ],
-                })(<Input />)}
+            <Col span={4}>
+              <FormItem label="百公里油耗">
+                {form.getFieldDecorator('baiOilUsed', {
+                  initialValue: formValue.baiOilUsed,
+                  rules: [],
+                })(<InputNumber style={{ width: '100%' }} min={1} max={500} />)}
               </FormItem>
             </Col>
             {currentUser && currentUser.userid === '2' ? (

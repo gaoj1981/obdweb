@@ -101,7 +101,6 @@ class Obd extends PureComponent {
       subscribeHook.unsubscribe();
     }
     subscribeHook = stompClient.subscribe(destination, response => {
-      console.log('message:', response.body);
       const posiObj = JSON.parse(response.body);
       this.setState({ center: { longitude: posiObj.lng, latitude: posiObj.lat }, zoom: 15 });
       const { dispatch } = this.props;
