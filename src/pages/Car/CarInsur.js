@@ -9,6 +9,7 @@ import EditBizForm from '@/common/EditBizForm';
 import QueryBizForm from '@/common/QueryBizForm';
 import { TableListBase } from '@/common/TableLists';
 import { searchForm, addForm, editForm, getColumns, queryForm } from './CarInsurForms';
+import { getAreaId } from '@/utils/BizUtil';
 
 import styles from './CarInsur.less';
 
@@ -111,8 +112,8 @@ class CarInsur extends PureComponent {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const { id } = fieldsValue;
-      this.dispatchPageList(0, { id });
+      const { id, eidLike, areaIds } = fieldsValue;
+      this.dispatchPageList(0, { id, eidLike, areaId: getAreaId(areaIds) });
     });
   };
 
@@ -123,7 +124,12 @@ class CarInsur extends PureComponent {
   };
 
   handlePageChange = pagination => {
-    this.dispatchPageList(pagination.current - 1);
+    let { current } = pagination;
+    current -= 1;
+    const { queryPage } = this.state;
+    if (current !== queryPage) {
+      this.dispatchPageList(current);
+    }
   };
 
   handleQueryVisible = flag => {
