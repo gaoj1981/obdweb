@@ -29,6 +29,7 @@ import {
   delCarInsur,
   editCarInsur,
   getCarInsur,
+  getCarInsurInfo,
 } from '@/services/cars';
 
 const servToReduce = {
@@ -60,6 +61,7 @@ const servToReduce = {
   delCarInsur: { method: delCarInsur, reduce: null },
   editCarInsur: { method: editCarInsur, reduce: null },
   getCarInsur: { method: getCarInsur, reduce: 'getCarInsur' },
+  getCarInsurInfo: { method: getCarInsurInfo, reduce: 'getCarInsurInfo' },
 };
 //
 export default {
@@ -80,6 +82,7 @@ export default {
     // 车辆保险
     pageCarInsur: {},
     carInsur: {},
+    carInsurInfo: {},
   },
 
   effects: {
@@ -147,6 +150,12 @@ export default {
     *clearCarMotInfo({ payload }, { put }) {
       yield put({
         type: 'getCarMotInfo',
+        payload,
+      });
+    },
+    *clearCarInsurInfo({ payload }, { put }) {
+      yield put({
+        type: 'getCarInsurInfo',
         payload,
       });
     },
@@ -224,6 +233,12 @@ export default {
       return {
         ...state,
         carInsur: action.payload,
+      };
+    },
+    getCarInsurInfo(state, action) {
+      return {
+        ...state,
+        carInsurInfo: action.payload,
       };
     },
   },

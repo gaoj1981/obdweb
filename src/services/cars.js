@@ -124,6 +124,10 @@ export async function getCarInsur(params) {
   return request(`/api/carinsur/get?${stringify(params)}`);
 }
 
+export async function getCarInsurInfo(params) {
+  return request(`/api/carinsur/get.info?${stringify(params)}`);
+}
+
 // 车辆图表
 export async function chartCarProvGroup(params) {
   return request(`/api/charts/car.group?${stringify(params)}`, {

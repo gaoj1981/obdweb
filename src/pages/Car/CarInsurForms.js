@@ -3,7 +3,7 @@ import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import moment from 'moment';
 import { Input, Row, Col, Divider, Form, Cascader, Tooltip, Radio, DatePicker } from 'antd';
 import BizConst from '@/common/BizConst';
-import { deleteConfirm, getAreaName } from '@/utils/BizUtil';
+import { deleteConfirm, getAreaName, getInsurByType } from '@/utils/BizUtil';
 import { AREA_DATA } from '@/common/AreaJson';
 import { normFile, getFormExtraMsg, getFilePrefix } from '@/utils/uploadUtils';
 import OssMultiUpload from '@/widgets/OssMultiUpload';
@@ -198,7 +198,7 @@ const editForm = (FormItem, form, formValue) => {
   const { getFieldDecorator } = form;
 
   const insurImgArr = [];
-  const formImgArr = formValue.motImgs ? formValue.motImgs.split(',') : [];
+  const formImgArr = formValue.insurImgs ? formValue.insurImgs.split(',') : [];
   let fileTmpObj;
   if (formImgArr) {
     formImgArr.forEach(item => {
@@ -244,6 +244,88 @@ const editForm = (FormItem, form, formValue) => {
         </FormItem>
       </Col>
       <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="保险类别">
+          {getFieldDecorator('insurType', {
+            initialValue: formValue.insurType,
+            rules: [
+              {
+                required: true,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
+              },
+            ],
+          })(
+            <RadioGroup>
+              <Radio value={1}>交强险</Radio>
+              <Radio value={2}>商业险</Radio>
+            </RadioGroup>
+          )}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="保单编号">
+          {getFieldDecorator('insurNum', {
+            initialValue: formValue.insurNum,
+            rules: [
+              {
+                required: true,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
+              },
+              {
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="投保公司">
+          {getFieldDecorator('insurLtd', {
+            initialValue: formValue.insurLtd,
+            rules: [
+              {
+                required: true,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
+              },
+              {
+                max: 50,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 50 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
         <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="生效日期">
           {getFieldDecorator('effectDate', {
             initialValue: formValue.effectDate ? moment(formValue.effectDate, 'YYYY-MM-DD') : null,
@@ -283,6 +365,63 @@ const editForm = (FormItem, form, formValue) => {
         </FormItem>
       </Col>
       <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="客服电话">
+          {getFieldDecorator('servTel', {
+            initialValue: formValue.servTel,
+            rules: [
+              {
+                max: 15,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 15 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="业务员姓名">
+          {getFieldDecorator('salesName', {
+            initialValue: formValue.salesName,
+            rules: [
+              {
+                max: 15,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 15 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="业务员电话">
+          {getFieldDecorator('salesTel', {
+            initialValue: formValue.salesTel,
+            rules: [
+              {
+                max: 15,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 15 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
         <FormItem label="保险资料" extra={getFormExtraMsg(maxUpdNum)}>
           {getFieldDecorator('insurImgArr', {
             initialValue: insurImgArr,
@@ -292,12 +431,15 @@ const editForm = (FormItem, form, formValue) => {
           })(<OssMultiUpload maxUpdNum={maxUpdNum} filedName="insurImgArr" curForm={form} />)}
         </FormItem>
       </Col>
-      <FormItem style={{ display: 'none' }}>
-        {getFieldDecorator('id', {
-          initialValue: formValue.id,
-          rules: [],
-        })(<Input type="hidden" />)}
-      </FormItem>
+      <Col span={24}>
+        &nbsp;
+        <FormItem style={{ display: 'none' }}>
+          {getFieldDecorator('id', {
+            initialValue: formValue.id,
+            rules: [],
+          })(<Input type="hidden" />)}
+        </FormItem>
+      </Col>
     </Row>
   );
 };
@@ -332,6 +474,11 @@ const getColumns = columnMethods => {
     {
       title: '失效效期',
       dataIndex: 'expDate',
+    },
+    {
+      title: '保单类别',
+      dataIndex: 'insurType',
+      render: val => getInsurByType(val),
     },
     {
       title: <FormattedMessage id="form.action" defaultMessage="No translate" />,

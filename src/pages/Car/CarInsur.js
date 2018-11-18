@@ -19,7 +19,7 @@ const FormItem = Form.Item;
 // 底层组件
 @connect(({ car, loading }) => ({
   pageCarInsur: car.pageCarInsur,
-  carInsur: car.carInsur,
+  carInsurInfo: car.carInsurInfo,
   loading: loading.models.car,
 }))
 @Form.create()
@@ -29,7 +29,7 @@ class CarInsur extends PureComponent {
     queryPage: 0,
     addVisible: false,
     editVisible: false,
-    editWidth: 666,
+    editWidth: 400,
     queryVisible: false,
     queryHeight: 99,
   };
@@ -76,12 +76,17 @@ class CarInsur extends PureComponent {
   };
 
   handleEditVisible = (flag, id) => {
+    const { dispatch } = this.props;
     if (flag) {
-      const { dispatch } = this.props;
       dispatch({
         type: 'car/reqCommon',
-        service: 'getCarInsur',
+        service: 'getCarInsurInfo',
         payload: { id },
+      });
+    } else {
+      dispatch({
+        type: 'car/clearCarInsurInfo',
+        payload: {},
       });
     }
     this.setState({
@@ -92,7 +97,14 @@ class CarInsur extends PureComponent {
   handleEdit = fields => {
     const formParam = { ...fields };
     //
-    console.log('edit', formParam);
+    const impNameArr = [];
+    const { insurImgArr } = formParam;
+    if (insurImgArr) {
+      insurImgArr.forEach(item => {
+        impNameArr.push(item.newName || item.name);
+      });
+    }
+    formParam.insurImgs = impNameArr.join(',');
     //
     const { dispatch } = this.props;
     dispatch({
@@ -203,7 +215,7 @@ class CarInsur extends PureComponent {
 
   render() {
     const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
-    const { pageCarInsur, carInsur, loading } = this.props;
+    const { pageCarInsur, carInsurInfo, loading } = this.props;
 
     const columnMethods = {
       handleEditVisible: this.handleEditVisible,
@@ -248,7 +260,7 @@ class CarInsur extends PureComponent {
           editVisible={editVisible}
           editWidth={editWidth}
           loading={loading}
-          formValue={carInsur}
+          formValue={carInsurInfo}
         />
         <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
       </div>

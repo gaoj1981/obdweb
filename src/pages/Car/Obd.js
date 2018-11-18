@@ -169,12 +169,17 @@ class Obd extends PureComponent {
                 })(<Input placeholder="请输入准确的车辆编号" />)}
               </FormItem>
             </Col>
-            <Col span={14}>
+            <Col span={7}>
               <FormItem wrapperCol={{ span: 23, offset: 1 }}>
                 <Button type="primary" htmlType="submit" loading={loading}>
                   <FormattedMessage id="form.search" defaultMessage="No translate" />
                 </Button>
               </FormItem>
+            </Col>
+            <Col span={7} style={{ textAlign: 'right' }}>
+              <Button type="danger" icon="warning">
+                手动同步
+              </Button>
             </Col>
           </Row>
         </Form>
@@ -183,11 +188,20 @@ class Obd extends PureComponent {
             style={{ marginBottom: 18 }}
             message={
               <div>
-                <h3>当前车辆信息：</h3>
-                <Icon type="car" theme="twoTone" />
+                <h3>
+                  <Icon type="car" theme="twoTone" />
+                  &nbsp;当前车辆信息：
+                  <span style={{ fontSize: 14 }}>
+                    {obdInfo.carName}（{obdInfo.eid}）
+                  </span>
+                </h3>
+                总油耗量：
+                <Icon type="bg-colors" style={{ color: '#f50' }} />
                 &nbsp;
-                {obdInfo.carName}（{obdInfo.eid}）
+                {obdInfo.totalGasUsed}
+                &nbsp;ml
                 <Divider type="vertical" style={{ margin: '0 14px' }} />
+                所属区县：
                 <Icon type="pushpin" theme="twoTone" twoToneColor="#52c41a" />
                 &nbsp;
                 {getAreaName(areaArr[0])}
@@ -196,7 +210,6 @@ class Obd extends PureComponent {
               </div>
             }
             type="info"
-            showIcon
           />
         ) : null}
         {obdInfo && obdInfo.faulContext ? (

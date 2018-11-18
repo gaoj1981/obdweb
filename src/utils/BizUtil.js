@@ -123,6 +123,17 @@ function getEquipByType(type) {
   }
 }
 
+function getInsurByType(type) {
+  switch (type) {
+    case 1:
+      return <Badge status="processing" text="交强险" />;
+    case 2:
+      return <Badge status="warning" text="商业险" />;
+    default:
+      return null;
+  }
+}
+
 function renderForNull(val, rtnVal) {
   if (!val) return rtnVal;
   return val;
@@ -148,6 +159,7 @@ export {
   convUname,
   getStatus4FuelType,
   getEquipByType,
+  getInsurByType,
   renderForNull,
   disabledDateCurAfter,
   disabledDateCurBefore,
