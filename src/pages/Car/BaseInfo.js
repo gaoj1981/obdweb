@@ -258,6 +258,7 @@ class BaseInfo extends PureComponent {
         router.push(`/car/mot/${record.eid}`);
         break;
       case 'insur':
+        router.push(`/car/insur/${record.eid}`);
         break;
       default:
         break;

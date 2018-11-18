@@ -32,10 +32,17 @@ class CarInsur extends PureComponent {
     editWidth: 400,
     queryVisible: false,
     queryHeight: 99,
+    eidParam: null,
   };
 
   componentDidMount() {
-    this.dispatchPageList(0, {});
+    const {
+      match: {
+        params: { eidParam },
+      },
+    } = this.props;
+    this.dispatchPageList(0, { eidLike: eidParam });
+    this.setState({ eidParam });
   }
 
   handleAddVisible = flag => {
@@ -202,11 +209,17 @@ class CarInsur extends PureComponent {
   }
 
   renderSimpleForm() {
-    const { form } = this.props;
+    const {
+      form,
+      match: {
+        params: { eidParam },
+      },
+    } = this.props;
+    const extraVals = { eidParam };
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          {searchForm(FormItem, form)}
+          {searchForm(FormItem, form, extraVals)}
           <Col md={6} sm={14}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
@@ -234,7 +247,7 @@ class CarInsur extends PureComponent {
   }
 
   render() {
-    const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
+    const { addVisible, editVisible, editWidth, queryVisible, queryHeight, eidParam } = this.state;
     const { pageCarInsur, carInsurInfo, loading } = this.props;
 
     const columnMethods = {
@@ -274,13 +287,14 @@ class CarInsur extends PureComponent {
             <TableListBase {...propsTableList} onChange={this.handlePageChange} />
           </div>
         </Card>
-        <AddBizForm {...addMethods} addVisible={addVisible} />
+        <AddBizForm {...addMethods} addVisible={addVisible} extraVals={{ eidParam }} />
         <EditBizForm
           {...editMethods}
           editVisible={editVisible}
           editWidth={editWidth}
           loading={loading}
           formValue={carInsurInfo}
+          extraVals={{ eidParam }}
         />
         <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
       </div>

@@ -84,6 +84,13 @@ export default [
             icon: 'insurance',
           },
           {
+            path: '/car/insur/:eidParam',
+            name: 'insur',
+            component: './Car/CarInsur',
+            icon: 'insurance',
+            hideInMenu: true,
+          },
+          {
             path: '/car/mot',
             name: 'mot',
             component: './Car/CarMot',
