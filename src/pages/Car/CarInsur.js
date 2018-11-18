@@ -152,11 +152,31 @@ class CarInsur extends PureComponent {
 
   handleQuery = fields => {
     const formParam = { ...fields };
-    console.log('request', formParam);
     //
-    const { id } = formParam;
+    if (formParam.areaIds) {
+      const areaId = getAreaId(formParam.areaIds);
+      formParam.areaId = areaId;
+    }
+    if (formParam.timeSel && formParam.times && formParam.times.length === 2) {
+      formParam.timeStart = formParam.times[0].format('YYYY-MM-DD');
+      formParam.timeEnd = formParam.times[1].format('YYYY-MM-DD');
+    } else {
+      formParam.timeSel = null;
+      formParam.timeStart = null;
+      formParam.timeEnd = null;
+    }
     //
-    this.dispatchPageList(0, { id });
+    const { areaId, eidLike, insurNumLike, expDayFlag, timeSel, timeStart, timeEnd } = formParam;
+    //
+    this.dispatchPageList(0, {
+      areaId,
+      eidLike,
+      insurNumLike,
+      expDayFlag,
+      timeSel,
+      timeStart,
+      timeEnd,
+    });
   };
 
   moreBtnExc = (key, record) => {

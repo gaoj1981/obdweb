@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import moment from 'moment';
-import { Input, Row, Col, Divider, Form, Cascader, Tooltip, Radio, DatePicker } from 'antd';
+import { Input, Row, Col, Divider, Form, Cascader, Tooltip, Radio, DatePicker, Select } from 'antd';
 import BizConst from '@/common/BizConst';
 import { deleteConfirm, getAreaName, getInsurByType } from '@/utils/BizUtil';
 import { AREA_DATA } from '@/common/AreaJson';
@@ -11,6 +11,8 @@ import CarInputWidget from './CarInputWidget';
 
 const localVal = getLocale();
 const RadioGroup = Radio.Group;
+const SelectOption = Select.Option;
+const { RangePicker } = DatePicker;
 // 图片最大上传数
 const maxUpdNum = 3;
 
@@ -505,13 +507,72 @@ const getColumns = columnMethods => {
 
 const queryForm = (FormItem, form) => {
   const { getFieldDecorator } = form;
+  const expDayChange = e => {
+    form.resetFields();
+    form.setFieldsValue({ expDayFlag: e.target.value });
+  };
   return (
     // 注意Col总步长占总屏宽21:24
     <Row gutter={16}>
-      <Col span={24}>
-        <FormItem label="ID" labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
-          {getFieldDecorator('id', {})(<Input />)}
+      <Col md={8} sm={24}>
+        <Row>
+          <Col span={8}>
+            <Form.Item>
+              {getFieldDecorator('timeSel')(
+                <Select
+                  allowClear
+                  placeholder="时间类型"
+                  style={{ width: '100%', borderRadius: 0 }}
+                >
+                  <SelectOption key="3">生效日期</SelectOption>
+                  <SelectOption key="4">失效日期</SelectOption>
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={16}>
+            <FormItem>
+              {getFieldDecorator('times', { rules: [{ type: 'array' }] })(
+                <RangePicker style={{ width: '100%', borderRadius: 0 }} />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+      </Col>
+      <Col md={8} sm={24}>
+        <FormItem label="车辆编号" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+          {getFieldDecorator('eidLike')(<Input placeholder="请输入车辆编号" />)}
         </FormItem>
+      </Col>
+      <Col md={8} sm={24}>
+        <Form.Item label="所在区域" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+          {getFieldDecorator('areaIds')(
+            <Cascader
+              placeholder="请选择"
+              style={{ width: '100%' }}
+              options={AREA_DATA.areaIds}
+              allowClear
+            />
+          )}
+        </Form.Item>
+      </Col>
+      <Col md={8} sm={24}>
+        <FormItem label="保单编号" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+          {getFieldDecorator('insurNumLike')(<Input placeholder="请输入保单编号" />)}
+        </FormItem>
+      </Col>
+      <Col md={16} sm={24}>
+        <Form.Item label="保险到期车辆" labelCol={{ span: 3 }} wrapperCol={{ span: 21 }}>
+          {getFieldDecorator('expDayFlag', { initialValue: 0 })(
+            <RadioGroup onChange={expDayChange}>
+              <Radio value={0}>忽略到期</Radio>
+              <Radio value={1}>30天内到期</Radio>
+              <Radio value={2}>60天内到期</Radio>
+              <Radio value={3}>90天内到期</Radio>
+              <Radio value={4}>已过期</Radio>
+            </RadioGroup>
+          )}
+        </Form.Item>
       </Col>
     </Row>
   );
