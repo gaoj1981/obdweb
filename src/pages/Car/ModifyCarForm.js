@@ -371,7 +371,7 @@ class ModifyCarForm extends PureComponent {
                 })(<InputNumber style={{ width: '100%' }} min={1} max={500} />)}
               </FormItem>
             </Col>
-            {currentUser && currentUser.userid === '2' ? (
+            {currentUser && currentUser.role !== 'user' ? (
               <Fragment>
                 <Col span={24}>
                   <FormItem>

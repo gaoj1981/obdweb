@@ -103,7 +103,7 @@ class MainPage extends PureComponent {
           <p>{formatMessage({ id: 'biz.car.count.total', defaultMessage: 'No Translate' })}</p>
           <p>{carCountSum || 0}</p>
         </div>
-        {currentUser && currentUser.userid === '2' ? (
+        {currentUser && currentUser.role !== 'user' ? (
           <Fragment>
             <div className={styles.statItem}>
               <p>{formatMessage({ id: 'biz.lic.count.sum', defaultMessage: 'No Translate' })}</p>

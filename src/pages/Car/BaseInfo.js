@@ -121,7 +121,7 @@ class BaseInfo extends PureComponent {
           <Dropdown
             overlay={
               /* eslint-disable */
-              this.props.currentUser && this.props.currentUser.userid === '2' ? (
+              this.props.currentUser && this.props.currentUser.role !== 'user' ? (
                 <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
                   <Menu.Item key="record">维修保养</Menu.Item>
                   <Menu.Item key="insur">车辆保险</Menu.Item>

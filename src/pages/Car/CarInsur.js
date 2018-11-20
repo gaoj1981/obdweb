@@ -29,7 +29,7 @@ class CarInsur extends PureComponent {
     queryPage: 0,
     addVisible: false,
     editVisible: false,
-    editWidth: 400,
+    editWidth: 404,
     queryVisible: false,
     queryHeight: 99,
     eidParam: null,

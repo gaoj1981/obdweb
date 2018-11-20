@@ -50,19 +50,19 @@ export default class GlobalHeaderRight extends PureComponent {
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        {currentUser && currentUser.userid === '2' ? (
+        {currentUser && currentUser.role !== 'user' ? (
           <Menu.Item key="userCenter">
             <Icon type="user" />
             <FormattedMessage id="menu.account.center" defaultMessage="account center" />
           </Menu.Item>
         ) : null}
-        {currentUser && currentUser.userid === '2' ? (
+        {currentUser && currentUser.role !== 'user' ? (
           <Menu.Item key="userinfo">
             <Icon type="setting" />
             <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
           </Menu.Item>
         ) : null}
-        {currentUser && currentUser.userid === '2' ? <Menu.Divider /> : null}
+        {currentUser && currentUser.role !== 'user' ? <Menu.Divider /> : null}
         <Menu.Item key="logout">
           <Icon type="logout" />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
@@ -76,7 +76,7 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
-        {currentUser && currentUser.userid === '2' ? (
+        {currentUser && currentUser.role !== 'user' ? (
           <Tooltip title={formatMessage({ id: 'component.globalHeader.api.doc' })}>
             <a
               target="_blank"
@@ -140,7 +140,7 @@ export default class GlobalHeaderRight extends PureComponent {
         ) : (
           <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
         )}
-        {currentUser && currentUser.userid === '2' ? (
+        {currentUser && currentUser.role !== 'user' ? (
           <SelectLang className={styles.action} />
         ) : null}
       </div>
