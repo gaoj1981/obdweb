@@ -10,6 +10,7 @@ class BaseInfo extends PureComponent {
     return (
       <div className={styles.testCss}>
         <FormattedMessage id="menu.equip.license" />
+        （二期开发中...）
       </div>
     );
   }

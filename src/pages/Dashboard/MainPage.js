@@ -12,7 +12,7 @@ import MiniArea from '@/components/Charts/MiniArea';
 import styles from './MainPage.less';
 
 const salesData = [];
-const testPeople = [1192, 1097, 1175, 1136, 794, 1119, 590, 569, 600, 282, 1048, 0];
+const testPeople = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 for (let i = 0; i < 12; i += 1) {
   salesData.push({
     x: `${i + 1}月`,
@@ -114,7 +114,7 @@ class MainPage extends PureComponent {
             </div>
             <div className={styles.statItem}>
               <p>{formatMessage({ id: 'biz.car.count.record', defaultMessage: 'No Translate' })}</p>
-              <p>2,223</p>
+              <p>0</p>
             </div>
           </Fragment>
         ) : null}
