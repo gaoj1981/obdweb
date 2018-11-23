@@ -6,6 +6,7 @@ import { Map, Marker } from 'react-amap';
 import { getAreaArr, getAreaName } from '@/utils/BizUtil';
 import ObdGaugeWidget from './ObdGaugeWidget';
 import ObdSpeedWidget from './ObdSpeedWidget';
+import ChartsElectric from './ChartsElectric';
 import WaterWave from '@/components/Charts/WaterWave';
 import WsStomp from '@/common/WsStomp';
 
@@ -40,7 +41,8 @@ class Obd extends PureComponent {
 
   componentDidMount() {
     // 建立连接对象（还未发起连接）
-    const socket = new WebSocket(`ws://${window.location.host}/stomp`);
+    // const socket = new WebSocket(`ws://${window.location.host}/stomp`);
+    const socket = new WebSocket(`ws://localhost:8020/stomp`);
     // 获取 STOMP 子协议的客户端对象
     stompClient = Stomp.over(socket);
     // 向服务器发起websocket连接并发送CONNECT帧
@@ -221,16 +223,23 @@ class Obd extends PureComponent {
           />
         ) : null}
         <Row gutter={16} style={{ backgroundColor: '#FFF', padding: 8 }}>
-          <Col span={6} style={{ textAlign: 'center' }}>
-            <WaterWave height={161} title="剩余油量" percent={obdInfo.remainingGasValue || 0} />
+          <Col span={4} style={{ textAlign: 'center', paddingTop: 8 }}>
+            <WaterWave height={150} title="剩余油量" percent={obdInfo.remainingGasValue || 0} />
           </Col>
-          <Col span={6}>
+          <Col span={5}>
+            <ChartsElectric
+              title="电瓶电压（V）"
+              height={166}
+              realVal={obdInfo.batteryvoltage || 0}
+            />
+          </Col>
+          <Col span={5}>
             <ObdSpeedWidget
               val={Math.floor(obdInfo.vehicleSpeed)}
               realVal={obdInfo.vehicleSpeed || 0}
             />
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <ObdGaugeWidget
               title="汽车仪表总里程（KM）"
               height={166}
@@ -238,7 +247,7 @@ class Obd extends PureComponent {
               realVal={obdInfo.dashboardTotalMileage || 0}
             />
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <Slider
               className={styles.sliderMargin}
               style={{ marginTop: 10 }}

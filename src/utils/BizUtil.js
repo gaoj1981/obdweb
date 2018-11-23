@@ -97,6 +97,14 @@ function convUname(uname, sex) {
   );
 }
 
+function elliStr(str, num) {
+  return (
+    <Ellipsis tooltip={str} length={num}>
+      {str}
+    </Ellipsis>
+  );
+}
+
 function getStatus4FuelType(fuelType) {
   switch (fuelType) {
     case '汽油':
@@ -134,6 +142,30 @@ function getInsurByType(type) {
   }
 }
 
+function getExcByRes(type) {
+  switch (type) {
+    case 1:
+      return <Badge status="success" text="设备" />;
+    case 2:
+      return <Badge status="warning" text="车辆" />;
+    default:
+      return null;
+  }
+}
+
+function getExcByType(type) {
+  switch (type) {
+    case 1:
+      return <Badge status="processing" text="维修" />;
+    case 2:
+      return <Badge status="warning" text="保养" />;
+    case 3:
+      return <Badge status="error" text="更换" />;
+    default:
+      return null;
+  }
+}
+
 function renderForNull(val, rtnVal) {
   if (!val) return rtnVal;
   return val;
@@ -157,10 +189,13 @@ export {
   getAreaName,
   getAreaNameTest,
   convUname,
+  elliStr,
   getStatus4FuelType,
   getEquipByType,
   getInsurByType,
   renderForNull,
   disabledDateCurAfter,
   disabledDateCurBefore,
+  getExcByRes,
+  getExcByType,
 };

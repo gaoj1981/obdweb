@@ -128,6 +128,38 @@ export async function getCarInsurInfo(params) {
   return request(`/api/carinsur/get.info?${stringify(params)}`);
 }
 
+// 维修记录增删改查
+export async function pageWareRecord(params) {
+  return request('/api/warerecord/get.page', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function addWareRecord(params) {
+  return request('/api/warerecord/add', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function delWareRecord(params) {
+  return request(`/api/warerecord/del?${stringify(params)}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function editWareRecord(params) {
+  return request('/api/warerecord/edit', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function getWareRecord(params) {
+  return request(`/api/warerecord/get?${stringify(params)}`);
+}
+
 // 车辆图表
 export async function chartCarProvGroup(params) {
   return request(`/api/charts/car.group?${stringify(params)}`, {

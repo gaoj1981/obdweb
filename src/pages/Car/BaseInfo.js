@@ -50,7 +50,7 @@ class BaseInfo extends PureComponent {
       title: <FormattedMessage id="biz.car.eid" defaultMessage="No translate" />,
       dataIndex: 'eid',
       render: val => (
-        <Ellipsis length={15} tooltip>
+        <Ellipsis length={18} tooltip>
           {val}
         </Ellipsis>
       ),
@@ -123,7 +123,6 @@ class BaseInfo extends PureComponent {
               /* eslint-disable */
               this.props.currentUser && this.props.currentUser.role !== 'user' ? (
                 <Menu onClick={({ key }) => this.moreBtnExc(key, record)}>
-                  <Menu.Item key="record">维修保养</Menu.Item>
                   <Menu.Item key="insur">车辆保险</Menu.Item>
                   <Menu.Item key="mot">车辆年检</Menu.Item>
                   <Menu.Item key="equip">设备详情</Menu.Item>

@@ -173,7 +173,7 @@ export default [
           {
             path: '/sales/record',
             name: 'record',
-            component: './Sales/Record',
+            component: './Sales/WareRecord',
             icon: 'tool',
           },
         ],
