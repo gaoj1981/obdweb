@@ -96,6 +96,33 @@ data3[24] = { type: 24, value: 10 };
 //   data3.push(item);
 // }
 
+const data0 = [];
+data0[0] = { type: 0, value: 0 };
+data0[1] = { type: 1, value: 0 };
+data0[2] = { type: 2, value: 0 };
+data0[3] = { type: 3, value: 0 };
+data0[4] = { type: 4, value: 0 };
+data0[5] = { type: 5, value: 0 };
+data0[6] = { type: 6, value: 0 };
+data0[7] = { type: 7, value: 0 };
+data0[8] = { type: 8, value: 0 };
+data0[9] = { type: 9, value: 0 };
+data0[10] = { type: 10, value: 0 };
+data0[11] = { type: 11, value: 0 };
+data0[12] = { type: 12, value: 0 };
+data0[13] = { type: 13, value: 0 };
+data0[14] = { type: 14, value: 0 };
+data0[15] = { type: 15, value: 0 };
+data0[16] = { type: 16, value: 0 };
+data0[17] = { type: 17, value: 0 };
+data0[18] = { type: 18, value: 0 };
+data0[19] = { type: 19, value: 0 };
+data0[20] = { type: 20, value: 0 };
+data0[21] = { type: 21, value: 0 };
+data0[22] = { type: 22, value: 0 };
+data0[23] = { type: 23, value: 0 };
+data0[24] = { type: 24, value: 0 };
+
 const cols = {
   type: {
     range: [0, 1],
@@ -115,14 +142,13 @@ const colsView2 = {
 class ChartsElectric extends React.Component {
   render() {
     const { title, height, realVal } = this.props;
-
     let intVal = Math.round(realVal);
     if (!intVal) intVal = 0;
-    const data2 = data3;
-    data2[intVal] = 14;
+    // const data2 = data0;
+    // data0[intVal] = { type: intVal, value: 14 };
 
     return (
-      <Chart height={height} data={[1]} scale={cols} padding={[-25, -30, 16, -30]} forceFit>
+      <Chart height={height} data={intVal} scale={cols} padding={[-25, -30, 16, -30]} forceFit>
         <View data={data1}>
           <Coord
             type="polar"
@@ -164,7 +190,7 @@ class ChartsElectric extends React.Component {
           />
           <Axis name="value" visible={false} />
         </View>
-        <View data={data2}>
+        <View data={data0}>
           <Coord
             type="polar"
             startAngle={(-9 / 8) * Math.PI}
@@ -172,13 +198,7 @@ class ChartsElectric extends React.Component {
             radius={0.8}
             innerRadius={0.75}
           />
-          <Geom
-            type="interval"
-            position="type*value"
-            color={['value', '#108ee9']}
-            opacity={1}
-            size={6}
-          />
+          <Geom type="point" position="0.5*140" color={['value', '#108ee9']} opacity={1} size={6} />
           <Guide>
             <Html
               position={['50%', '95%']}
