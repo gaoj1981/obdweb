@@ -54,8 +54,6 @@ class CarInsur extends PureComponent {
   handleAdd = fields => {
     const formParam = { ...fields };
     //
-    console.log('add', formParam);
-    //
     const { dispatch } = this.props;
     dispatch({
       type: 'car/reqCommon',

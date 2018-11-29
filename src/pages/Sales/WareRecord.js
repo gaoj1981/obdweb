@@ -18,7 +18,7 @@ const FormItem = Form.Item;
 // 底层组件
 @connect(({ sales, loading }) => ({
   pageWareRecord: sales.pageWareRecord,
-  wareRecord: sales.wareRecord,
+  wareRecordInfo: sales.wareRecordInfo,
   loading: loading.models.sales,
 }))
 @Form.create()
@@ -28,7 +28,7 @@ class WareRecord extends PureComponent {
     queryPage: 0,
     addVisible: false,
     editVisible: false,
-    editWidth: 666,
+    editWidth: 366,
     queryVisible: false,
     queryHeight: 99,
   };
@@ -66,7 +66,7 @@ class WareRecord extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'sales/reqCommon',
-      service: 'delWareRecord',
+      service: 'deleteWareRecord',
       payload: { id },
       callback: () => {
         this.dispatchPageList();
@@ -76,12 +76,17 @@ class WareRecord extends PureComponent {
   };
 
   handleEditVisible = (flag, id) => {
+    const { dispatch } = this.props;
     if (flag) {
-      const { dispatch } = this.props;
       dispatch({
         type: 'sales/reqCommon',
-        service: 'getWareRecord',
+        service: 'getWareRecordInfo',
         payload: { id },
+      });
+    } else {
+      dispatch({
+        type: 'sales/clearWareRecordInfo',
+        payload: {},
       });
     }
     this.setState({
@@ -92,7 +97,8 @@ class WareRecord extends PureComponent {
   handleEdit = fields => {
     const formParam = { ...fields };
     //
-    console.log('edit', formParam);
+    const { excDateMoment } = formParam;
+    formParam.excDate = excDateMoment.format('YYYY-MM-DD HH:mm:ss');
     //
     const { dispatch } = this.props;
     dispatch({
@@ -199,7 +205,7 @@ class WareRecord extends PureComponent {
 
   render() {
     const { addVisible, editVisible, editWidth, queryVisible, queryHeight } = this.state;
-    const { pageWareRecord, wareRecord, loading } = this.props;
+    const { pageWareRecord, wareRecordInfo, loading } = this.props;
 
     const columnMethods = {
       handleEditVisible: this.handleEditVisible,
@@ -244,7 +250,7 @@ class WareRecord extends PureComponent {
           editVisible={editVisible}
           editWidth={editWidth}
           loading={loading}
-          formValue={wareRecord}
+          formValue={wareRecordInfo}
         />
         <QueryBizForm {...queryMethods} queryVisible={queryVisible} queryHeight={queryHeight} />
       </div>

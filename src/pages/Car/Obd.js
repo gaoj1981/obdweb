@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import { formatMessage, FormattedMessage, getLocale } from 'umi/locale';
 import { connect } from 'dva';
-import { Row, Col, Input, Button, Form, Divider, Slider, Alert, Icon } from 'antd';
+import { Row, Col, Input, Button, Form, Divider, Slider, Alert, Icon, Badge } from 'antd';
 import { Map, Marker } from 'react-amap';
 import { getAreaArr, getAreaName } from '@/utils/BizUtil';
 import ObdGaugeWidget from './ObdGaugeWidget';
 import ObdSpeedWidget from './ObdSpeedWidget';
 import ChartsElectric from './ChartsElectric';
-import WaterWave from '@/components/Charts/WaterWave';
 import WsStomp from '@/common/WsStomp';
 
 import styles from './Obd.less';
@@ -223,23 +222,16 @@ class Obd extends PureComponent {
           />
         ) : null}
         <Row gutter={16} style={{ backgroundColor: '#FFF', padding: 8 }}>
-          <Col span={4} style={{ textAlign: 'center', paddingTop: 8 }}>
-            <WaterWave height={150} title="剩余油量" percent={obdInfo.remainingGasValue || 0} />
+          <Col span={6} style={{ textAlign: 'center', paddingTop: 8 }}>
+            <ChartsElectric height={160} title="电瓶电压" percent={obdInfo.batteryvoltage || 0} />
           </Col>
-          <Col span={5}>
-            <ChartsElectric
-              title="电瓶电压（V）"
-              height={166}
-              realVal={obdInfo.batteryvoltage || 0}
-            />
-          </Col>
-          <Col span={5}>
+          <Col span={6}>
             <ObdSpeedWidget
               val={Math.floor(obdInfo.vehicleSpeed)}
               realVal={obdInfo.vehicleSpeed || 0}
             />
           </Col>
-          <Col span={5}>
+          <Col span={6}>
             <ObdGaugeWidget
               title="汽车仪表总里程（KM）"
               height={166}
@@ -247,26 +239,32 @@ class Obd extends PureComponent {
               realVal={obdInfo.dashboardTotalMileage || 0}
             />
           </Col>
-          <Col span={5}>
+          <Col span={6}>
             <Slider
               className={styles.sliderMargin}
-              style={{ marginTop: 10 }}
+              style={{ marginTop: 28 }}
               marks={marks}
               value={obdInfo.environmentTemperature || 0}
               tipFormatter={val => `车辆环境温度${val}°C`}
-            />
+            >
+              <Badge count={obdInfo.environmentTemperature || 0} offset={[-35, -10]} />
+            </Slider>
             <Slider
               className={styles.sliderMargin}
               marks={marks}
               value={obdInfo.airDoorTemperature || 0}
               tipFormatter={val => `进气口温度${val}°C`}
-            />
+            >
+              <Badge count={obdInfo.airDoorTemperature || 0} offset={[-35, -10]} />
+            </Slider>
             <Slider
               className={styles.sliderMargin}
               marks={marks}
               value={obdInfo.coolWaterTemperature || 0}
               tipFormatter={val => `冷却液温度${val}°C`}
-            />
+            >
+              <Badge count={obdInfo.coolWaterTemperature || 0} offset={[-35, -10]} />
+            </Slider>
           </Col>
           <Col span={24}>
             <Divider />

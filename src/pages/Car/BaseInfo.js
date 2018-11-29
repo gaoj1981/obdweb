@@ -50,7 +50,7 @@ class BaseInfo extends PureComponent {
       title: <FormattedMessage id="biz.car.eid" defaultMessage="No translate" />,
       dataIndex: 'eid',
       render: val => (
-        <Ellipsis length={18} tooltip>
+        <Ellipsis length={20} tooltip>
           {val}
         </Ellipsis>
       ),
@@ -170,7 +170,13 @@ class BaseInfo extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       const { areaIds } = fieldsValue;
-      this.dispatchPageList(0, { eidLike: fieldsValue.eidLike, areaId: getAreaId(areaIds) });
+      let { plateNumLike } = fieldsValue;
+      if (!plateNumLike) plateNumLike = null;
+      this.dispatchPageList(0, {
+        eidLike: fieldsValue.eidLike,
+        areaId: getAreaId(areaIds),
+        plateNumLike: plateNumLike,
+      });
     });
   };
 
@@ -297,20 +303,25 @@ class BaseInfo extends PureComponent {
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="车辆编号">
-              {getFieldDecorator('eidLike')(<Input placeholder="请输入" />)}
+        <Row gutter={{ md: 4, lg: 8, xl: 48 }}>
+          <Col md={7} sm={24}>
+            <FormItem>
+              {getFieldDecorator('eidLike')(<Input placeholder="请输入车辆编号" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <Form.Item label="所在区域">
+          <Col md={7} sm={24}>
+            <Form.Item>
               {getFieldDecorator('areaIds')(
-                <Cascader placeholder="请选择" options={AREA_DATA.areaIds} allowClear />
+                <Cascader placeholder="请选择所在区域" options={AREA_DATA.areaIds} allowClear />
               )}
             </Form.Item>
           </Col>
-          <Col md={6} sm={20}>
+          <Col md={4} sm={24}>
+            <FormItem>
+              {getFieldDecorator('plateNumLike')(<Input placeholder="请输入车牌号" />)}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={20}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 <FormattedMessage id="form.search" defaultMessage="No translate" />

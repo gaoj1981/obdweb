@@ -170,21 +170,25 @@ const addForm = (FormItem, form) => {
   );
 };
 
-const editForm = (FormItem, form, formValue, extraVals) => {
+const editForm = (FormItem, form, formValue) => {
   if (!formValue) return null;
   const { getFieldDecorator } = form;
-  console.log(extraVals);
   return (
     <Row gutter={16}>
       <Col span={24}>
-        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="ID">
-          {getFieldDecorator('id', {
-            initialValue: formValue.id,
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="车辆编号">
+          {getFieldDecorator('eid', {
+            initialValue: formValue.eid,
             rules: [
               {
                 required: true,
                 message:
-                  localVal === 'zh-CN' ? formatMessage({ id: 'biz.common.require.input' }) : null,
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
               },
               {
                 max: 20,
@@ -197,7 +201,112 @@ const editForm = (FormItem, form, formValue, extraVals) => {
                     : null,
               },
             ],
+          })(<Input disabled />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="维修对象">
+          {getFieldDecorator('excRes', {
+            initialValue: formValue.excRes,
+            rules: [{ required: true }],
+          })(
+            <Select style={{ width: '100%' }}>
+              <Option value={1}>设备</Option>
+              <Option value={2}>车辆</Option>
+            </Select>
+          )}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="维修类型">
+          {getFieldDecorator('excType', {
+            initialValue: formValue.excType,
+            rules: [{ required: true }],
+          })(
+            <Select style={{ width: '100%' }}>
+              <Option value={1}>维修</Option>
+              <Option value={2}>保养</Option>
+              <Option value={3}>更换</Option>
+            </Select>
+          )}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="维修日期">
+          {getFieldDecorator('excDateMoment', {
+            initialValue: formValue.excDate
+              ? moment(formValue.excDate, 'YYYY-MM-DD HH:mm:ss')
+              : null,
+            rules: [
+              {
+                required: true,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage({
+                        id: 'biz.common.require.input',
+                        defaultMessage: 'No Translate',
+                      })
+                    : null,
+              },
+            ],
+          })(<DatePicker style={{ width: '100%' }} showTime format="YYYY-MM-DD HH:mm:ss" />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="操作人姓名">
+          {getFieldDecorator('excUser', {
+            initialValue: formValue.excUser,
+            rules: [
+              {
+                max: 15,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 15 }
+                      )
+                    : null,
+              },
+            ],
           })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="操作人电话">
+          {getFieldDecorator('excTel', {
+            initialValue: formValue.excTel,
+            rules: [
+              {
+                max: 15,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 15 }
+                      )
+                    : null,
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem label="备注">
+          {getFieldDecorator('note', {
+            initialValue: formValue.note,
+            rules: [
+              {
+                max: 500,
+                message:
+                  localVal === 'zh-CN'
+                    ? formatMessage(
+                        { id: 'biz.common.length.max', defaultMessage: 'No Translate' },
+                        { length: 500 }
+                      )
+                    : null,
+              },
+            ],
+          })(<TextArea rows={4} />)}
         </FormItem>
       </Col>
       <FormItem style={{ display: 'none' }}>

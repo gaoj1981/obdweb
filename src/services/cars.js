@@ -143,8 +143,8 @@ export async function addWareRecord(params) {
   });
 }
 
-export async function delWareRecord(params) {
-  return request(`/api/warerecord/del?${stringify(params)}`, {
+export async function deleteWareRecord(params) {
+  return request(`/api/warerecord/delete?${stringify(params)}`, {
     method: 'DELETE',
   });
 }
@@ -158,6 +158,10 @@ export async function editWareRecord(params) {
 
 export async function getWareRecord(params) {
   return request(`/api/warerecord/get?${stringify(params)}`);
+}
+
+export async function getWareRecordInfo(params) {
+  return request(`/api/warerecord/get.info?${stringify(params)}`);
 }
 
 // 车辆图表

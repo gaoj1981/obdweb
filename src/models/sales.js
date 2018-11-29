@@ -3,18 +3,20 @@ import {
   // 维修记录
   pageWareRecord,
   addWareRecord,
-  delWareRecord,
+  deleteWareRecord,
   editWareRecord,
   getWareRecord,
+  getWareRecordInfo,
 } from '@/services/cars';
 
 const servToReduce = {
   // 维修记录
   pageWareRecord: { method: pageWareRecord, reduce: 'pageWareRecord' },
   addWareRecord: { method: addWareRecord, reduce: null },
-  delWareRecord: { method: delWareRecord, reduce: null },
+  deleteWareRecord: { method: deleteWareRecord, reduce: null },
   editWareRecord: { method: editWareRecord, reduce: null },
   getWareRecord: { method: getWareRecord, reduce: 'getWareRecord' },
+  getWareRecordInfo: { method: getWareRecordInfo, reduce: 'getWareRecordInfo' },
 };
 
 //
@@ -25,6 +27,7 @@ export default {
     // 维修记录
     pageWareRecord: {},
     wareRecord: {},
+    wareRecordInfo: {},
   },
 
   effects: {
@@ -50,6 +53,12 @@ export default {
         }
       }
     },
+    *clearWareRecordInfo({ payload }, { put }) {
+      yield put({
+        type: 'getWareRecordInfo',
+        payload,
+      });
+    },
   },
 
   reducers: {
@@ -63,6 +72,12 @@ export default {
       return {
         ...state,
         wareRecord: action.payload,
+      };
+    },
+    getWareRecordInfo(state, action) {
+      return {
+        ...state,
+        wareRecordInfo: action.payload,
       };
     },
   },
