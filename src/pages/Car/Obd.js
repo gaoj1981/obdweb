@@ -40,8 +40,8 @@ class Obd extends PureComponent {
 
   componentDidMount() {
     // 建立连接对象（还未发起连接）
-    // const socket = new WebSocket(`ws://${window.location.host}/stomp`);
-    const socket = new WebSocket(`ws://localhost:8020/stomp`);
+    const socket = new WebSocket(`ws://${window.location.host}/stomp`);
+    // const socket = new WebSocket(`ws://localhost:8020/stomp`);
     // 获取 STOMP 子协议的客户端对象
     stompClient = Stomp.over(socket);
     // 向服务器发起websocket连接并发送CONNECT帧
