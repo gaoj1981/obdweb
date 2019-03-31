@@ -10,14 +10,14 @@ export async function getCarCountSum() {
 }
 
 export async function getCarPage(params) {
-  return request('/api/car/get.page', {
+  return request('/api/carbasicinfo/get.page', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function createCar(params) {
-  return request('/api/car/add', {
+  return request('/api/carbasicinfo/add', {
     method: 'POST',
     body: params,
   });
